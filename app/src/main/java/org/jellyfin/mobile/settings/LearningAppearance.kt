@@ -7,6 +7,13 @@ import androidx.core.content.edit
 
 enum class LookupTheme { SYSTEM, LIGHT, DARK }
 
+enum class LearningControlsTimeout(val milliseconds: Long?) {
+    TWO_AND_HALF_SECONDS(2_500L),
+    FIVE_SECONDS(5_000L),
+    TEN_SECONDS(10_000L),
+    ALWAYS_VISIBLE(null),
+}
+
 class LookupPreferences(context: Context) {
     private val preferences = context.applicationContext.getSharedPreferences("subtitle_lookup", Context.MODE_PRIVATE)
 
@@ -17,6 +24,12 @@ class LookupPreferences(context: Context) {
     var pauseOnScreenTap: Boolean
         get() = preferences.getBoolean("pause_on_screen_tap", true)
         set(value) { preferences.edit { putBoolean("pause_on_screen_tap", value) } }
+
+    var learningControlsTimeout: LearningControlsTimeout
+        get() = LearningControlsTimeout.entries.firstOrNull {
+            it.name == preferences.getString("learning_controls_timeout", null)
+        } ?: LearningControlsTimeout.TWO_AND_HALF_SECONDS
+        set(value) { preferences.edit { putString("learning_controls_timeout", value.name) } }
 
     var theme: LookupTheme
         get() = LookupTheme.entries.firstOrNull { it.name == preferences.getString("theme", null) } ?: LookupTheme.SYSTEM

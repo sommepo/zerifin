@@ -33,6 +33,7 @@ class LearningSettingsFragment : Fragment() {
             },
             row(),
         )
+        content.addView(timeoutChoice(learning), row())
 
         content.addView(section(R.string.learning_subtitle_section), row())
         content.addView(
@@ -68,6 +69,20 @@ class LearningSettingsFragment : Fragment() {
     }
 
     private fun section(label: Int) = learningText(requireContext(), getString(label), 18f)
+
+    private fun timeoutChoice(learning: LookupPreferences) =
+        LearningChoice(requireContext(), getString(R.string.learning_controls_timeout)).apply {
+            setItems(
+                listOf(
+                    getString(R.string.learning_timeout_2_5_seconds),
+                    getString(R.string.learning_timeout_5_seconds),
+                    getString(R.string.learning_timeout_10_seconds),
+                    getString(R.string.learning_timeout_always),
+                ),
+                learning.learningControlsTimeout.ordinal,
+            )
+            onSelected = { learning.learningControlsTimeout = LearningControlsTimeout.entries[it] }
+        }
 
     private fun row() = LinearLayout.LayoutParams(-1, -2).apply {
         bottomMargin = requireContext().learningDp(16)

@@ -23,7 +23,9 @@ names, legal acknowledgements, upstream links and library content are preserved.
 
 The compact popup stays hidden while lookup is pending.
 Lookup pauses by default without opening player controls. **General** in the main side menu contains
-**Pause on lookup**, **Pause on screen tap enabled by default**, and the common subtitle settings.
+**Pause on lookup**, **Pause on screen tap enabled by default**, the learning-controls timeout, and
+the common subtitle settings. Choose **Always visible** when the EN, previous-line, and padlock panel
+should remain on screen.
 When enabled, each video starts with Jellyfin's standard player lock active. Screen taps play or pause
 without showing the normal controls; tap the padlock to unlock them, and use the standard lock control
 to return to tap playback. **Dictionaries → Subtitle popup** contains

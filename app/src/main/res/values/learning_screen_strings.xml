@@ -13,7 +13,12 @@
     <string name="learning_playback_section">Playback</string>
     <string name="learning_subtitle_section">Subtitles and lookup</string>
     <string name="learning_pause_screen_tap">Pause on screen tap enabled by default</string>
-    <string name="learning_drag_controls_hint">When enabled, videos start with the standard player lock on: screen taps play or pause without showing controls. Tap the padlock to unlock normal controls. Drag EN or previous-line to move the learning panel.</string>
+    <string name="learning_controls_timeout">Learning controls timeout</string>
+    <string name="learning_timeout_2_5_seconds">2.5 seconds</string>
+    <string name="learning_timeout_5_seconds">5 seconds</string>
+    <string name="learning_timeout_10_seconds">10 seconds</string>
+    <string name="learning_timeout_always">Always visible</string>
+    <string name="learning_drag_controls_hint">When enabled, videos start with the standard player lock on: screen taps play or pause without showing controls. Tap the screen to reveal the learning panel and padlock, then tap the padlock to unlock normal controls. Drag EN or previous-line to move the learning panel.</string>
     <string name="learning_popup_theme">Popup appearance</string>
     <string name="learning_system_theme">System</string>
     <string name="learning_light_theme">Light</string>

@@ -137,6 +137,9 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
     private var pendingAnkiMining: PendingAnkiMining? = null
     private var subtitleControllerVisible = false
     private var lockPlayerOnViewCreated = true
+    private val hideLearningControlsAction = Runnable {
+        _playerBinding?.learningControls?.isVisible = false
+    }
     private var interactiveSubtitleBottomPaddingFraction =
         SubtitleView.DEFAULT_BOTTOM_PADDING_FRACTION
     private var interactiveSubtitleHost: View? = null
@@ -191,7 +194,7 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
 
     private val controllerVisibilityListener = PlayerView.ControllerVisibilityListener { visibility ->
         updateInteractiveSubtitleBottomMargin(visibility == View.VISIBLE)
-        updateEnglishButton()
+        updateEnglishButton(revealPanel = visibility == View.VISIBLE)
     }
 
     private lateinit var playerFullscreenHelper: PlayerFullscreenHelper
@@ -1127,16 +1130,9 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
         updateEnglishButton()
     }
 
-    private fun updateEnglishButton() {
+    private fun updateEnglishButton(revealPanel: Boolean = true) {
         val binding = _playerBinding ?: return
-        // One overlay control is shared by both states, so its position never jumps on lookup.
-        val learningControlsVisible = activity?.isInPictureInPictureMode != true
-        binding.learningControls.isVisible = learningControlsVisible
-        if (learningControlsVisible) {
-            binding.learningControls.post {
-                if (_playerBinding === binding) restoreLearningControlsPosition(binding)
-            }
-        }
+        if (revealPanel) peekLearningControls()
         binding.englishSubtitleButton.isSelected = englishVisible
         binding.englishSubtitleButton.setTextColor(
             if (englishVisible) {
@@ -1152,13 +1148,29 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
         )
     }
 
+    fun peekLearningControls() {
+        val binding = _playerBinding ?: return
+        binding.learningControls.removeCallbacks(hideLearningControlsAction)
+        if (activity?.isInPictureInPictureMode == true) {
+            binding.learningControls.isVisible = false
+            return
+        }
+        binding.learningControls.isVisible = true
+        binding.learningControls.post {
+            if (_playerBinding === binding) restoreLearningControlsPosition(binding)
+        }
+        LookupPreferences(binding.root.context).learningControlsTimeout.milliseconds?.let { timeout ->
+            binding.learningControls.postDelayed(hideLearningControlsAction, timeout)
+        }
+    }
+
     fun onPlayerScreenTapped() {
         if (!::playerLockScreenHelper.isInitialized || !playerLockScreenHelper.isLocked) return
         val player = viewModel.playerOrNull ?: return
         if (player.playWhenReady) viewModel.pause() else viewModel.play()
     }
 
-    @Suppress("ClickableViewAccessibility", "CyclomaticComplexMethod")
+    @Suppress("ClickableViewAccessibility", "CyclomaticComplexMethod", "LongMethod")
     private fun setUpLearningControlsDrag() {
         val binding = _playerBinding ?: return
         val controls = binding.learningControls
@@ -1186,6 +1198,7 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
         val dragListener = View.OnTouchListener { button, event ->
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
+                    controls.removeCallbacks(hideLearningControlsAction)
                     downRawX = event.rawX
                     downRawY = event.rawY
                     startX = controls.x
@@ -1217,10 +1230,12 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
                         button.performClick()
                     }
                     parent.requestDisallowInterceptTouchEvent(false)
+                    peekLearningControls()
                     true
                 }
                 MotionEvent.ACTION_CANCEL -> {
                     parent.requestDisallowInterceptTouchEvent(false)
+                    peekLearningControls()
                     true
                 }
                 else -> true
@@ -1368,6 +1383,7 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
         if (isInPictureInPictureMode) {
             playerMenus?.dismissPlaybackInfo()
             playerLockScreenHelper.hideUnlockButton()
+            playerBinding.learningControls.removeCallbacks(hideLearningControlsAction)
             playerBinding.learningControls.isVisible = false
         } else {
             updateEnglishButton()
@@ -1394,6 +1410,7 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
     }
 
     override fun onDestroyView() {
+        playerBinding.learningControls.removeCallbacks(hideLearningControlsAction)
         subtitleSeekJob?.cancel()
         subtitleSeekJob = null
         finishSubtitleLookup(resumePlayback = activity?.isChangingConfigurations == true)

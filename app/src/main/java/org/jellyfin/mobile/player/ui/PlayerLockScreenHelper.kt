@@ -7,7 +7,6 @@ import androidx.core.view.isVisible
 import androidx.media3.ui.PlayerView
 import org.jellyfin.mobile.databinding.FragmentPlayerBinding
 import org.jellyfin.mobile.utils.AndroidVersion
-import org.jellyfin.mobile.utils.Constants
 import org.jellyfin.mobile.utils.extensions.lockOrientation
 import org.jellyfin.mobile.utils.isAutoRotateOn
 
@@ -20,13 +19,6 @@ class PlayerLockScreenHelper(
     private val unlockScreenButton: ImageButton by playerBinding::unlockScreenButton
     var isLocked = false
         private set
-
-    /**
-     * Runnable that hides the unlock screen button, used by [peekUnlockButton]
-     */
-    private val hideUnlockButtonAction = Runnable {
-        hideUnlockButton()
-    }
 
     init {
         // Handle unlock action
@@ -60,9 +52,8 @@ class PlayerLockScreenHelper(
     }
 
     fun peekUnlockButton() {
-        playerView.removeCallbacks(hideUnlockButtonAction)
         unlockScreenButton.isVisible = true
-        playerView.postDelayed(hideUnlockButtonAction, Constants.DEFAULT_CONTROLS_TIMEOUT_MS.toLong())
+        playerFragment.peekLearningControls()
     }
 
     fun hideUnlockButton() {
