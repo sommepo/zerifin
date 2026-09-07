@@ -17,7 +17,9 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.jellyfin.mobile.MainViewModel
 import org.jellyfin.mobile.R
 import org.jellyfin.mobile.events.ActivityEvent
@@ -64,6 +66,12 @@ fun LogoHeader() {
             modifier = Modifier
                 .height(72.dp),
             contentDescription = null,
+        )
+        Text(
+            text = stringResource(R.string.app_name),
+            modifier = Modifier.padding(start = 14.dp),
+            fontSize = 42.sp,
+            fontWeight = FontWeight.Medium,
         )
     }
 }

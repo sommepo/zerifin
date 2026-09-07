@@ -22,6 +22,9 @@ import org.jellyfin.mobile.player.source.JellyfinMediaSource
 import org.jellyfin.mobile.player.source.LocalJellyfinMediaSource
 import org.jellyfin.mobile.player.source.MediaSourceResolver
 import org.jellyfin.mobile.player.source.PlaybackDetails
+import org.jellyfin.mobile.player.source.YouTubeMediaSource
+import org.jellyfin.mobile.youtube.YouTubeClient
+import org.jellyfin.mobile.youtube.YouTubePlayback
 import org.jellyfin.mobile.player.source.RemoteJellyfinMediaSource
 import org.jellyfin.sdk.api.client.ApiClient
 import org.jellyfin.sdk.api.client.extensions.videosApi
@@ -71,6 +74,14 @@ class QueueManager(
         currentQueue = playOptions.ids
         currentQueueIndex = playOptions.startIndex
         resetPlaybackFallback()
+
+        playOptions.youTubePlayback?.let {
+            val source = YouTubeMediaSource(YouTubeClient.json.decodeFromString<YouTubePlayback>(it))
+            source.startTime = playOptions.startPosition ?: Duration.ZERO
+            _currentMediaSource.value = source
+            viewModel.load(source, source.prepare(), true)
+            return null
+        }
 
         val itemId = when {
             currentQueue.isNotEmpty() -> currentQueue[currentQueueIndex]
@@ -163,8 +174,8 @@ class QueueManager(
             enableDirectStream = enableDirectStream,
         ).onSuccess { jellyfinMediaSource ->
             // Ensure transcoding of the current element is stopped
-            getCurrentMediaSourceOrNull()?.let { oldMediaSource ->
-                viewModel.stopTranscoding(oldMediaSource as RemoteJellyfinMediaSource)
+            (getCurrentMediaSourceOrNull() as? RemoteJellyfinMediaSource)?.let { oldMediaSource ->
+                viewModel.stopTranscoding(oldMediaSource)
             }
 
             _currentMediaSource.value = jellyfinMediaSource
@@ -184,6 +195,7 @@ class QueueManager(
     fun tryRestartPlayback() {
         with(getCurrentMediaSourceOrNull()) {
             when (this) {
+                is YouTubeMediaSource -> prepare()
                 is LocalJellyfinMediaSource -> prepareStreams(this)
                 is RemoteJellyfinMediaSource -> prepareStreams(this)
                 null -> return
@@ -210,6 +222,15 @@ class QueueManager(
      * @return true if a retry was initiated, false if retries are exhausted or not applicable.
      */
     suspend fun restartPlaybackWithFallback(startPosition: Duration): Boolean {
+        val youtube = getCurrentMediaSourceOrNull() as? YouTubeMediaSource
+        if (youtube != null) {
+            if (youtube.useRelay) return false
+            youtube.useRelay = true
+            youtube.startTime = startPosition
+            Timber.i("YouTube direct playback failed; trying server relay")
+            viewModel.load(youtube, youtube.prepare(), true)
+            return true
+        }
         val currentMediaSource = getCurrentMediaSourceOrNull() as? RemoteJellyfinMediaSource ?: return false
 
         val now = System.currentTimeMillis()
@@ -298,7 +319,7 @@ class QueueManager(
                 mediaSourceId = null,
                 maxStreamingBitrate = currentMediaSource.maxStreamingBitrate,
             )
-            null -> return false
+            is YouTubeMediaSource, null -> return false
         }
         return true
     }
@@ -450,7 +471,7 @@ class QueueManager(
                 subtitleStreamIndex = currentMediaSource.selectedSubtitleStreamIndex,
                 playWhenReady = currentPlayState.playWhenReady,
             )
-            null -> return false
+            is YouTubeMediaSource, null -> return false
         }
         return true
     }
@@ -484,7 +505,7 @@ class QueueManager(
                 subtitleStreamIndex = stream?.index ?: -1, // -1 disables subtitles, null would select the default subtitle
                 playWhenReady = currentPlayState.playWhenReady,
             )
-            null -> return false
+            is YouTubeMediaSource, null -> return false
         }
         return true
     }

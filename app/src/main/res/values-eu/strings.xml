@@ -29,7 +29,7 @@
     <string name="pref_music_notification_always_dismissible_summary_off">Jakinarazpena erreprodukzioa geldituta dagoen bitartean bakarrik ezaba daiteke</string>
     <string name="pref_music_notification_always_dismissible_title">Erreproduzigailu baztergarriaren jakinarazpena</string>
     <string name="pref_category_music_player">Musika-erreproduzitzailea</string>
-    <string name="activity_name_settings">Jellyfinen ezarpenak</string>
+    <string name="activity_name_settings">Zerifinen ezarpenak</string>
     <string name="external_player_unknown_error">Errore ezezaguna kanpo-erreproduzitzailea. Erreprodukzioaren jarraipena desaktibatuta dago.</string>
     <string name="external_player_invalid_player">Ez da kanpoko erreproduzigailu baliozkorik hautatu. Erreprodukzioaren jarraipena desaktibatu da.</string>
     <string name="external_player_not_supported_yet">Hautatutako kanpo-erreproduzitzaileak ez du erreprodukzioaren jarraipena jasaten. Jar zaitez harremanetan garatzaileekin.</string>
@@ -52,7 +52,7 @@
     <string name="notification_action_rewind">Atzera egin</string>
     <string name="notification_action_previous">Aurrekoa</string>
     <string name="music_notification_channel_description">Musikaren erreprodukzioa kontrolatzeko erabiltzen da</string>
-    <string name="music_notification_channel">Jellyfin musika-erreproduzitzailea</string>
+    <string name="music_notification_channel">Zerifin musika-erreproduzitzailea</string>
     <string name="media_service_car_item_no_title">Titulurik gabe</string>
     <string name="media_service_car_section_genres">Generoak</string>
     <string name="media_service_car_section_songs">Abestiak</string>
@@ -68,7 +68,7 @@
     <string name="wifi_only">WiFi bakarrik</string>
     <string name="network_message">Datu mugikorren edo ibiltaritzaren bidez deskargatzeko aukera eman nahi duzu? Zure operadoreak kargu gehigarriak egin ditzake. Aukera hau geroago alda dezakezu ezarpenetatik.</string>
     <string name="network_title">Baimendutako sare-motak</string>
-    <string name="battery_optimizations_message">Desaktibatu Jellyfinentzat aurreztutako energia sistemaren ezarpenetan, pantaila itzalita dagoen bitartean edukia erreproduzitu ahal izateko.</string>
+    <string name="battery_optimizations_message">Desaktibatu Zerifinentzat aurreztutako energia sistemaren ezarpenetan, pantaila itzalita dagoen bitartean edukia erreproduzitu ahal izateko.</string>
     <string name="available_servers_title">Zerbitzari erabilgarriak</string>
     <string name="choose_server_button_text">Hautatu zerbitzaria</string>
     <string name="connect_button_text">Konektatu</string>
@@ -106,7 +106,7 @@
     <string name="failed_network_method_check">Mesedez, egiaztatu baimendutako deskargatzeko metodoak</string>
     <string name="no">Ez</string>
     <string name="downloading_desc">%1$d titulu deskargatzen</string>
-    <string name="bluetooth_permission_message">Haririk gabeko entzungailuak edo bozgorailuak deskonektatuta daudenean detektatzeko, aplikazioak Bluetooth sarbidea behar du. Android-en, baimen hau inguruko gailuetarako sarbidea bezala deskribatzen da, eta Bluetooth gailuak uneko kokapena ondorioztatzeko erabil daitezkeela ohartarazten du. Hala ere, Jellyfin aplikazioak ez du inoiz baimen hau erabiliko zure kokapena detektatzeko.</string>
+    <string name="bluetooth_permission_message">Haririk gabeko entzungailuak edo bozgorailuak deskonektatuta daudenean detektatzeko, aplikazioak Bluetooth sarbidea behar du. Android-en, baimen hau inguruko gailuetarako sarbidea bezala deskribatzen da, eta Bluetooth gailuak uneko kokapena ondorioztatzeko erabil daitezkeela ohartarazten du. Hala ere, Zerifin aplikazioak ez du inoiz baimen hau erabiliko zure kokapena detektatzeko.</string>
     <string name="bluetooth_permission_granted">Bluetooth baimena eman da</string>
     <string name="external_player_mpvkt_description">mpv-android-en oinarritutako multimedia erreproduzitzailea, jatorrizkoa baino erabiltzaile-interfaze hobea eskaintzeko helburuarekin.</string>
     <string name="mobile_data_and_roaming_summary">Multimedia WiFi, mugikorreko eta roaming sareen bidez deskargatuko da.</string>

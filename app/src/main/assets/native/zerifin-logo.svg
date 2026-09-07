@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 252 72" role="img" aria-label="Zerifin">
+    <defs>
+        <linearGradient id="green" x1="12.5" y1="30" x2="72.5" y2="63" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#a3e879" />
+            <stop offset="1" stop-color="#18b886" />
+        </linearGradient>
+    </defs>
+    <path fill="url(#green)" d="M24.71,49.16c-1.55,-3.12 8.63,-21.57 11.79,-21.57 3.17,0 13.32,18.49 11.79,21.57 -1.53,3.08 -22.02,3.12 -23.58,0z" />
+    <path fill="url(#green)" fill-rule="evenodd" d="M0.98,65C-3.69,55.61 26.98,0 36.5,0c9.53,0 40.15,55.71 35.53,65s-66.37,9.39 -71.04,0m12.26,-8.15c3.07,6.15 43.52,6.08 46.55,0 3.03,-6.09 -17.03,-42.59 -23.27,-42.59S10.17,50.69 13.23,56.85z" />
+    <text x="88" y="52" fill="#69d89c" font-family="sans-serif" font-size="43" font-weight="500">Zerifin</text>
+</svg>

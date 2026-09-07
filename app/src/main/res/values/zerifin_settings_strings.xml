@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="zerifin_learning_settings">Japanese learning</string>
+    <string name="zerifin_learning_help_title">Subtitle lookup and cards</string>
+    <string name="zerifin_learning_help_summary">Using dictionaries, word audio and Anki mining</string>
+    <string name="zerifin_learning_help">Tap a Japanese subtitle in the integrated player to look up a word and make a card. Import term and frequency dictionaries here; they stay on this device.</string>
+    <string name="zerifin_dictionary_summary">%1$d dictionaries · %2$d terms · %3$d frequencies. Tap to import another ZIP.</string>
+</resources>

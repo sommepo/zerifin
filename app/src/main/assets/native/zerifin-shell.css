@@ -1,0 +1,57 @@
+.pageTitleWithDefaultLogo,
+.imgLogoIcon,
+.splashLogo {
+    background-image: url('/native/zerifin-logo.svg') !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: contain !important;
+}
+
+img.imgLogoIcon,
+img.splashLogo {
+    content: url('/native/zerifin-logo.svg');
+}
+
+.zerifin-learning-menu {
+    margin-block: 1em;
+    border-top: 1px solid rgba(128, 128, 128, .3);
+    padding-top: .5em;
+    color: inherit;
+}
+
+.zerifin-learning-menu h3 {
+    margin: .75em 1.5em .5em;
+    color: #18b886;
+    font-size: .85em;
+    font-weight: 600;
+}
+
+.zerifin-learning-button {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    width: 100%;
+    min-height: 48px;
+    border: 0;
+    border-radius: 0;
+    padding: .75em 1.5em;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+}
+
+.zerifin-learning-button:hover,
+.zerifin-learning-button:focus-visible {
+    background: rgba(24, 184, 134, .15);
+    outline: 2px solid #18b886;
+    outline-offset: -2px;
+}
+
+.zerifin-learning-icon {
+    flex: 0 0 1.25em;
+    color: #18b886;
+    text-align: center;
+    font-size: 1.25em;
+}

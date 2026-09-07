@@ -23,7 +23,7 @@
     <string name="available_servers_title">Tapılan serverlər</string>
     <string name="button_use_different_server">Fərqli server istifadə edin</string>
     <string name="bluetooth_permission_title">Bluetooth istifadəsinə icazə verilsin?</string>
-    <string name="bluetooth_permission_message">Simsiz qulaqlıqların və ya dinamiklərin bağlantısının kəsildiyini aşkar etmək üçün tətbiqin Bluetooth girişinə ehtiyacı var. Android sistemində bu icazə “yaxınlıqdakı cihazlara giriş” kimi göstərilir və Bluetooth cihazlarından istifadə etməklə cari məkanın təxmin edilə biləcəyi barədə xəbərdarlıq edilir. Lakin Jellyfin tətbiqi bu icazədən heç vaxt məkanınızı müəyyən etmək üçün istifadə etməyəcək.</string>
+    <string name="bluetooth_permission_message">Simsiz qulaqlıqların və ya dinamiklərin bağlantısının kəsildiyini aşkar etmək üçün tətbiqin Bluetooth girişinə ehtiyacı var. Android sistemində bu icazə “yaxınlıqdakı cihazlara giriş” kimi göstərilir və Bluetooth cihazlarından istifadə etməklə cari məkanın təxmin edilə biləcəyi barədə xəbərdarlıq edilir. Lakin Zerifin tətbiqi bu icazədən heç vaxt məkanınızı müəyyən etmək üçün istifadə etməyəcək.</string>
     <string name="bluetooth_permission_continue">Davam edin</string>
     <string name="bluetooth_permission_granted">Bluetooth girişinə icazə verildi</string>
     <string name="battery_optimizations_message">Ekran söndürüldükdə media oxutmasının davam etməsi üçün batareya optimizasiyalarını deaktiv edin.</string>
@@ -52,7 +52,7 @@
     <string name="media_service_car_section_genres">Janrlar</string>
     <string name="media_service_car_section_playlists">Oxutma siyahıları</string>
     <string name="media_service_car_item_no_title">Başlıq yoxdur</string>
-    <string name="music_notification_channel">Jellyfin Musiqi Oxuducusu</string>
+    <string name="music_notification_channel">Zerifin Musiqi Oxuducusu</string>
     <string name="music_notification_channel_description">Musiqi oxutma idarəetmələri üçün istifadə olunur</string>
     <string name="notification_action_previous">Əvvəlki</string>
     <string name="notification_action_rewind">Geri sar</string>
@@ -80,7 +80,7 @@
     <string name="external_player_not_supported_yet">Seçilmiş xarici pleyer hələ oxutma izlənməsini dəstəkləmir. Bu dəstəyin əlavə edilməsi üçün tərtibatçılarla əlaqə saxlaya bilərsiniz</string>
     <string name="external_player_invalid_player">Uyğun xarici pleyer seçilmədiyi üçün oxutma izlənməsi söndürülüb.</string>
     <string name="external_player_unknown_error">Xarici pleyerdə naməlum xəta baş verdi. Oxutma izlənməsi deaktiv edilib.</string>
-    <string name="activity_name_settings">Jellyfin Parametrləri</string>
+    <string name="activity_name_settings">Zerifin Parametrləri</string>
     <string name="pref_category_music_player">Musiqi oxuducusu</string>
     <string name="pref_music_notification_always_dismissible_title">Bağlana bilən pleyer bildirişi</string>
     <string name="pref_music_notification_always_dismissible_summary_off">Bildiriş yalnız oxutma fasiləyə verildikdə bağlana bilər</string>

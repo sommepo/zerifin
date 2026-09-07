@@ -13,7 +13,7 @@
     <string name="pref_category_video_player">Videólejátszó</string>
     <string name="pref_music_notification_always_dismissible_title">Elvethető zenelejátszó értesítés(ek)</string>
     <string name="pref_category_music_player">Zenelejátszó</string>
-    <string name="activity_name_settings">Jellyfin Beállítások</string>
+    <string name="activity_name_settings">Zerifin Beállítások</string>
     <string name="menu_item_none">Nincs</string>
     <string name="playback_info_and_x_more">...és %d további</string>
     <string name="playback_info_audio_streams">Audio sávok</string>
@@ -56,7 +56,7 @@
     <string name="video_player_web_description">Az alapértelmezett HTML-videolejátszó a webes felhasználói felületről</string>
     <string name="video_player_web">Webes lejátszó</string>
     <string name="music_notification_channel_description">A zenelejátszás vezérlésére szolgál</string>
-    <string name="music_notification_channel">Jellyfin Zenelejátszó</string>
+    <string name="music_notification_channel">Zerifin Zenelejátszó</string>
     <string name="media_service_car_item_no_title">Nincs cím</string>
     <string name="media_service_car_section_genres">Műfajok</string>
     <string name="media_service_car_section_songs">Dalok</string>
@@ -105,7 +105,7 @@
     <string name="bluetooth_permission_title">Engedélyezi a Bluetooth hozzáférést\?</string>
     <string name="bluetooth_permission_continue">Folytatás</string>
     <string name="bluetooth_permission_granted">Bluetooth hozzáférés engedélyezve</string>
-    <string name="bluetooth_permission_message">A vezeték nélküli fejhallgató vagy hangszóró leválasztásának észleléséhez az alkalmazásnak Bluetooth-hozzáférésre van szüksége. Androidon ez az engedély a közeli eszközökhöz való hozzáférésként van leírva, és figyelmeztet arra, hogy a Bluetooth-eszközök felhasználhatók az aktuális hely megállapítására. A Jellyfin alkalmazás azonban soha nem használja ezt az engedélyt az Ön tartózkodási helyének észlelésére.</string>
+    <string name="bluetooth_permission_message">A vezeték nélküli fejhallgató vagy hangszóró leválasztásának észleléséhez az alkalmazásnak Bluetooth-hozzáférésre van szüksége. Androidon ez az engedély a közeli eszközökhöz való hozzáférésként van leírva, és figyelmeztet arra, hogy a Bluetooth-eszközök felhasználhatók az aktuális hely megállapítására. A Zerifin alkalmazás azonban soha nem használja ezt az engedélyt az Ön tartózkodási helyének észlelésére.</string>
     <string name="mobile_data_and_roaming_summary">A média WiFi és mobil hálózaton és roamingon keresztül is le lesz letöltve.</string>
     <string name="wifi_only_summary">A média csak WiFi hálózaton keresztül lesz letöltve.</string>
     <string name="mobile_data_summary">A média WiFi és mobil hálózaton keresztül is le lesz letöltve.</string>

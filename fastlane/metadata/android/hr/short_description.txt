@@ -1,1 +1,0 @@
-Mobilni klijent za Jellyfin, besplatna aplikacija za sadržaj

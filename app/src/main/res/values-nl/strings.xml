@@ -13,7 +13,7 @@
     <string name="pref_category_video_player">Videospeler</string>
     <string name="pref_music_notification_always_dismissible_title">Wegveegbare melding speler</string>
     <string name="pref_category_music_player">Muziekspeler</string>
-    <string name="activity_name_settings">Jellyfin-instellingen</string>
+    <string name="activity_name_settings">Zerifin-instellingen</string>
     <string name="menu_item_none">Geen</string>
     <string name="external_player_unknown_error">Onbekende fout in externe speler. Volgen van afspelen uitgeschakeld.</string>
     <string name="external_player_invalid_player">Geen geldige externe speler geselecteerd. Volgen van afspelen uitgeschakeld.</string>
@@ -56,7 +56,7 @@
     <string name="external_player_vlc_player">VLC Player</string>
     <string name="external_player_mx_player_free_description">Krachtige videospeler met geavanceerde hardwareversnelling en ondersteuning voor ondertiteling.</string>
     <string name="music_notification_channel_description">Gebruikt voor muziekafspeelknoppen</string>
-    <string name="music_notification_channel">Jellyfin-muziekspeler</string>
+    <string name="music_notification_channel">Zerifin-muziekspeler</string>
     <string name="media_service_car_item_no_title">Geen titel</string>
     <string name="media_service_car_section_genres">Genres</string>
     <string name="media_service_car_section_songs">Nummers</string>
@@ -103,7 +103,7 @@
     <string name="button_use_different_server">Andere server gebruiken</string>
     <string name="pref_exoplayer_start_landscape_video_in_landscape">Horizontale video\'s in horizontale oriëntatie starten</string>
     <string name="bluetooth_permission_continue">Doorgaan</string>
-    <string name="bluetooth_permission_message">De app vereist Bluetooth-toegang om te detecteren of er een draadloze koptelefoon of luidspreker is aangesloten. Op Android wordt deze machtiging beschreven als \"toegang tot apparaten in de buurt\" met de waarschuwing dat deze kan worden gebruikt om de huidige locatie te achterhalen. De Jellyfin-app zal deze machtiging echter nooit met dat doel gebruiken.</string>
+    <string name="bluetooth_permission_message">De app vereist Bluetooth-toegang om te detecteren of er een draadloze koptelefoon of luidspreker is aangesloten. Op Android wordt deze machtiging beschreven als \"toegang tot apparaten in de buurt\" met de waarschuwing dat deze kan worden gebruikt om de huidige locatie te achterhalen. De Zerifin-app zal deze machtiging echter nooit met dat doel gebruiken.</string>
     <string name="bluetooth_permission_title">Bluetooth-toegang toestaan\?</string>
     <string name="bluetooth_permission_granted">Bluetooth-toestemming is verleend</string>
     <string name="mobile_data_summary">Media zal via wifi en mobiele netwerken worden gedownload.</string>

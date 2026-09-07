@@ -1,0 +1,17 @@
+name: Feature request
+description: Suggest an improvement to Zerifin.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Explain how this would fit the existing playback and learning workflow.
+    validations:
+      required: true

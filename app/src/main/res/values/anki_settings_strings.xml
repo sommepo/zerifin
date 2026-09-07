@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_anki_mining">Anki mining</string>
+    <string name="pref_anki_mining_summary_empty">Choose a deck, note type, and field mappings</string>
+    <string name="pref_anki_mining_summary_configured">%1$s · %2$s</string>
+    <string name="anki_unavailable">Install or enable AnkiDroid, then open it once before setting up mining.</string>
+    <string name="anki_permission_denied">AnkiDroid access was not granted. Allow it in Android app settings to enable mining.</string>
+
+    <string name="anki_mapping_title">Anki mining</string>
+    <string name="anki_mapping_description">Choose where new cards are saved and what each note field receives.</string>
+    <string name="anki_mapping_loading">Reading decks and note types from AnkiDroid…</string>
+    <string name="anki_mapping_deck">Deck</string>
+    <string name="anki_mapping_note_type">Note type</string>
+    <string name="anki_mapping_fields_title">Field mappings</string>
+    <string name="anki_mapping_fields_description">Each row is a field in the selected Anki note type.</string>
+    <string name="anki_mapping_tags">Tags</string>
+    <string name="anki_mapping_tags_hint">Optional, separated by spaces</string>
+    <string name="anki_mapping_block_duplicates">Block duplicate cards</string>
+    <string name="anki_mapping_cancel">Cancel</string>
+    <string name="anki_mapping_save">Save</string>
+    <string name="anki_mapping_retry">Retry</string>
+    <string name="anki_mapping_error">Could not read AnkiDroid: %1$s</string>
+    <string name="anki_mapping_no_decks">No Anki decks were found. Create a deck in AnkiDroid, then retry.</string>
+    <string name="anki_mapping_no_models">No Anki note types were found. Create a note type in AnkiDroid, then retry.</string>
+    <string name="anki_mapping_no_fields">The selected note type has no fields.</string>
+    <string name="anki_mapping_first_field_required">Map Anki’s first field, “%1$s”, before saving.</string>
+    <string name="anki_mapping_saved">Anki mining setup saved</string>
+
+    <string name="anki_field_source_unused">Unused</string>
+    <string name="anki_field_source_word">Word</string>
+    <string name="anki_field_source_reading">Reading</string>
+    <string name="anki_field_source_definition">Definition</string>
+    <string name="anki_field_source_subtitle">Full subtitle</string>
+</resources>

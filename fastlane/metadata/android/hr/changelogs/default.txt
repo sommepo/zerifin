@@ -1,3 +1,0 @@
-Hvala što koristite Jellyfin za Android! Uvijek se preporučuje korištenje najnovijeg izdanja Jellyfin poslužitelja.
-
-Za više informacija pogledajte naš blog na jellyfin.org ili pročitajte cijeli dnevnik promjena na GitHubu.

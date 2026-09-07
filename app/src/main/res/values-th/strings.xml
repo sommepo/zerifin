@@ -4,7 +4,7 @@
     <string name="pref_category_video_player">เครื่องเล่นวีดีโอ</string>
     <string name="pref_music_notification_always_dismissible_title">ทำให้การแจ้งเตือนเครื่องเล่นเพลงปิดได้เสมอ</string>
     <string name="pref_category_music_player">เครื่องเล่นเพลง</string>
-    <string name="activity_name_settings">การตั้งค่า Jellyfin</string>
+    <string name="activity_name_settings">การตั้งค่า Zerifin</string>
     <string name="playback_info_and_x_more">…และ %d อีก</string>
     <string name="playback_info_audio_streams">สตรีมเสียง</string>
     <string name="playback_info_video_streams">สตรีมวิดีโอ</string>
@@ -56,7 +56,7 @@
     <string name="video_player_web">เครื่องเล่นบนเว็บ</string>
     <string name="pref_exoplayer_allow_brightness_volume_gesture">อนุญาตท่าทางปรับแสงสว่างและเสียงในเครื่องเล่นในตัว</string>
     <string name="music_notification_channel_description">ใช้สำหรับควบคุมการเล่นเพลง</string>
-    <string name="music_notification_channel">เครื่องเล่นเพลง Jellyfin</string>
+    <string name="music_notification_channel">เครื่องเล่นเพลง Zerifin</string>
     <string name="media_service_car_item_no_title">ไม่มีชื่อ</string>
     <string name="media_service_car_section_genres">ประเภท</string>
     <string name="media_service_car_section_songs">เพลง</string>

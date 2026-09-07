@@ -17,7 +17,7 @@
     <string name="pref_category_video_player">Reprodutor de vídeo</string>
     <string name="pref_music_notification_always_dismissible_title">Notificação do reprodutor dispensável</string>
     <string name="pref_category_music_player">Reprodutor de música</string>
-    <string name="activity_name_settings">Definições Jellyfin</string>
+    <string name="activity_name_settings">Definições Zerifin</string>
     <string name="external_player_invalid_play_method">Método de reprodução inválido.</string>
     <string name="playback_info_and_x_more">...e mais %d</string>
     <string name="playback_info_audio_streams">Transmissões de áudio</string>
@@ -45,7 +45,7 @@
     <string name="external_player_invalid_player">Nenhum reprodutor externo válido selecionado. Monitorização de reprodução desativada.</string>
     <string name="external_player_not_supported_yet">A monitorização da reprodução ainda não é suportada no reprodutor externo selecionado. Contacte os programadores para tentar adicionar suporte ao reprodutor.</string>
     <string name="music_notification_channel_description">Utilizado para controlo da reprodução de música</string>
-    <string name="music_notification_channel">Leitor de música Jellyfin</string>
+    <string name="music_notification_channel">Leitor de música Zerifin</string>
     <string name="media_service_car_item_no_title">Sem título</string>
     <string name="media_service_car_section_genres">Géneros</string>
     <string name="media_service_car_section_songs">Músicas</string>
@@ -106,7 +106,7 @@
     <string name="bluetooth_permission_granted">Permissão do Bluetooth foi autorizada</string>
     <string name="bluetooth_permission_title">Permitir acesso Bluetooth\?</string>
     <string name="bluetooth_permission_continue">Continuar</string>
-    <string name="bluetooth_permission_message">Para detectar se os auscultadores ou colunas estão desconectados, a aplicação necessita de acesso ao Bluetooth. No android, esta permissão chama-se acesso a dispositivos nas redondezas, e avisa que dispositivos Bluetooth podem ser usados para uma localização mais precisa. No entanto, a aplicação Jellyfin nunca irá usar esta permissão para detectar a sua localização.</string>
+    <string name="bluetooth_permission_message">Para detectar se os auscultadores ou colunas estão desconectados, a aplicação necessita de acesso ao Bluetooth. No android, esta permissão chama-se acesso a dispositivos nas redondezas, e avisa que dispositivos Bluetooth podem ser usados para uma localização mais precisa. No entanto, a aplicação Zerifin nunca irá usar esta permissão para detectar a sua localização.</string>
     <string name="wifi_only_summary">Os conteúdos multimédia serão transferidos apenas por Wi-Fi.</string>
     <string name="mobile_data_summary">Os conteúdos multimédia serão transferidos por Wi-Fi e dados móveis.</string>
     <string name="mobile_data_and_roaming_summary">Os conteúdos multimédia serão transferidos por Wi-Fi, dados móveis e redes em roaming.</string>

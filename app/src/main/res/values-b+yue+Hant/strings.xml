@@ -22,7 +22,7 @@
     <string name="available_servers_title">可用伺服器</string>
     <string name="button_use_different_server">使用其他伺服器</string>
     <string name="bluetooth_permission_title">允許存取藍牙？</string>
-    <string name="bluetooth_permission_message">為咗偵測無線耳機或喇叭幾時斷開連線，本程式需要存取藍牙。喺 Android 系統，呢項權限被描述為「存取鄰近裝置」，並會警告話藍牙裝置可以用嚟推算目前位置。不過，Jellyfin 絕對唔會利用呢項權限嚟偵測你嘅位置。</string>
+    <string name="bluetooth_permission_message">為咗偵測無線耳機或喇叭幾時斷開連線，本程式需要存取藍牙。喺 Android 系統，呢項權限被描述為「存取鄰近裝置」，並會警告話藍牙裝置可以用嚟推算目前位置。不過，Zerifin 絕對唔會利用呢項權限嚟偵測你嘅位置。</string>
     <string name="bluetooth_permission_continue">繼續</string>
     <string name="bluetooth_permission_granted">已取得藍牙權限</string>
     <string name="battery_optimizations_message">唔該停用電池最佳化，以確保螢幕關閉時依然正常播放媒體。</string>
@@ -44,7 +44,7 @@
     <string name="media_service_car_section_songs">歌曲</string>
     <string name="media_service_car_section_genres">曲風</string>
     <string name="media_service_car_item_no_title">無標題</string>
-    <string name="music_notification_channel">Jellyfin 音樂播放器</string>
+    <string name="music_notification_channel">Zerifin 音樂播放器</string>
     <string name="music_notification_channel_description">用於音樂播放控制</string>
     <string name="notification_action_previous">上一首</string>
     <string name="notification_action_rewind">倒放</string>
@@ -72,7 +72,7 @@
     <string name="external_player_not_supported_yet">所選嘅外部播放器暫時唔支援播放進度追蹤。請聯絡開發者嘗試加入支援。</string>
     <string name="external_player_invalid_player">未選擇有效嘅外部播放器。播放進度追蹤已停用。</string>
     <string name="external_player_unknown_error">外部播放器發生未知錯誤。播放進度追蹤已停用。</string>
-    <string name="activity_name_settings">Jellyfin 設定</string>
+    <string name="activity_name_settings">Zerifin 設定</string>
     <string name="pref_category_music_player">音樂播放器</string>
     <string name="pref_music_notification_always_dismissible_title">可清除嘅播放器通知</string>
     <string name="pref_music_notification_always_dismissible_summary_off">只有喺暫停播放嗰陣先至可以清除通知</string>

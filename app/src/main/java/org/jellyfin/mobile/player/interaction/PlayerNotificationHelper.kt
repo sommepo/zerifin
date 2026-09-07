@@ -152,7 +152,7 @@ class PlayerNotificationHelper(private val viewModel: PlayerViewModel) : KoinCom
     }
 
     private suspend fun loadImage(mediaSource: JellyfinMediaSource) = when (mediaSource) {
-        is LocalJellyfinMediaSource -> null
+        is org.jellyfin.mobile.player.source.YouTubeMediaSource, is LocalJellyfinMediaSource -> null
         is RemoteJellyfinMediaSource -> {
             val height = context.resources.getDimensionPixelSize(R.dimen.media_notification_height)
 

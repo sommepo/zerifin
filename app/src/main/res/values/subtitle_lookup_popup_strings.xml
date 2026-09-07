@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="subtitle_lookup_popup_pane">Dictionary lookup</string>
+    <string name="subtitle_lookup_popup_empty_title">No result</string>
+    <string name="subtitle_lookup_popup_empty_message">Try another part of the subtitle, or import a larger Yomitan dictionary.</string>
+    <string name="subtitle_lookup_popup_error_title">Lookup failed</string>
+    <string name="subtitle_lookup_popup_error_message">The dictionary could not be searched.</string>
+    <string name="subtitle_lookup_mine_add">Add %1$s to Anki</string>
+    <string name="subtitle_lookup_mine_adding">Adding %1$s to Anki</string>
+    <string name="subtitle_lookup_mine_added">Added %1$s to Anki</string>
+    <string name="subtitle_lookup_mine_duplicate">%1$s is already in Anki</string>
+    <string name="subtitle_lookup_mine_error">Failed to add %1$s to Anki. Tap to retry.</string>
+</resources>

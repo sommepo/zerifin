@@ -1,3 +1,0 @@
-Kiitos kun käytät Jellyfiniä Androidilla! Uusimman Jellyfin-palvelinversion käyttäminen on aina suositeltavaa.
-
-Lisätietoja saat jellyfin.org-sivuston blogista, ja täydellinen muutoshistoria löytyy GitHubista.

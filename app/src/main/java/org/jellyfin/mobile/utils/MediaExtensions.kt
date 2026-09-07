@@ -34,8 +34,10 @@ fun JellyfinMediaSource.toMediaMetadata(): MediaMetadata = MediaMetadata.Builder
         putString(MediaMetadata.METADATA_KEY_ARTIST, artists)
     }
     putLong(MediaMetadata.METADATA_KEY_DURATION, runTime.inWholeMilliseconds)
-    val imageUri = ImageProvider.buildItemUri(itemId, ImageType.PRIMARY, item?.imageTags?.get(ImageType.PRIMARY))
-    putString(MediaMetadata.METADATA_KEY_ART_URI, imageUri.toString())
+    if (this@toMediaMetadata !is org.jellyfin.mobile.player.source.YouTubeMediaSource) {
+        val imageUri = ImageProvider.buildItemUri(itemId, ImageType.PRIMARY, item?.imageTags?.get(ImageType.PRIMARY))
+        putString(MediaMetadata.METADATA_KEY_ART_URI, imageUri.toString())
+    }
 }.build()
 
 fun MediaSession.setPlaybackState(playbackState: Int, position: Long, playbackActions: Long) {

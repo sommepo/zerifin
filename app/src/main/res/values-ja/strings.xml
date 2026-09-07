@@ -40,7 +40,7 @@
     <string name="pref_category_video_player">ビデオプレーヤー</string>
     <string name="pref_music_notification_always_dismissible_title">削除可能なプレイヤー通知</string>
     <string name="pref_category_music_player">ミュージックプレーヤー</string>
-    <string name="activity_name_settings">Jellyfinの設定</string>
+    <string name="activity_name_settings">Zerifinの設定</string>
     <string name="external_player_unknown_error">外部のプレーヤーに不明なエラーがあります。プレイバックトラッキングが無効になっています。</string>
     <string name="external_player_invalid_player">有効な外部のプレーヤーが選択されていません。プレイバックトラッキングが無効になっています。</string>
     <string name="external_player_not_supported_yet">選択している外部のプレーヤーの再生記録がまだサポートされていません。開発元にご連絡してください。</string>
@@ -56,7 +56,7 @@
     <string name="external_player_mpv">MPV プレーヤー</string>
     <string name="external_player_app">外部プレーヤーアプリ</string>
     <string name="music_notification_channel_description">音楽再生のコントロールに使われます</string>
-    <string name="music_notification_channel">Jellyfin ミュージック プレイヤー</string>
+    <string name="music_notification_channel">Zerifin ミュージック プレイヤー</string>
     <string name="media_service_car_item_no_title">タイトルなし</string>
     <string name="media_service_car_section_genres">ジャンル</string>
     <string name="media_service_car_section_songs">曲</string>
@@ -104,7 +104,7 @@
     <string name="menu_item_hardware_decoding">ハードウェアデコード</string>
     <string name="pref_subtitle_style">字幕スタイルのカスタマイズ</string>
     <string name="pref_subtitle_style_summary">Androidの設定で字幕のスタイルを変更できます</string>
-    <string name="bluetooth_permission_message">ワイヤレスヘッドフォンやスピーカーの接続が切れたことを検出するために、アプリはBluetoothへのアクセス権限を必要とします。Androidでは、この権限は近くのデバイスへのアクセスとして説明されており、Bluetoothデバイスを使用して現在の位置情報を推測できることが警告されます。ただし、Jellyfin アプリはこの権限を使用してあなたの位置情報を検出することは決してありません。</string>
+    <string name="bluetooth_permission_message">ワイヤレスヘッドフォンやスピーカーの接続が切れたことを検出するために、アプリはBluetoothへのアクセス権限を必要とします。Androidでは、この権限は近くのデバイスへのアクセスとして説明されており、Bluetoothデバイスを使用して現在の位置情報を推測できることが警告されます。ただし、Zerifin アプリはこの権限を使用してあなたの位置情報を検出することは決してありません。</string>
     <string name="pref_exoplayer_direct_play_ass">直接再生時にSSA/ASS字幕を許可する</string>
     <string name="pref_exoplayer_start_landscape_video_in_landscape">ランドスケープモードの動画を横向きで再生する</string>
     <string name="bluetooth_permission_continue">続く</string>

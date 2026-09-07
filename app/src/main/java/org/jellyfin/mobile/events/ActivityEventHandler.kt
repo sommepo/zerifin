@@ -104,6 +104,15 @@ class ActivityEventHandler(
             ActivityEvent.OpenSettings -> {
                 supportFragmentManager.addFragment<SettingsFragment>()
             }
+            is ActivityEvent.OpenLearningSettings -> {
+                if (event.destination == "youtube") {
+                    supportFragmentManager.addFragment<org.jellyfin.mobile.youtube.YouTubeFragment>()
+                } else if (event.destination == SettingsFragment.DESTINATION_ANKI) {
+                    supportFragmentManager.addFragment<org.jellyfin.mobile.settings.AnkiMappingFragment>()
+                } else {
+                    supportFragmentManager.addFragment<org.jellyfin.mobile.settings.DictionaryManagerFragment>()
+                }
+            }
             ActivityEvent.SelectServer -> {
                 mainViewModel.resetServer()
             }

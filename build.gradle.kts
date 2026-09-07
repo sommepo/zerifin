@@ -2,6 +2,11 @@ allprojects {
     repositories {
         mavenCentral()
         google()
+        maven("https://jitpack.io") {
+            content {
+                includeModule("com.github.ankidroid", "Anki-Android")
+            }
+        }
         mavenLocal {
             content {
                 includeVersionByRegex(JellyfinSdk.GROUP, ".*", JellyfinSdk.LOCAL)

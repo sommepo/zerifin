@@ -15,10 +15,10 @@
     <string name="media_service_car_section_songs">Mga Kanta</string>
     <string name="media_service_car_section_genres">Mga Genre</string>
     <string name="media_service_car_item_no_title">Walang Pamagat</string>
-    <string name="music_notification_channel">Player pangkanta ng Jellyfin</string>
+    <string name="music_notification_channel">Player pangkanta ng Zerifin</string>
     <string name="dialog_web_view_not_supported">Hindi man supportado ng WebView</string>
     <string name="button_use_different_server">Gumamit na iba na Server</string>
-    <string name="bluetooth_permission_message">para ma detect kapag nag disconnect ang headphones or speakers, kailangang nang app yung Bluetooth access. kapag nasa android, yung bluetooth access naglalagay nang babala na may access sa iba na mnga devices, at baka makita yung lugar mo depende sa device. pero ang Jellyfin hindi man mag gagamit or magtanong nang lugar mo.</string>
+    <string name="bluetooth_permission_message">para ma detect kapag nag disconnect ang headphones or speakers, kailangang nang app yung Bluetooth access. kapag nasa android, yung bluetooth access naglalagay nang babala na may access sa iba na mnga devices, at baka makita yung lugar mo depende sa device. pero ang Zerifin hindi man mag gagamit or magtanong nang lugar mo.</string>
     <string name="toast_reopen_after_change">Ipa bukas ulit ang app pagkatapos na merong bago na pinalit</string>
     <string name="host_input_hint">Host</string>
     <string name="connection_error_cannot_connect">Hindi man maka connectado.

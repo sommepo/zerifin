@@ -50,7 +50,7 @@
     <string name="media_service_car_section_artists">కళాకారులు</string>
     <string name="media_service_car_section_songs">పాటలు</string>
     <string name="media_service_car_section_genres">శైలులు</string>
-    <string name="music_notification_channel">Jellyfin మ్యూజిక్ ప్లేయర్</string>
+    <string name="music_notification_channel">Zerifin మ్యూజిక్ ప్లేయర్</string>
     <string name="music_notification_channel_description">సంగీత ప్లేబ్యాక్ నియంత్రణల కోసం ఉపయోగించబడుతుంది</string>
     <string name="notification_action_rewind">రివైండ్ చేయండి</string>
     <string name="notification_action_play">play చేయండి</string>
@@ -70,7 +70,7 @@
     <string name="external_player_not_supported_yet">ఎంచుకున్న బాహ్య ప్లేయర్‌లో ప్లేబ్యాక్ ట్రాకింగ్‌కు ఇంకా మద్దతు లేదు. దీనికి మద్దతును జోడించడానికి ప్రయత్నించడానికి డెవలపర్‌లను సంప్రదించండి.</string>
     <string name="external_player_invalid_player">చెల్లుబాటు అయ్యే బాహ్య ప్లేయర్ ఎంచుకోబడలేదు. ప్లేబ్యాక్ ట్రాకింగ్ నిలిపివేయబడింది.</string>
     <string name="external_player_unknown_error">బాహ్య ప్లేయర్‌లో తెలియని లోపం. ప్లేబ్యాక్ ట్రాకింగ్ నిలిపివేయబడింది.</string>
-    <string name="activity_name_settings">Jellyfin సెట్టింగులు</string>
+    <string name="activity_name_settings">Zerifin సెట్టింగులు</string>
     <string name="pref_music_notification_always_dismissible_title">విస్మరించదగిన ప్లేయర్ నోటిఫికేషన్</string>
     <string name="pref_music_notification_always_dismissible_summary_off">ప్లేబ్యాక్ పాజ్ చేయబడినప్పుడు మాత్రమే నోటిఫికేషన్ తీసివేయబడుతుంది</string>
     <string name="pref_music_notification_always_dismissible_summary_on">మీడియాను ప్లే చేస్తున్నప్పుడు కూడా నోటిఫికేషన్ ఎల్లప్పుడూ తీసివేయబడవచ్చు</string>

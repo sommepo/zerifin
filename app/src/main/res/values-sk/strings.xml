@@ -13,7 +13,7 @@
     <string name="pref_category_video_player">Prehrávač videa</string>
     <string name="pref_music_notification_always_dismissible_title">Umožniť odstránenie upozornení prehrávača</string>
     <string name="pref_category_music_player">Prehrávač hudby</string>
-    <string name="activity_name_settings">Nastavenia Jellyfinu</string>
+    <string name="activity_name_settings">Nastavenia Zerifinu</string>
     <string name="menu_item_none">Žiadne</string>
     <string name="playback_info_and_x_more">…a %d ďalších</string>
     <string name="playback_info_audio_streams">Zvukové streamy</string>
@@ -56,7 +56,7 @@
     <string name="external_player_invalid_player">Nebol vybraný platný externý prehrávač. Sledovanie pozície prehrávania bolo zakázané.</string>
     <string name="external_player_not_supported_yet">Sledovanie pozície prehrávania v externom prehrávači nie je podporované. Kontaktujte vývojárov a požiadajte ich, aby podporu pridali.</string>
     <string name="music_notification_channel_description">Používa sa pre ovládanie prehrávania hudby</string>
-    <string name="music_notification_channel">Prehrávač hudby Jellyfin</string>
+    <string name="music_notification_channel">Prehrávač hudby Zerifin</string>
     <string name="media_service_car_item_no_title">Bez názvu</string>
     <string name="media_service_car_section_genres">Žánre</string>
     <string name="media_service_car_section_songs">Skladby</string>
@@ -103,7 +103,7 @@
     <string name="pref_subtitle_style_summary">Štýl titulkov môžete zmeniť v nastaveniach systému Android</string>
     <string name="pref_exoplayer_start_landscape_video_in_landscape">Spustiť horizontálne videá v v orientácii na šírku</string>
     <string name="button_use_different_server">Použiť iný server</string>
-    <string name="bluetooth_permission_message">Na detekovanie odpojenia bezdrôtových slúchadiel alebo reproduktorov vyžaduje aplikácia prístup cez Bluetooth. V systéme Android je toto povolenie opísané ako prístup k blízkym zariadeniam a upozorňuje, že zariadenia Bluetooth môžu byť použité na zistenie aktuálnej polohy. Aplikácia Jellyfin však toto povolenie nikdy nepoužije na zistenie vašej polohy.</string>
+    <string name="bluetooth_permission_message">Na detekovanie odpojenia bezdrôtových slúchadiel alebo reproduktorov vyžaduje aplikácia prístup cez Bluetooth. V systéme Android je toto povolenie opísané ako prístup k blízkym zariadeniam a upozorňuje, že zariadenia Bluetooth môžu byť použité na zistenie aktuálnej polohy. Aplikácia Zerifin však toto povolenie nikdy nepoužije na zistenie vašej polohy.</string>
     <string name="bluetooth_permission_continue">Pokračovať</string>
     <string name="bluetooth_permission_title">Povoliť prístup cez Bluetooth\?</string>
     <string name="bluetooth_permission_granted">Povolenie pre Bluetooth bolo udelené</string>

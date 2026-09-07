@@ -28,7 +28,7 @@
     <string name="menu_item_none">Puudub</string>
     <string name="menu_item_auto">Automaatne</string>
     <string name="pref_category_music_player">Muusikapleier</string>
-    <string name="activity_name_settings">Jellyfini sätted</string>
+    <string name="activity_name_settings">Zerifini sätted</string>
     <string name="pref_category_video_player">Videopleier</string>
     <string name="pref_video_player_type_title">Videopleieri tüüp</string>
     <string name="video_player_web">Veebi pleier</string>
@@ -72,7 +72,7 @@
         <item quantity="other">Prooviti sisestada %d kandidaati, kuid edutult.</item>
     </plurals>
     <string name="bluetooth_permission_title">Kas lubada Bluetoothile juurdepääs\?</string>
-    <string name="bluetooth_permission_message">Juhtmeta kõrvaklappide või kõlarite lahtiühendamise tuvastamiseks vajab rakendus Bluetoothi juurdepääsu. Androidis kirjeldatakse seda luba kui juurdepääsu lähedalasuvatele seadmetele ja hoiatab, et Bluetooth-seadmeid saab kasutada praeguse asukoha tuletamiseks. Rakendus Jellyfin ei kasuta seda luba aga kunagi teie asukoha tuvastamiseks.</string>
+    <string name="bluetooth_permission_message">Juhtmeta kõrvaklappide või kõlarite lahtiühendamise tuvastamiseks vajab rakendus Bluetoothi juurdepääsu. Androidis kirjeldatakse seda luba kui juurdepääsu lähedalasuvatele seadmetele ja hoiatab, et Bluetooth-seadmeid saab kasutada praeguse asukoha tuletamiseks. Rakendus Zerifin ei kasuta seda luba aga kunagi teie asukoha tuvastamiseks.</string>
     <string name="bluetooth_permission_continue">Jätka</string>
     <string name="battery_optimizations_message">Keela aku optimeerimine, et esitada meediat väljalülitatud ekraaniga.</string>
     <string name="network_message">Kas lubada allalaadimine mobiilse andmeside või rändlusvõrkude kaudu? Rakenduda võivad teenusepakkuja tasud. Sätet on võimalik hiljem seadistuste alt muuta.</string>
@@ -86,7 +86,7 @@
     <string name="media_service_generic_error">Ilmnes viga</string>
     <string name="media_service_item_not_found">Meediaüksust ei leitud</string>
     <string name="media_service_car_item_no_title">Pealkiri puudub</string>
-    <string name="music_notification_channel">Jellyfini muusikapleier</string>
+    <string name="music_notification_channel">Zerifini muusikapleier</string>
     <string name="music_notification_channel_description">Kasutatakse muusika taasesituse juhtnuppude jaoks</string>
     <string name="player_error_invalid_play_options">Taasesituse teavet ei saa lahendada</string>
     <string name="player_error_network_failure">Meediateavet ei saa serverist laadida</string>

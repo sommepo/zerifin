@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="activity_name_settings">Parametroj de Jellyfin</string>
+    <string name="activity_name_settings">Parametroj de Zerifin</string>
     <string name="playback_info_stream_unknown_title">Nekonata titolo</string>
     <string name="media_service_car_item_no_title">Sen titolo</string>
     <string name="mobile_data">Poŝfonaj Datenoj</string>
@@ -74,7 +74,7 @@
     <string name="external_player_invalid_play_method">Nevalida ludmetodo.</string>
     <string name="playback_info_and_x_more">…kaj %d pli</string>
     <string name="playback_info_play_method">Ludmetodo: %s</string>
-    <string name="music_notification_channel">Jellyfin Muzikludilo</string>
+    <string name="music_notification_channel">Zerifin Muzikludilo</string>
     <string name="media_service_generic_error">Eraro okazis</string>
     <string name="network_title">Permesitaj Rettipoj</string>
     <string name="dialog_web_view_not_supported">WebView ne subtenata</string>

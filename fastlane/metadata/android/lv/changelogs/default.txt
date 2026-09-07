@@ -1,3 +1,0 @@
-Paldies, ka izmantojat Jellyfin operētājsistēmai Android! Vienmēr ieteicams izmantot jaunāko izdoto Jellyfin serveri.
-
-Lai iegūtu vairāk informācijas, lūdzu, skatiet mūsu blogu vietnē jellyfin.org vai lasiet pilnu izmaiņu sarakstu GitHub.

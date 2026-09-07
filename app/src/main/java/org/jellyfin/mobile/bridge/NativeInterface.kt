@@ -16,9 +16,11 @@ import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.longOrNull
 import kotlinx.serialization.json.put
 import org.jellyfin.mobile.BuildConfig
+import org.jellyfin.mobile.R
 import org.jellyfin.mobile.events.ActivityEvent
 import org.jellyfin.mobile.events.ActivityEventHandler
 import org.jellyfin.mobile.player.deviceprofile.DeviceProfileBuilder
+import org.jellyfin.mobile.settings.SettingsFragment
 import org.jellyfin.mobile.utils.Constants
 import org.jellyfin.mobile.utils.Constants.EXTRA_ALBUM
 import org.jellyfin.mobile.utils.Constants.EXTRA_ARTIST
@@ -110,7 +112,10 @@ class NativeInterface(private val context: Context) : KoinComponent {
             putExtra(EXTRA_ARTIST, options[EXTRA_ARTIST]?.jsonPrimitive?.contentOrNull ?: "")
             putExtra(EXTRA_ALBUM, options[EXTRA_ALBUM]?.jsonPrimitive?.contentOrNull ?: "")
             putExtra(EXTRA_IMAGE_URL, options[EXTRA_IMAGE_URL]?.jsonPrimitive?.contentOrNull ?: "")
-            putExtra(EXTRA_POSITION, options[EXTRA_POSITION]?.jsonPrimitive?.longOrNull ?: PlaybackState.PLAYBACK_POSITION_UNKNOWN)
+            putExtra(
+                EXTRA_POSITION,
+                options[EXTRA_POSITION]?.jsonPrimitive?.longOrNull ?: PlaybackState.PLAYBACK_POSITION_UNKNOWN
+            )
             putExtra(EXTRA_DURATION, options[EXTRA_DURATION]?.jsonPrimitive?.longOrNull ?: 0L)
             putExtra(EXTRA_CAN_SEEK, options[EXTRA_CAN_SEEK]?.jsonPrimitive?.booleanOrNull ?: false)
             putExtra(EXTRA_IS_LOCAL_PLAYER, options[EXTRA_IS_LOCAL_PLAYER]?.jsonPrimitive?.booleanOrNull ?: true)
@@ -171,6 +176,21 @@ class NativeInterface(private val context: Context) : KoinComponent {
     @JavascriptInterface
     fun openClientSettings() {
         emitEvent(ActivityEvent.OpenSettings)
+    }
+
+    @JavascriptInterface
+    fun getLearningMenuLabels(): String = buildJsonObject {
+        put("title", context.getString(R.string.zerifin_learning_settings))
+        put("dictionary", context.getString(R.string.pref_japanese_dictionary))
+        put("anki", context.getString(R.string.pref_anki_mining))
+        put("youtube", "YouTube")
+    }.toString()
+
+    @JavascriptInterface
+    fun openLearningSettings(destination: String) {
+        if (destination == "youtube" || destination == SettingsFragment.DESTINATION_DICTIONARY || destination == SettingsFragment.DESTINATION_ANKI) {
+            emitEvent(ActivityEvent.OpenLearningSettings(destination))
+        }
     }
 
     @JavascriptInterface

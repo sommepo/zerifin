@@ -8,7 +8,7 @@
     <string name="pref_category_video_player">Odtwarzacz wideo</string>
     <string name="pref_music_notification_always_dismissible_title">Wyłącz powiadomienia odtwarzacza</string>
     <string name="pref_category_music_player">Odtwarzacz muzyki</string>
-    <string name="activity_name_settings">Ustawienia Jellyfin</string>
+    <string name="activity_name_settings">Ustawienia Zerifin</string>
     <string name="playback_info_and_x_more">... i %d wiecej</string>
     <string name="playback_info_transcoding">Transkodowanie: %b</string>
     <string name="playback_info_play_method">Metoda odtwarzania: %s</string>
@@ -19,7 +19,7 @@
     <string name="notification_action_pause">Pauza</string>
     <string name="notification_action_play">Odtwórz</string>
     <string name="notification_action_previous">Poprzednie</string>
-    <string name="music_notification_channel">Odtwarzacz muzyczny Jellyfin</string>
+    <string name="music_notification_channel">Odtwarzacz muzyczny Zerifin</string>
     <string name="media_service_car_item_no_title">Bez tytułu</string>
     <string name="media_service_car_section_genres">Gatunki</string>
     <string name="media_service_car_section_songs">Piosenki</string>
@@ -105,7 +105,7 @@
     <string name="bluetooth_permission_continue">Kontynuuj</string>
     <string name="bluetooth_permission_granted">Zgoda na korzystanie z Bluetooth została przyznana</string>
     <string name="bluetooth_permission_title">Zezwolić na dostęp do Bluetooth?</string>
-    <string name="bluetooth_permission_message">Aby wykryć czy bezprzewodowe słuchawki i głośniki zostały rozłączone, aplikacja wymaga dostępu do Bluetooth. W systemie Android to uprawnienie jest opisywane jako dostęp do pobliskich urządzeń i ostrzega, że urządzenia Bluetooth mogą służyć do określania bieżącej lokalizacji. Jednak aplikacja Jellyfin nigdy nie użyje tej zgody do określenia Twojej lokalizacji.</string>
+    <string name="bluetooth_permission_message">Aby wykryć czy bezprzewodowe słuchawki i głośniki zostały rozłączone, aplikacja wymaga dostępu do Bluetooth. W systemie Android to uprawnienie jest opisywane jako dostęp do pobliskich urządzeń i ostrzega, że urządzenia Bluetooth mogą służyć do określania bieżącej lokalizacji. Jednak aplikacja Zerifin nigdy nie użyje tej zgody do określenia Twojej lokalizacji.</string>
     <string name="wifi_only_summary">Multimedia będą pobierane wyłącznie przez Wi-Fi.</string>
     <string name="mobile_data_summary">Multimedia będą pobierane przez Wi-Fi i sieci komórkowe.</string>
     <string name="mobile_data_and_roaming_summary">Multimedia będą pobierane przez Wi-Fi, sieci komórkowe i roamingowe.</string>

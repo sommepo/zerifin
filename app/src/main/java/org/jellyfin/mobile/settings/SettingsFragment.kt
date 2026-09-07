@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import de.Maxr1998.modernpreferences.Preference
 import de.Maxr1998.modernpreferences.PreferencesAdapter
 import de.Maxr1998.modernpreferences.helpers.categoryHeader
@@ -22,14 +23,18 @@ import de.Maxr1998.modernpreferences.helpers.screen
 import de.Maxr1998.modernpreferences.helpers.singleChoice
 import de.Maxr1998.modernpreferences.preferences.CheckBoxPreference
 import de.Maxr1998.modernpreferences.preferences.choice.SelectionItem
+import kotlinx.coroutines.launch
 import org.jellyfin.mobile.R
 import org.jellyfin.mobile.app.AppPreferences
 import org.jellyfin.mobile.app.StorageManager
 import org.jellyfin.mobile.databinding.FragmentSettingsBinding
 import org.jellyfin.mobile.downloads.DownloadMethod
+import org.jellyfin.mobile.player.anki.AnkiDroidGateway
+import org.jellyfin.mobile.player.subtitle.YomitanDictionaryRepository
 import org.jellyfin.mobile.utils.BackPressInterceptor
 import org.jellyfin.mobile.utils.Constants
 import org.jellyfin.mobile.utils.applyWindowInsetsAsMargins
+import org.jellyfin.mobile.utils.extensions.addFragment
 import org.jellyfin.mobile.utils.extensions.requireMainActivity
 import org.jellyfin.mobile.utils.isPackageInstalled
 import org.jellyfin.mobile.utils.withThemedContext
@@ -39,6 +44,8 @@ class SettingsFragment : Fragment(), BackPressInterceptor {
 
     private val appPreferences: AppPreferences by inject()
     private val storageManager: StorageManager by inject()
+    private val dictionaryRepository by lazy { YomitanDictionaryRepository.get(requireContext()) }
+    private val ankiGateway by lazy { AnkiDroidGateway.get(requireContext()) }
 
     private val storageLocationPicker = registerForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
         if (uri != null) {
@@ -63,6 +70,8 @@ class SettingsFragment : Fragment(), BackPressInterceptor {
     private lateinit var networkBufferPreference: Preference
     private lateinit var externalPlayerChoicePreference: Preference
     private lateinit var downloadLocationPreference: Preference
+    private lateinit var dictionaryPreference: Preference
+    private lateinit var ankiPreference: Preference
 
     init {
         Preference.Config.titleMaxLines = 2
@@ -78,6 +87,8 @@ class SettingsFragment : Fragment(), BackPressInterceptor {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
         binding.recyclerView.adapter = settingsAdapter
+        lifecycleScope.launch { refreshDictionarySummary() }
+        refreshAnkiSummary()
         return binding.root
     }
 
@@ -93,6 +104,21 @@ class SettingsFragment : Fragment(), BackPressInterceptor {
     @Suppress("LongMethod")
     private fun buildSettingsScreen() = screen(requireContext()) {
         collapseIcon = true
+        categoryHeader(PREF_CATEGORY_LEARNING) {
+            titleRes = R.string.zerifin_learning_settings
+        }
+        dictionaryPreference = pref(PREF_JAPANESE_DICTIONARY) {
+            titleRes = R.string.pref_japanese_dictionary
+            summaryRes = R.string.pref_japanese_dictionary_summary_empty
+            defaultOnClick {
+                parentFragmentManager.addFragment<DictionaryManagerFragment>()
+            }
+        }
+        ankiPreference = pref(PREF_ANKI_MINING) {
+            titleRes = R.string.pref_anki_mining
+            summaryRes = R.string.pref_anki_mining_summary_empty
+            defaultOnClick { parentFragmentManager.addFragment<AnkiMappingFragment>() }
+        }
         categoryHeader(PREF_CATEGORY_MUSIC_PLAYER) {
             titleRes = R.string.pref_category_music_player
         }
@@ -291,9 +317,43 @@ class SettingsFragment : Fragment(), BackPressInterceptor {
         }
     }
 
+    private suspend fun refreshDictionarySummary() {
+        if (!::dictionaryPreference.isInitialized) return
+        val status = dictionaryRepository.status()
+        val attachedContext = context ?: return
+        dictionaryPreference.summary = if (status.entryCount == 0) {
+            attachedContext.getString(R.string.pref_japanese_dictionary_summary_empty)
+        } else {
+            attachedContext.getString(
+                R.string.zerifin_dictionary_summary,
+                status.dictionaryCount,
+                status.termCount,
+                status.frequencyCount,
+            )
+        }
+        dictionaryPreference.requestRebindAndHighlight()
+    }
+
+    private fun refreshAnkiSummary() {
+        if (!::ankiPreference.isInitialized) return
+        val preset = ankiGateway.loadPreset()
+        ankiPreference.summary = if (preset == null) {
+            getString(R.string.pref_anki_mining_summary_empty)
+        } else {
+            getString(R.string.pref_anki_mining_summary_configured, preset.deckName, preset.modelName)
+        }
+        ankiPreference.requestRebindAndHighlight()
+    }
+
     companion object {
+        const val ARG_LEARNING_DESTINATION = "learning_destination"
+        const val DESTINATION_DICTIONARY = "dictionary"
+        const val DESTINATION_ANKI = "anki"
+        private const val PREF_CATEGORY_LEARNING = "pref_category_learning"
         const val PREF_CATEGORY_MUSIC_PLAYER = "pref_category_music"
         const val PREF_CATEGORY_VIDEO_PLAYER = "pref_category_video"
         const val PREF_CATEGORY_DOWNLOADS = "pref_category_downloads"
+        const val PREF_JAPANESE_DICTIONARY = "pref_japanese_dictionary"
+        const val PREF_ANKI_MINING = "pref_anki_mining"
     }
 }

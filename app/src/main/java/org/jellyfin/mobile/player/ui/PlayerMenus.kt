@@ -191,7 +191,7 @@ class PlayerMenus(
         val height = videoStream?.height
         val width = videoStream?.width
         when (mediaSource) {
-            is LocalJellyfinMediaSource -> qualityButton.isVisible = false
+            is org.jellyfin.mobile.player.source.YouTubeMediaSource, is LocalJellyfinMediaSource -> qualityButton.isVisible = false
             is RemoteJellyfinMediaSource -> if (height != null && width != null) {
                 buildQualityMenu(qualityMenu.menu, mediaSource.maxStreamingBitrate, width, height)
             }

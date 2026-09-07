@@ -33,6 +33,7 @@ import org.jellyfin.mobile.utils.BluetoothPermissionHelper
 import org.jellyfin.mobile.utils.Constants
 import org.jellyfin.mobile.utils.PermissionRequestHelper
 import org.jellyfin.mobile.utils.SmartOrientationListener
+import org.jellyfin.mobile.utils.extensions.addFragment
 import org.jellyfin.mobile.utils.extensions.replaceFragment
 import org.jellyfin.mobile.utils.isWebViewSupported
 import org.jellyfin.mobile.webapp.RemotePlayerService
@@ -43,6 +44,7 @@ import org.koin.androidx.fragment.android.setupKoinFragmentFactory
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
+    private var pendingYouTube: String? = null
     private val activityEventHandler: ActivityEventHandler = get()
     val mainViewModel: MainViewModel by viewModel()
     val bluetoothPermissionHelper: BluetoothPermissionHelper = BluetoothPermissionHelper(this, get())
@@ -103,6 +105,7 @@ class MainActivity : AppCompatActivity() {
         )
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        pendingYouTube = savedInstanceState?.getString("pending_youtube") ?: sharedYouTube(intent)
 
         // Check WebView support
         if (!isWebViewSupported()) {
@@ -146,6 +149,40 @@ class MainActivity : AppCompatActivity() {
         chromecast.initializePlugin(this)
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        pendingYouTube = sharedYouTube(intent)
+        openPendingYouTube()
+    }
+
+    override fun onPostResume() {
+        super.onPostResume()
+        openPendingYouTube()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        pendingYouTube?.let { outState.putString("pending_youtube", it) }
+        super.onSaveInstanceState(outState)
+    }
+
+    private fun sharedYouTube(intent: Intent): String? = if (intent.action == Intent.ACTION_SEND && intent.type == "text/plain") {
+        org.jellyfin.mobile.youtube.YouTubeInput.videoId(intent.getStringExtra(Intent.EXTRA_TEXT).orEmpty())
+    } else null
+
+    private fun openPendingYouTube() {
+        val query = pendingYouTube ?: return
+        if (supportFragmentManager.isStateSaved || mainViewModel.serverState.value !is ServerState.Available) return
+        pendingYouTube = null
+        intent.removeExtra(Intent.EXTRA_TEXT)
+        if (supportFragmentManager.findFragmentById(R.id.fragment_container) is PlayerFragment) {
+            supportFragmentManager.popBackStackImmediate()
+        }
+        supportFragmentManager.addFragment<org.jellyfin.mobile.youtube.YouTubeFragment>(Bundle().apply {
+            putString("query", query)
+        })
+    }
+
     override fun onStart() {
         super.onStart()
         orientationListener.enable()
@@ -174,6 +211,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        openPendingYouTube()
     }
 
     override fun onRequestPermissionsResult(

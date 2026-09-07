@@ -38,7 +38,7 @@
         <item quantity="other"/>
     </plurals>
     <string name="connection_error_unsupported_version_or_product">Versão ou produto não suportado</string>
-    <string name="bluetooth_permission_message">Para detectar quando fones de ouvido ou alto-falantes sem fio estão desconectados, o aplicativo requer acesso Bluetooth. No Android, essa permissão é descrita como acesso a dispositivos próximos e avisa que dispositivos Bluetooth podem ser usados para inferir a localização atual. No entanto, o aplicativo Jellyfin nunca usará essa permissão para detectar sua localização.</string>
+    <string name="bluetooth_permission_message">Para detectar quando fones de ouvido ou alto-falantes sem fio estão desconectados, o aplicativo requer acesso Bluetooth. No Android, essa permissão é descrita como acesso a dispositivos próximos e avisa que dispositivos Bluetooth podem ser usados para inferir a localização atual. No entanto, o aplicativo Zerifin nunca usará essa permissão para detectar sua localização.</string>
     <string name="network_message">Deseja permitir que o download seja executado por dados móveis ou redes de roaming? Podem ser cobradas taxas da sua operadora. Você pode alterar essa opção posteriormente nas configurações.</string>
     <string name="network_title">Tipos de rede permitidos</string>
     <string name="battery_optimizations_message">Desative as otimizações de bateria para reprodução de mídia enquanto a tela estiver desligada.</string>
@@ -55,7 +55,7 @@
     <string name="wifi_only">Apenas WiFi</string>
     <string name="mobile_data">Dados Moveis</string>
     <string name="mobile_data_and_roaming">Dados Moveis e Roaming</string>
-    <string name="music_notification_channel">Reprodutor de música Jellyfin</string>
+    <string name="music_notification_channel">Reprodutor de música Zerifin</string>
     <string name="wifi_only_summary">A mídia será baixada somente via WiFi.</string>
     <string name="media_service_car_section_songs">Sons</string>
     <string name="music_notification_channel_description">Usado para controles de reprodução de música</string>
@@ -75,7 +75,7 @@
     <string name="playback_info_and_x_more">…e mais %d</string>
     <string name="menu_item_software_decoding">Decodificação por software</string>
     <string name="skip_media_segment">Pular</string>
-    <string name="activity_name_settings">Configurações do Jellyfin</string>
+    <string name="activity_name_settings">Configurações do Zerifin</string>
     <string name="mobile_data_summary">A mídia será baixada via WiFi e redes móveis.</string>
     <string name="playback_info_play_method">Método de reprodução: %s</string>
     <string name="menu_item_none">Nenhum</string>

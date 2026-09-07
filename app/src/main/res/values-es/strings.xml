@@ -6,7 +6,7 @@
     <string name="wifi_only">Solo WiFi</string>
     <string name="network_message">¿Deseas permitir la descarga a través de datos móviles o itinerancia? Tu operador puede realizar cargos adicionales. Puedes cambiar esta opción después en la configuración.</string>
     <string name="network_title">Tipo de redes permitidas</string>
-    <string name="battery_optimizations_message">Desactiva el ahorro de energía para Jellyfin en los ajustes del sistema a fin de poder reproducir contenido mientras la pantalla está apagada.</string>
+    <string name="battery_optimizations_message">Desactiva el ahorro de energía para Zerifin en los ajustes del sistema a fin de poder reproducir contenido mientras la pantalla está apagada.</string>
     <string name="connect_button_text">Conectar</string>
     <string name="connect_to_server_title">Conectarse al servidor</string>
     <string name="playback_info_transcoding">Conversión: %b</string>
@@ -17,7 +17,7 @@
     <string name="pref_category_video_player">Reproductor de vídeo</string>
     <string name="pref_category_music_player">Reproductor de música</string>
     <string name="pref_music_notification_always_dismissible_title">Notificación del reproductor descartable</string>
-    <string name="activity_name_settings">Ajustes de Jellyfin</string>
+    <string name="activity_name_settings">Ajustes de Zerifin</string>
     <string name="playback_info_and_x_more">... y %d más</string>
     <string name="playback_info_audio_streams">Streaming de audio</string>
     <string name="playback_info_video_streams">Streaming de vídeo</string>
@@ -56,7 +56,7 @@
     <string name="external_player_mpv">Reproductor MPV</string>
     <string name="external_player_app">Reproductor de video externo</string>
     <string name="music_notification_channel_description">Utilizado para el control de la reproducción de música</string>
-    <string name="music_notification_channel">Reproductor de Música Jellyfin</string>
+    <string name="music_notification_channel">Reproductor de Música Zerifin</string>
     <string name="media_service_car_item_no_title">Sin título</string>
     <string name="media_service_car_section_genres">Géneros</string>
     <string name="media_service_car_section_songs">Canciones</string>
@@ -103,7 +103,7 @@
     <string name="pref_exoplayer_start_landscape_video_in_landscape">Iniciar vídeos en orientación horizontal</string>
     <string name="button_use_different_server">Utiliza un servidor diferente</string>
     <string name="bluetooth_permission_title">¿Permitir conexión Bluetooth\?</string>
-    <string name="bluetooth_permission_message">La aplicación necesita acceso Bluetooth para detectar cuándo los auriculares o altavoces inalámbricos están desconectados. En Android, este permiso se describe como acceso a dispositivos cercanos, y advierte que los dispositivos Bluetooth podrían ser usados para inferir la localización actual. Sin embargo, la aplicación Jellyfin nunca usará este permiso para detectar su ubicación.</string>
+    <string name="bluetooth_permission_message">La aplicación necesita acceso Bluetooth para detectar cuándo los auriculares o altavoces inalámbricos están desconectados. En Android, este permiso se describe como acceso a dispositivos cercanos, y advierte que los dispositivos Bluetooth podrían ser usados para inferir la localización actual. Sin embargo, la aplicación Zerifin nunca usará este permiso para detectar su ubicación.</string>
     <string name="bluetooth_permission_continue">Continuar</string>
     <string name="bluetooth_permission_granted">Se concedió el permiso Bluetooth</string>
     <string name="mobile_data_and_roaming_summary">Los medios se descargarán a través de redes WiFi, móviles y de roaming.</string>

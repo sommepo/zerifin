@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="learning_back">Back</string>
+    <string name="learning_term_tab">Term</string>
+    <string name="learning_frequency_tab">Frequency</string>
+    <string name="learning_import">Import</string>
+    <string name="learning_empty_terms">No term dictionaries yet</string>
+    <string name="learning_empty_frequency">No frequency dictionaries yet</string>
+    <string name="learning_import_hint">Import a Yomitan dictionary ZIP</string>
+    <string name="learning_dictionary_entries">%1$s entries</string>
+    <string name="learning_pause_lookup">Pause on lookup</string>
+    <string name="learning_popup_theme">Popup appearance</string>
+    <string name="learning_system_theme">System</string>
+    <string name="learning_light_theme">Light</string>
+    <string name="learning_dark_theme">Dark</string>
+    <string name="learning_popup_settings">Subtitle popup</string>
+    <string name="learning_english_show">Show English subtitle</string>
+    <string name="learning_english_hide">Hide English subtitle</string>
+    <string name="learning_english_missing">No matching English subtitle</string>
+    <string name="learning_english_error">English subtitle is unavailable</string>
+    <string name="learning_import_failed">Could not import this dictionary. Please choose a Yomitan ZIP archive.</string>
+    <string name="learning_english_button" translatable="false">EN</string>
+</resources>

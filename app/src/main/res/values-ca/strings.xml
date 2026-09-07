@@ -22,7 +22,7 @@
     <string name="media_service_car_section_artists">Artistes</string>
     <string name="media_service_car_section_songs">Cançons</string>
     <string name="media_service_car_section_genres">Gèneres</string>
-    <string name="music_notification_channel">Reproductor de música de Jellyfin</string>
+    <string name="music_notification_channel">Reproductor de música de Zerifin</string>
     <string name="notification_action_previous">Anterior</string>
     <string name="notification_action_play">Reprodueix</string>
     <string name="notification_action_pause">Atura</string>
@@ -34,7 +34,7 @@
     <string name="menu_item_auto">Automàtic</string>
     <string name="menu_item_software_decoding">Descodificació de programari</string>
     <string name="external_player_invalid_play_method">Mètode de reproducció no vàlid.</string>
-    <string name="activity_name_settings">Configuració de Jellyfin</string>
+    <string name="activity_name_settings">Configuració de Zerifin</string>
     <string name="video_player_web">Reproductor web</string>
     <string name="video_player_external">Reproductor extern</string>
     <string name="pref_exoplayer_start_landscape_video_in_landscape">Iniciar vídeos en mode paisatge en orientació paisatge</string>
@@ -104,7 +104,7 @@
     <string name="bluetooth_permission_continue">Continua</string>
     <string name="bluetooth_permission_title">Autoritzeu la connexió via Bluetooth?</string>
     <string name="bluetooth_permission_granted">S\'ha concedit el permís Bluetooth</string>
-    <string name="bluetooth_permission_message">L\'aplicació necessita accés a Bluetooth per a detectar quan els auriculars o altaveus sense fils estan desconnectats. A Android, aquest permís es descriu com a accés a dispositius propers, i adverteix que els dispositius Bluetooth podrien ser utilitzats per a inferir la localització actual. Tot i això, l\'aplicació Jellyfin mai farà servir aquest permís per a detectar la seva ubicació.</string>
+    <string name="bluetooth_permission_message">L\'aplicació necessita accés a Bluetooth per a detectar quan els auriculars o altaveus sense fils estan desconnectats. A Android, aquest permís es descriu com a accés a dispositius propers, i adverteix que els dispositius Bluetooth podrien ser utilitzats per a inferir la localització actual. Tot i això, l\'aplicació Zerifin mai farà servir aquest permís per a detectar la seva ubicació.</string>
     <string name="wifi_only_summary">Els continguts multimèdia només es baixaran mitjançant wifi.</string>
     <string name="mobile_data_summary">Els continguts multimèdia es descarregaran mitjançant wifi i xarxes mòbils.</string>
     <string name="mobile_data_and_roaming_summary">Els continguts multimèdia es descarregaran mitjançant wifi, xarxes mòbils i d\'itinerància.</string>

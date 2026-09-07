@@ -7,7 +7,7 @@
     <string name="network_message">Ar norite leisti duomenų siuntimą per mobilius arba tarptinklinius tinklus? Gali būti taikomi teikėjo mokesčiai. Šį nustatymą galėsite pakeisti vėliau.</string>
     <string name="network_title">Leidžiamos tinklo rūšys</string>
     <string name="battery_optimizations_message">Prašome išjungti baterijos optimizavimą, tam kad medijos atkūrimas veiktų išjungus ekraną.</string>
-    <string name="activity_name_settings">Jellyfin Nustatymai</string>
+    <string name="activity_name_settings">Zerifin Nustatymai</string>
     <string name="external_player_unknown_error">Nežinoma išorinio grotuvo klaida. Atkūrimo sekimas išjungtas.</string>
     <string name="external_player_invalid_player">Nepasirinktas tinkamas išorinis grotuvas. Atkūrimo sekimas išjungtas.</string>
     <string name="external_player_not_supported_yet">Atkūrimo sekimas dar nepalaikomas pasirinktame išoriniame grotuve. Susisiekite su kūrėjais dėl jo palaikymo pridėjimo.</string>
@@ -32,7 +32,7 @@
     <string name="notification_action_rewind">Atsukti</string>
     <string name="notification_action_previous">Ankstesnis</string>
     <string name="music_notification_channel_description">Naudojamas muzikos atkūrimo valdikliams</string>
-    <string name="music_notification_channel">Jellyfin Muzikos Grotuvas</string>
+    <string name="music_notification_channel">Zerifin Muzikos Grotuvas</string>
     <string name="media_service_car_item_no_title">Be pavadinimo</string>
     <string name="media_service_car_section_genres">Žanrai</string>
     <string name="media_service_car_section_songs">Dainos</string>
@@ -82,7 +82,7 @@
     </plurals>
     <string name="menu_item_hardware_decoding">Aparatūrinis dekodavimas</string>
     <string name="bluetooth_permission_title">Leisti Bluetooth prieigą?</string>
-    <string name="bluetooth_permission_message">Programa reikalauja Bluetooth prieigos, kad atpažinti kada atjungiamos bevielės ausinės ar garsiakalbiai. Android operacinėje sistemoje, tai vadinama prieiga prie artimų įrenginių, bei joje įspėjama, kad Bluetooth įrenginiai gali būti naudojami gauti dabartinę lokaciją. Jellyfin programa niekada nenaudos šios prieigos aptikti lokaciją.</string>
+    <string name="bluetooth_permission_message">Programa reikalauja Bluetooth prieigos, kad atpažinti kada atjungiamos bevielės ausinės ar garsiakalbiai. Android operacinėje sistemoje, tai vadinama prieiga prie artimų įrenginių, bei joje įspėjama, kad Bluetooth įrenginiai gali būti naudojami gauti dabartinę lokaciją. Zerifin programa niekada nenaudos šios prieigos aptikti lokaciją.</string>
     <string name="menu_item_auto">Auto</string>
     <string name="video_player_native_description">Remiantis ExoPlayer, palaikoma daugiau vaizdo įrašų formatų ir kodekų, jis labiau integruotas į operacinę sistemą</string>
     <string name="pref_exoplayer_start_landscape_video_in_landscape">Paleisti horizontaliojo režimo vaizdo įrašus horizontalia orientacija</string>

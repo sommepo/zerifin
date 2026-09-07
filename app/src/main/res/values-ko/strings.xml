@@ -14,7 +14,7 @@
     <string name="pref_category_video_player">비디오 재생기</string>
     <string name="pref_music_notification_always_dismissible_title">지울 수 있는 음악 플레이어 알림</string>
     <string name="pref_category_music_player">음악 플레이어</string>
-    <string name="activity_name_settings">Jellyfin 설정</string>
+    <string name="activity_name_settings">Zerifin 설정</string>
     <string name="playback_info_and_x_more">...그리고 %d 만큼 더</string>
     <string name="playback_info_audio_streams">오디오 스트림</string>
     <string name="playback_info_video_streams">비디오 스트림</string>
@@ -81,7 +81,7 @@
     <string name="playback_info_stream_unknown_title">알 수 없는 타이틀</string>
     <string name="player_error_unsupported_content">이 기기에서 재생할 수 없는 미디어</string>
     <string name="music_notification_channel_description">음악 재생 컨트롤에 사용됩니다</string>
-    <string name="music_notification_channel">Jellyfin 음악 플레이어</string>
+    <string name="music_notification_channel">Zerifin 음악 플레이어</string>
     <string name="connection_error_unsupported_version_or_product">지원되지 않는 버전 또는 제품</string>
     <string name="pref_exoplayer_remember_brightness">화면 밝기 기억</string>
     <string name="video_player_integrated">내장 플레이어</string>
@@ -98,7 +98,7 @@
     <string name="pref_exoplayer_start_landscape_video_in_landscape">가로 모드 비디오를 가로 모드로 재생 시작</string>
     <string name="pref_subtitle_style_summary">안드로이드 설정에서 자막 스타일을 변경할 수 있습니다</string>
     <string name="bluetooth_permission_title">Bluetooth 권한을 허용 하시겠습니까?</string>
-    <string name="bluetooth_permission_message">Jellyfin은 무선 헤드폰이나 스피커의 연결 해제 감지를 위해 Bluetooth 권한이 필요합니다. Android에서 근처 기기 액세스 권한으로 표시되며, 기기 간 상대적 위치를 파악할 수 있다고 경고할 수 있습니다. 하지만 Jellyfin은 사용자의 위치 정보를 얻기 위해 이 권한을 사용하지 않습니다.</string>
+    <string name="bluetooth_permission_message">Zerifin은 무선 헤드폰이나 스피커의 연결 해제 감지를 위해 Bluetooth 권한이 필요합니다. Android에서 근처 기기 액세스 권한으로 표시되며, 기기 간 상대적 위치를 파악할 수 있다고 경고할 수 있습니다. 하지만 Zerifin은 사용자의 위치 정보를 얻기 위해 이 권한을 사용하지 않습니다.</string>
     <string name="bluetooth_permission_continue">계속</string>
     <string name="bluetooth_permission_granted">Bluetooth 접근 권한이 허용되었습니다</string>
     <string name="pref_exoplayer_direct_play_ass">직접 플레이시 SSA/ASS 자막 허용</string>

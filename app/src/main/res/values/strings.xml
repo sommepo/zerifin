@@ -24,7 +24,7 @@
     <string name="button_use_different_server">Use a different server</string>
 
     <string name="bluetooth_permission_title">Allow Bluetooth access?</string>
-    <string name="bluetooth_permission_message">To detect when wireless headphones or speakers are disconnected, the app requires Bluetooth access. On Android, this permission is described as access to nearby devices, and warns that Bluetooth devices can be used to infer the current location. However, the Jellyfin app will never use this permission to detect your location.</string>
+    <string name="bluetooth_permission_message">To detect when wireless headphones or speakers are disconnected, the app requires Bluetooth access. On Android, this permission is described as access to nearby devices, and warns that Bluetooth devices can be used to infer the current location. However, the Zerifin app will never use this permission to detect your location.</string>
     <string name="bluetooth_permission_continue">Continue</string>
     <string name="bluetooth_permission_granted">Bluetooth permission was granted</string>
     <string name="battery_optimizations_message">Please disable battery optimizations for media playback while the screen is off.</string>
@@ -57,7 +57,7 @@
     <string name="media_service_car_section_playlists">Playlists</string>
     <string name="media_service_car_item_no_title">No title</string>
 
-    <string name="music_notification_channel">Jellyfin Music Player</string>
+    <string name="music_notification_channel">Zerifin Music Player</string>
     <string name="music_notification_channel_description">Used for music playback controls</string>
     <string name="notification_action_previous">Previous</string>
     <string name="notification_action_rewind">Rewind</string>
@@ -82,13 +82,19 @@
     <string name="menu_item_hardware_decoding">Hardware Decoding</string>
     <string name="menu_item_software_decoding">Software Decoding</string>
     <string name="skip_media_segment">Skip</string>
+    <string name="subtitle_lookup_title">Subtitle lookup</string>
+    <string name="subtitle_lookup_message">Selected:\n%1$s\n\nSubtitle:\n%2$s\n\nDefinition:\n%3$s</string>
+    <string name="subtitle_lookup_close">Close</string>
+    <string name="subtitle_lookup_no_results">No dictionary result was found for this tap.\n\nSubtitle:\n%1$s\n\nImport a Yomitan term dictionary from Dictionaries in the side menu.</string>
+    <string name="subtitle_lookup_results">Subtitle:\n%1$s\n\nResults:\n%2$s</string>
+    <string name="subtitle_lookup_failed">Dictionary lookup failed: %1$s</string>
 
     <string name="external_player_invalid_play_method">Invalid play method.</string>
     <string name="external_player_not_supported_yet">Playback tracking not supported in selected external player yet. Contact developers to try to add support for it.</string>
     <string name="external_player_invalid_player">No valid external player selected. Playback tracking disabled.</string>
     <string name="external_player_unknown_error">Unknown error in external player. Playback tracking disabled.</string>
 
-    <string name="activity_name_settings">Jellyfin Settings</string>
+    <string name="activity_name_settings">Zerifin Settings</string>
     <string name="pref_category_music_player">Music player</string>
     <string name="pref_music_notification_always_dismissible_title">Dismissible player notification</string>
     <string name="pref_music_notification_always_dismissible_summary_off">The notification can only be dismissed when playback is paused</string>
@@ -136,6 +142,12 @@
 
     <string name="pref_subtitle_style">Customize subtitle style</string>
     <string name="pref_subtitle_style_summary">You can change the subtitle style in the Android settings</string>
+    <string name="pref_japanese_dictionary">Dictionaries</string>
+    <string name="pref_japanese_dictionary_summary_empty">Tap to import Yomitan term or frequency dictionary ZIPs</string>
+    <string name="pref_japanese_dictionary_summary">%1$s — %2$d entries. Tap to replace.</string>
+    <string name="pref_japanese_dictionary_importing">Importing and indexing dictionary…</string>
+    <string name="pref_japanese_dictionary_imported">Japanese dictionary imported</string>
+    <string name="pref_japanese_dictionary_import_failed">Import failed: %1$s</string>
 
     <string name="pref_category_downloads">Downloads</string>
     <string name="pref_download_location">Download location</string>

@@ -2,7 +2,7 @@
 <resources>
     <string name="pref_music_notification_always_dismissible_title">Notifikasi pemutar yang bisa dihapus</string>
     <string name="pref_category_music_player">Pemutar lagu</string>
-    <string name="activity_name_settings">Pengaturan Jellyfin</string>
+    <string name="activity_name_settings">Pengaturan Zerifin</string>
     <string name="wifi_only">Hanya WiFi</string>
     <string name="connect_button_text">Menghubungkan</string>
     <string name="connect_to_server_title">Sambungkan ke Server</string>
@@ -47,7 +47,7 @@
     <string name="external_player_mpv">Pemutar MPV</string>
     <string name="external_player_app">Aplikasi pemutaran eksternal</string>
     <string name="music_notification_channel_description">Untuk pengaturan pemutaran musik</string>
-    <string name="music_notification_channel">Pemutar Musik Jellyfin</string>
+    <string name="music_notification_channel">Pemutar Musik Zerifin</string>
     <string name="media_service_car_item_no_title">Tanpa judul</string>
     <string name="media_service_car_section_genres">Genre</string>
     <string name="media_service_car_section_songs">Lagu</string>
@@ -104,7 +104,7 @@
     <string name="bluetooth_permission_continue">Lanjutkan</string>
     <string name="bluetooth_permission_granted">Perizinan Bluethooth sudah disetujui</string>
     <string name="menu_item_software_decoding">Pengkodean Perangkat Lunak</string>
-    <string name="bluetooth_permission_message">Untuk mendeteksi headphone wireless atau speaker saat tidak tersambung, aplikasi membutuhkan akses Bluetooth. Di android, perizinan ini di desckripsikan sebagai \"Akses ke perangkat sekitar\", dan memberitahu bahwa Bluetooth dapat di akses di lokasi sekarang. Akan tetapi, Jellyfin tidak akan menggunakan perizinan ini untuk mendeteksi lokasimu.</string>
+    <string name="bluetooth_permission_message">Untuk mendeteksi headphone wireless atau speaker saat tidak tersambung, aplikasi membutuhkan akses Bluetooth. Di android, perizinan ini di desckripsikan sebagai \"Akses ke perangkat sekitar\", dan memberitahu bahwa Bluetooth dapat di akses di lokasi sekarang. Akan tetapi, Zerifin tidak akan menggunakan perizinan ini untuk mendeteksi lokasimu.</string>
     <string name="wifi_only_summary">Media akan di unduk hanya menggunakan WiFi saja</string>
     <string name="mobile_data_summary">Media akan di unduh melewati WiFi dan Jaringan Data Seluler</string>
     <string name="mobile_data_and_roaming_summary">Media akan di unduh dengan Wifi, Data Seluler dan Jaringan Roaming</string>

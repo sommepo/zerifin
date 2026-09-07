@@ -49,7 +49,7 @@
     <string name="media_service_car_section_albums">Άλμπουμ</string>
     <string name="media_service_car_section_genres">Είδη</string>
     <string name="media_service_car_item_no_title">Χωρίς τίτλο</string>
-    <string name="music_notification_channel">Jellyfin Music Player</string>
+    <string name="music_notification_channel">Zerifin Music Player</string>
     <string name="music_notification_channel_description">Χρησιμοποιείται για χειρισμό αναπαραγωγής μουσικής</string>
     <string name="notification_action_rewind">Πίσω</string>
     <string name="notification_action_next">Επόμενο</string>
@@ -61,7 +61,7 @@
     <string name="menu_item_software_decoding">Αποκωδικοποίηση Λογισμικού</string>
     <string name="external_player_not_supported_yet">Η παρακολούθηση αναπαραγωγής δεν υποστηρίζεται ακόμη σε επιλεγμένη εξωτερική συσκευή αναπαραγωγής. Επικοινωνήστε με τους προγραμματιστές για να προσπαθήσετε να προσθέσετε υποστήριξη για αυτό.</string>
     <string name="external_player_invalid_player">Δεν έχει επιλεγεί έγκυρη εξωτερική συσκευή αναπαραγωγής. Η παρακολούθηση αναπαραγωγής είναι απενεργοποιημένη.</string>
-    <string name="activity_name_settings">Ρυθμίσεις Jellyfin</string>
+    <string name="activity_name_settings">Ρυθμίσεις Zerifin</string>
     <string name="dialog_button_ignore">Παράβλεψη</string>
     <plurals name="connection_error_prefix">
         <item quantity="one">Δοκιμάστηκε %d υποψήφιος για εισαγωγή, χωρίς επιτυχία.</item>
@@ -102,7 +102,7 @@
     <string name="external_player_system_default_description">Αφήστε το σύστημα να χειριστεί την επιλογή προγράμματος αναπαραγωγής, ορισμένα προγράμματα αναπαραγωγής ενδέχεται να μην είναι πλήρως συμβατά.</string>
     <string name="pref_category_downloads">Λήψεις</string>
     <string name="pref_download_location">Τοποθεσία Λήψεων</string>
-    <string name="bluetooth_permission_message">Για να εντοπίσετε πότε τα ασύρματα ακουστικά ή ηχεία είναι αποσυνδεδεμένα, η εφαρμογή απαιτεί πρόσβαση Bluetooth. Στο Android, αυτή η άδεια περιγράφεται ως πρόσβαση σε κοντινές συσκευές και προειδοποιεί ότι οι συσκευές Bluetooth μπορούν να χρησιμοποιηθούν για να συναχθεί η τρέχουσα τοποθεσία. Ωστόσο, η εφαρμογή Jellyfin δεν θα χρησιμοποιήσει ποτέ αυτήν την άδεια για να εντοπίσει την τοποθεσία σας.</string>
+    <string name="bluetooth_permission_message">Για να εντοπίσετε πότε τα ασύρματα ακουστικά ή ηχεία είναι αποσυνδεδεμένα, η εφαρμογή απαιτεί πρόσβαση Bluetooth. Στο Android, αυτή η άδεια περιγράφεται ως πρόσβαση σε κοντινές συσκευές και προειδοποιεί ότι οι συσκευές Bluetooth μπορούν να χρησιμοποιηθούν για να συναχθεί η τρέχουσα τοποθεσία. Ωστόσο, η εφαρμογή Zerifin δεν θα χρησιμοποιήσει ποτέ αυτήν την άδεια για να εντοπίσει την τοποθεσία σας.</string>
     <string name="bluetooth_permission_granted">Η άδεια Bluetooth παραχωρήθηκε</string>
     <string name="bluetooth_permission_title">Να επιτρέπεται η πρόσβαση Bluetooth;</string>
     <string name="bluetooth_permission_continue">Συνέχεια</string>

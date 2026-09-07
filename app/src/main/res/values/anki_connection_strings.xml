@@ -1,0 +1,13 @@
+<resources>
+    <string name="anki_connection_checking">Checking AnkiDroid…</string>
+    <string name="anki_connection_ready">Connected to AnkiDroid</string>
+    <string name="anki_connection_unavailable">AnkiDroid API unavailable. Open AnkiDroid and enable its API in Advanced settings.</string>
+    <string name="anki_connection_permission">AnkiDroid permission required</string>
+    <string name="anki_connection_failed">AnkiDroid is installed, but its collection could not be read. Open AnkiDroid, then check again.</string>
+    <string name="anki_connection_local">Direct connection on this phone. AnkiConnect is not needed.</string>
+    <string name="anki_connection_check">Check connection</string>
+    <string name="anki_connection_open">Open AnkiDroid</string>
+    <string name="anki_connection_grant">Grant access</string>
+    <string name="anki_last_failure">Last card error: %1$s</string>
+    <string name="anki_failure_detail">Card not added: %1$s</string>
+</resources>

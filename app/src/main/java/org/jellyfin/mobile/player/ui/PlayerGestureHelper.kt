@@ -393,54 +393,76 @@ class PlayerGestureHelper(
 
     init {
         @Suppress("ClickableViewAccessibility")
-        playerView.setOnTouchListener { _, event ->
-            if (playerView.useController) {
-                when (event.pointerCount) {
-                    1 -> gestureDetector.onTouchEvent(event)
-                    2 -> zoomGestureDetector.onTouchEvent(event)
-                }
-            } else {
-                unlockDetector.onTouchEvent(event)
-            }
-            if (event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_CANCEL) {
-                if (isOnPressingSpeedUp) {
-                    isOnPressingSpeedUp = false
-                    with(fragment) {
-                        onPressSpeedUp(false)
-                    }
-                }
+        playerView.setOnTouchListener { _, event -> handleTouchEvent(event) }
+    }
 
-                // Handle horizontal seek gesture completion
-                if (event.action == MotionEvent.ACTION_UP && currentGesture == GestureDirection.HORIZONTAL && isHorizontalSeeking && seekTimeAccumulator != 0L) {
-                    fragment.onSeekByOffset(seekTimeAccumulator)
-                    seekOverlayLayout.apply {
-                        removeCallbacks(hideSeekOverlayAction)
-                        postDelayed(
-                            hideSeekOverlayAction,
-                            Constants.DEFAULT_CENTER_OVERLAY_TIMEOUT_MS.toLong(),
-                        )
-                    }
-                }
-                currentGesture = GestureDirection.NONE
-                isHorizontalSeeking = false
-                seekTimeAccumulator = 0L
-                seekStartPosition = 0L
-                mediaDuration = 0L
-
-                // Hide gesture indicator after timeout, if shown
-                gestureIndicatorOverlayLayout.apply {
-                    if (isVisible) {
-                        removeCallbacks(hideGestureIndicatorOverlayAction)
-                        postDelayed(
-                            hideGestureIndicatorOverlayAction,
-                            Constants.DEFAULT_CENTER_OVERLAY_TIMEOUT_MS.toLong(),
-                        )
-                    }
-                }
-                swipeGestureValueTracker = -1f
+    /**
+     * Feed a player-coordinate touch stream into the normal playback gesture detectors.
+     *
+     * The interactive subtitle overlay uses this entry point after it wins touch dispatch. A
+     * recognized subtitle tap ends the forwarded stream with ACTION_CANCEL; a drag continues the
+     * stream so seek, brightness, volume, and zoom gestures behave normally.
+     */
+    fun handleTouchEvent(event: MotionEvent): Boolean {
+        if (playerView.useController) {
+            when (event.pointerCount) {
+                1 -> gestureDetector.onTouchEvent(event)
+                2 -> zoomGestureDetector.onTouchEvent(event)
             }
-            true
+        } else {
+            unlockDetector.onTouchEvent(event)
         }
+        if (
+            event.actionMasked == MotionEvent.ACTION_UP ||
+            event.actionMasked == MotionEvent.ACTION_CANCEL
+        ) {
+            finishTouchGesture(event)
+        }
+        return true
+    }
+
+    private fun finishTouchGesture(event: MotionEvent) {
+        if (isOnPressingSpeedUp) {
+            isOnPressingSpeedUp = false
+            with(fragment) {
+                onPressSpeedUp(false)
+            }
+        }
+
+        // Handle horizontal seek gesture completion
+        if (shouldCommitHorizontalSeek(event)) {
+            fragment.onSeekByOffset(seekTimeAccumulator)
+            seekOverlayLayout.apply {
+                removeCallbacks(hideSeekOverlayAction)
+                postDelayed(
+                    hideSeekOverlayAction,
+                    Constants.DEFAULT_CENTER_OVERLAY_TIMEOUT_MS.toLong(),
+                )
+            }
+        }
+        currentGesture = GestureDirection.NONE
+        isHorizontalSeeking = false
+        seekTimeAccumulator = 0L
+        seekStartPosition = 0L
+        mediaDuration = 0L
+
+        // Hide gesture indicator after timeout, if shown
+        gestureIndicatorOverlayLayout.apply {
+            if (isVisible) {
+                removeCallbacks(hideGestureIndicatorOverlayAction)
+                postDelayed(
+                    hideGestureIndicatorOverlayAction,
+                    Constants.DEFAULT_CENTER_OVERLAY_TIMEOUT_MS.toLong(),
+                )
+            }
+        }
+        swipeGestureValueTracker = -1f
+    }
+
+    private fun shouldCommitHorizontalSeek(event: MotionEvent): Boolean {
+        if (event.actionMasked != MotionEvent.ACTION_UP) return false
+        if (currentGesture != GestureDirection.HORIZONTAL) return false
+        return isHorizontalSeeking && seekTimeAccumulator != 0L
     }
 
     fun handleConfiguration(newConfig: Configuration) {

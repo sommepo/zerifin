@@ -1,6 +1,7 @@
 *.iml
 .gradle
 /.kotlin
+/buildSrc/.kotlin/
 /local.properties
 /.idea
 .DS_Store
@@ -8,3 +9,38 @@ build
 /captures
 .externalNativeBuild
 .cxx
+
+# Local configuration, signing material and generated distributions
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.pem
+*.key
+*.apk
+*.aab
+*.apks
+keystore.properties
+signing.properties
+*.log
+*.pid
+__pycache__/
+.venv/
+.toolchains/
+.cache/
+.runtime/
+# Dictionary archives and local application data
+*.apkg
+*.colpkg
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+/dictionaries/
+/artifacts/
+
+*.zip

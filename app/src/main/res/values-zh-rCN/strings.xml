@@ -19,7 +19,7 @@
     <string name="pref_category_video_player">视频播放器</string>
     <string name="pref_music_notification_always_dismissible_title">可忽略的播放器通知</string>
     <string name="pref_category_music_player">音乐播放器</string>
-    <string name="activity_name_settings">Jellyfin设置</string>
+    <string name="activity_name_settings">Zerifin设置</string>
     <string name="playback_info_and_x_more">....还有 %d 个</string>
     <string name="playback_info_audio_streams">音频流</string>
     <string name="playback_info_video_streams">视频流</string>
@@ -56,7 +56,7 @@
     <string name="external_player_mpv">MPV 播放器</string>
     <string name="external_player_app">外部播放器应用</string>
     <string name="music_notification_channel_description">用于控制音乐播放</string>
-    <string name="music_notification_channel">Jellyfin 音乐播放器</string>
+    <string name="music_notification_channel">Zerifin 音乐播放器</string>
     <string name="media_service_car_item_no_title">无标题</string>
     <string name="media_service_car_section_genres">风格</string>
     <string name="media_service_car_section_songs">歌曲</string>
@@ -101,7 +101,7 @@
     <string name="menu_item_hardware_decoding">硬件解码</string>
     <string name="menu_item_software_decoding">软件解码</string>
     <string name="button_use_different_server">使用其它服务器</string>
-    <string name="bluetooth_permission_message">为了检测无线耳机或扬声器是否断开连接，应用需要蓝牙访问权限。在 Android 系统中，该权限被描述为“附近的设备”，权限可以使用蓝牙推断您的当前位置。不过，Jellyfin 应用程序将不会使用该权限来检测你的位置。</string>
+    <string name="bluetooth_permission_message">为了检测无线耳机或扬声器是否断开连接，应用需要蓝牙访问权限。在 Android 系统中，该权限被描述为“附近的设备”，权限可以使用蓝牙推断您的当前位置。不过，Zerifin 应用程序将不会使用该权限来检测你的位置。</string>
     <string name="bluetooth_permission_title">允许使用蓝牙？</string>
     <string name="bluetooth_permission_continue">继续</string>
     <string name="bluetooth_permission_granted">已授予蓝牙权限</string>

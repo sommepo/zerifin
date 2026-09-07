@@ -10,7 +10,7 @@
     <string name="connect_to_server_title">Соединение с сервером</string>
     <string name="pref_category_video_player">Видео проигрыватель</string>
     <string name="pref_category_music_player">Музыкальный проигрыватель</string>
-    <string name="activity_name_settings">Параметры Jellyfin</string>
+    <string name="activity_name_settings">Параметры Zerifin</string>
     <string name="menu_item_none">Ничего</string>
     <string name="connect_button_text">Соединение</string>
     <string name="host_input_hint">Узел</string>
@@ -55,7 +55,7 @@
     <string name="external_player_mpv_description">Простой, компактный и удобный бесплатный видео проигрыватель. Поддерживает разнообразные форматы медиафайлов.</string>
     <string name="external_player_mpv">MPV-плейер</string>
     <string name="external_player_app">Приложение внешнего проигрывателя</string>
-    <string name="music_notification_channel">Проигрыватель музыки Jellyfin</string>
+    <string name="music_notification_channel">Проигрыватель музыки Zerifin</string>
     <string name="music_notification_channel_description">Используется для управления воспроизведением музыки</string>
     <string name="media_service_car_item_no_title">Без названия</string>
     <string name="media_service_car_section_genres">Жанры</string>
@@ -107,7 +107,7 @@
     <string name="bluetooth_permission_continue">Продолжить</string>
     <string name="bluetooth_permission_granted">Доступ к Bluetooth разрешён</string>
     <string name="bluetooth_permission_title">Разрешить доступ к Bluetooth\?</string>
-    <string name="bluetooth_permission_message">Чтобы определить, что беспроводное аудио устройство отключилось, приложению нужен доступ к Bluetooth. На Android права доступа объясняются доступом к близлежащим устройствам, и предупреждают Вас о том, что устройства могут пытаться узнать Ваше местоположение. Однако Jellyfin не использует эти права для доступа к Вашему местоположению.</string>
+    <string name="bluetooth_permission_message">Чтобы определить, что беспроводное аудио устройство отключилось, приложению нужен доступ к Bluetooth. На Android права доступа объясняются доступом к близлежащим устройствам, и предупреждают Вас о том, что устройства могут пытаться узнать Ваше местоположение. Однако Zerifin не использует эти права для доступа к Вашему местоположению.</string>
     <string name="wifi_only_summary">Медиа будут загружаться только через Wi-Fi.</string>
     <string name="mobile_data_summary">Медиа будут загружаться через Wi-Fi и мобильные сети.</string>
     <string name="mobile_data_and_roaming_summary">Медиафайлы будут загружаться через Wi-Fi, мобильные сети и в роуминге.</string>

@@ -57,7 +57,7 @@
     <string name="pref_video_player_type_title">Video oynatıcı türü</string>
     <string name="pref_category_video_player">Video oynatıcı</string>
     <string name="pref_category_music_player">Müzik çalar</string>
-    <string name="activity_name_settings">Jellyfin Ayarları</string>
+    <string name="activity_name_settings">Zerifin Ayarları</string>
     <string name="external_player_invalid_play_method">Geçersiz oynatma yöntemi.</string>
     <string name="playback_info_audio_streams">Ses akışları</string>
     <string name="playback_info_video_streams">Video akışları</string>
@@ -72,7 +72,7 @@
     <string name="notification_action_play">Oynat</string>
     <string name="notification_action_rewind">Geri sar</string>
     <string name="notification_action_previous">Önceki</string>
-    <string name="music_notification_channel">Jellyfin Müzik Çalar</string>
+    <string name="music_notification_channel">Zerifin Müzik Çalar</string>
     <string name="media_service_car_item_no_title">Başlık yok</string>
     <string name="media_service_car_section_genres">Türler</string>
     <string name="media_service_car_section_songs">Şarkılar</string>
@@ -103,7 +103,7 @@
     <string name="pref_subtitle_style">Altyazı biçimini özelleştir</string>
     <string name="pref_subtitle_style_summary">Altyazı stilini Android ayarlarından değiştirebilirsiniz</string>
     <string name="bluetooth_permission_title">Bluetooth erişimine izin verilsin mi\?</string>
-    <string name="bluetooth_permission_message">Kablosuz kulaklıkların veya hoparlörlerin bağlantısının kesildiğini tespit etmek için uygulama Bluetooth erişimine ihtiyaç duyuyor. Android\'de bu izin, yakındaki cihazlara erişim olarak tanımlanır ve Bluetooth cihazlarının mevcut konumunu tespit etmek için kullanılabileceği konusunda uyarır. Ancak Jellyfin uygulaması konumunuzu tespit etmek için bu izni asla kullanmayacaktır.</string>
+    <string name="bluetooth_permission_message">Kablosuz kulaklıkların veya hoparlörlerin bağlantısının kesildiğini tespit etmek için uygulama Bluetooth erişimine ihtiyaç duyuyor. Android\'de bu izin, yakındaki cihazlara erişim olarak tanımlanır ve Bluetooth cihazlarının mevcut konumunu tespit etmek için kullanılabileceği konusunda uyarır. Ancak Zerifin uygulaması konumunuzu tespit etmek için bu izni asla kullanmayacaktır.</string>
     <string name="bluetooth_permission_continue">Devam et</string>
     <string name="bluetooth_permission_granted">Bluetooth izni verildi</string>
     <string name="wifi_only_summary">Medya yalnızca kablosuz bağlantı üzerinden indirilecektir.</string>

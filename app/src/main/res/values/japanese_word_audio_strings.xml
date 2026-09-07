@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="japanese_word_audio_privacy">Word audio uses JapanesePod101 when you play it or map it to a card. Downloaded audio is cached on this device.</string>
+</resources>

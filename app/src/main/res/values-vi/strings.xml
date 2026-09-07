@@ -11,7 +11,7 @@
     <string name="pref_category_video_player">Trình phát video</string>
     <string name="pref_music_notification_always_dismissible_title">Loại bỏ thông báo trình phát</string>
     <string name="pref_category_music_player">Trình phát nhạc</string>
-    <string name="activity_name_settings">Cài đặt Jellyfin</string>
+    <string name="activity_name_settings">Cài đặt Zerifin</string>
     <string name="external_player_unknown_error">Lỗi không xác định trong trình phát bên ngoài. Đã tắt theo dõi phát lại.</string>
     <string name="external_player_invalid_player">Không có trình phát bên ngoài hợp lệ nào được chọn. Đã tắt theo dõi phát lại.</string>
     <string name="external_player_not_supported_yet">Theo dõi phát lại không hỗ trợ ở trình phát bên ngoài đã chọn. Liên hệ với nhà phát triển để cố gắng thêm hỗ trợ cho nó.</string>
@@ -56,7 +56,7 @@
     <string name="external_player_mpv">Trình phát MPV</string>
     <string name="external_player_app">Ứng dụng trình phát bên ngoài</string>
     <string name="music_notification_channel_description">Được sử dụng để điều khiển phát nhạc</string>
-    <string name="music_notification_channel">Trình Phát Nhạc Jellyfin</string>
+    <string name="music_notification_channel">Trình Phát Nhạc Zerifin</string>
     <string name="media_service_car_item_no_title">Không tiêu đề</string>
     <string name="media_service_car_section_genres">Thể Loại</string>
     <string name="media_service_car_section_songs">Bài Hát</string>
@@ -101,7 +101,7 @@
     <string name="menu_item_hardware_decoding">Giải Mã Phần Cứng</string>
     <string name="menu_item_software_decoding">Giải Mã Phần Mềm</string>
     <string name="pref_exoplayer_start_landscape_video_in_landscape">Bắt đầu video ở chế độ ngang theo hướng ngang</string>
-    <string name="bluetooth_permission_message">Để phát hiện khi tai nghe hoặc loa không dây bị ngắt kết nối, ứng dụng yêu cầu quyền truy cập Bluetooth. Trên Android, quyền này được mô tả là quyền truy cập vào các thiết bị ở gần và cảnh báo rằng các thiết bị Bluetooth có thể được sử dụng để suy ra vị trí hiện tại. Tuy nhiên, ứng dụng Jellyfin sẽ không bao giờ sử dụng quyền này để phát hiện vị trí của bạn.</string>
+    <string name="bluetooth_permission_message">Để phát hiện khi tai nghe hoặc loa không dây bị ngắt kết nối, ứng dụng yêu cầu quyền truy cập Bluetooth. Trên Android, quyền này được mô tả là quyền truy cập vào các thiết bị ở gần và cảnh báo rằng các thiết bị Bluetooth có thể được sử dụng để suy ra vị trí hiện tại. Tuy nhiên, ứng dụng Zerifin sẽ không bao giờ sử dụng quyền này để phát hiện vị trí của bạn.</string>
     <string name="bluetooth_permission_title">Cho phép truy cập Bluetooth\?</string>
     <string name="bluetooth_permission_continue">Tiếp tục</string>
     <string name="bluetooth_permission_granted">Quyền Bluetooth đã được cấp</string>

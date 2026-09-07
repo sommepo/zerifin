@@ -13,7 +13,7 @@
     <string name="download_no_storage_permission">Немагчыма загрузіць файлы без дазволу на захоўванне</string>
     <string name="media_service_car_section_recents">Нядаўна прайгравалася</string>
     <string name="media_service_car_section_songs">Песні</string>
-    <string name="music_notification_channel">Музычны прайгравальнік Jellyfin</string>
+    <string name="music_notification_channel">Музычны прайгравальнік Zerifin</string>
     <string name="media_service_car_section_artists">Выканаўцы</string>
     <string name="notification_action_next">Далей</string>
     <string name="external_player_mx_player_pro">Прайгравальнік MX Player Pro</string>
@@ -85,7 +85,7 @@
     <string name="pref_download_location">Месца для спамповак</string>
     <string name="pref_category_downloads">Спампоўкі</string>
     <string name="pref_subtitle_style_summary">Вы можаце змяніць стыль субцітраў у наладах Android</string>
-    <string name="activity_name_settings">Налады Jellyfin</string>
+    <string name="activity_name_settings">Налады Zerifin</string>
     <string name="external_player_unknown_error">Невядомая памылка знешняга прайгравальніка. Адсочванне прайгравання адключана.</string>
     <string name="external_player_system_default_description">Дазвольце сістэме выбар прайгравальніка, некаторыя прайгравальнікі могуць быць не цалкам сумяшчальныя.</string>
     <string name="external_player_not_supported_yet">Адсочванне прайгравання пакуль не падтрымліваецца ў выбраным знешнім прайгравальніку. Звяжыцеся з распрацоўшчыкамі, каб паспрабаваць дадаць падтрымку.</string>
@@ -105,7 +105,7 @@
     <string name="external_player_mx_player_pro_description">Платная версія MX Player, якая забяспечвае бесперапыннае прайграванне відэа.</string>
     <string name="bluetooth_permission_continue">Працягнуць</string>
     <string name="bluetooth_permission_title">Дазволіць доступ па Bluetooth\?</string>
-    <string name="bluetooth_permission_message">Каб вызначыць, калі бесправадныя навушнікі або калонкі адлучаны, праграме патрабуецца доступ па Bluetooth. На Android гэты дазвол апісваецца як доступ да прылад паблізу і папярэджвае, што прылады Bluetooth можна выкарыстоўваць для вызначэння бягучага месцазнаходжання. Аднак праграма Jellyfin ніколі не будзе выкарыстоўваць гэты дазвол для вызначэння вашага месцазнаходжання.</string>
+    <string name="bluetooth_permission_message">Каб вызначыць, калі бесправадныя навушнікі або калонкі адлучаны, праграме патрабуецца доступ па Bluetooth. На Android гэты дазвол апісваецца як доступ да прылад паблізу і папярэджвае, што прылады Bluetooth можна выкарыстоўваць для вызначэння бягучага месцазнаходжання. Аднак праграма Zerifin ніколі не будзе выкарыстоўваць гэты дазвол для вызначэння вашага месцазнаходжання.</string>
     <string name="bluetooth_permission_granted">Быў дадзены дазвол Bluetooth</string>
     <string name="wifi_only_summary">Мультымедыя будзе спампоўвацца толькі праз Wi-Fi.</string>
     <string name="mobile_data_and_roaming_summary">Мультымедыя будзе спампоўвацца праз Wi-Fi, мабільную сетку і сетку ў роўмінгу.</string>

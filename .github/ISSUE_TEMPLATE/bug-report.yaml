@@ -1,106 +1,44 @@
-name: Bug report
-description: Create a bug report
-labels:
-  - bug
+name: Zerifin bug report
+description: Report a problem with playback, subtitle lookup, dictionaries, mining or YouTube.
+labels: [bug]
 body:
-  - type: checkboxes
-    id: before-posting
-    attributes:
-      label: "This issue respects the following points:"
-      description: All conditions are **required**.
-      options:
-        - label: This issue is **not** already reported on [GitHub](https://github.com/jellyfin/jellyfin-android/issues?q=is%3Aopen+is%3Aissue) _(I've searched it)_.
-          required: true
-        - label: I agree to follow Jellyfin's [Code of Conduct](https://jellyfin.org/docs/general/community-standards.html#code-of-conduct).
-          required: true
-        - label: This report addresses only a single issue; If you encounter multiple issues, kindly create separate reports for each one.
-          required: true
   - type: markdown
     attributes:
-      value: |
-        ## Bug information  
+      value: Please search this fork's existing issues first. Remove credentials, private media and personal card content from anything you attach.
   - type: textarea
-    id: description
+    id: reproduce
     attributes:
-      label: Describe the bug
-      description: |
-        A clear and concise description of the bug, including steps to reproduce it and the normally expected behavior.
-        You can also attach screenshots or screen recordings to help explain your issue.
-      placeholder: |
-        1. Go to …
-        2. Click on …
-        3. Scroll down to …
-        4. See error / the app crashes
-
-        Instead, I expect …
-    validations:
-      required: true
-  - type: textarea
-    id: logs
-    attributes:
-      label: Logs
-      description: |
-        Please paste your client logs (logcat) here, *NOT* server logs (in most cases).
-        Learn how to capture those logcats [here](https://wiki.lineageos.org/logcat.html).
-        Make sure that they don't contain any sensitive information like server URL, auth tokens or passwords.
-      placeholder: Paste logs…
-      render: shell
-  - type: markdown
-    attributes:
-      value: |
-        ## Environment
-  - type: input
-    id: app-version
-    attributes:
-      label: Application version
-      description: The version of the installed Jellyfin for Android app.
-      placeholder: 2.6.1
+      label: What happened?
+      description: Steps to reproduce, expected behavior and actual behavior.
     validations:
       required: true
   - type: dropdown
-    id: installation-source
+    id: area
     attributes:
-      label: Where did you install the app from?
-      description: Choose the appropriate app store or installation method.
-      options:
-        - Google Play Store
-        - Amazon Appstore
-        - F-Droid
-        - Sideloaded APK (libre build)
-        - Sideloaded APK (proprietary build)
-  - type: input
-    id: device-info
-    attributes:
-      label: Device information
-      description: Manufacturer and model
-      placeholder: Google Pixel 5, Samsung Galaxy S21
+      label: Feature
+      options: [Jellyfin playback, Subtitle lookup, Dictionaries, Anki mining, YouTube, Other]
     validations:
       required: true
   - type: input
-    id: android-version
+    id: version
     attributes:
-      label: Android version
-      description: Version of the OS and other information (e.g. custom ROM / OEM skin)
-      placeholder: Android 13, LineageOS 20
+      label: Zerifin version or commit
     validations:
       required: true
   - type: input
-    id: server-version
+    id: device
     attributes:
-      label: Jellyfin server version
-      description: If on unstable, please specify the commit hash.
-      placeholder: 10.10.2
+      label: Android version and device model
     validations:
       required: true
-  - type: markdown
+  - type: textarea
+    id: source
     attributes:
-      value: |
-        ## Additional
-  - type: input
-    id: other-sources
+      label: Media and setup
+      description: Relevant Jellyfin/AnkiDroid versions, subtitle format, audio language, dictionary format or public YouTube URL. Do not attach private archives.
+  - type: textarea
+    id: error
     attributes:
-      label: Other sources
-      description: If this topic has been discussed outside of GitHub, please link it.
-      placeholder: https://forum.jellyfin.org/…
-    validations:
-      required: false
+      label: Error message or relevant log lines
+      description: For mining, include Last card error. For YouTube, include the companion's categorized error. Remove tokens, session URLs and private data.
+      render: text

@@ -10,7 +10,7 @@
     <string name="available_servers_title">Tøkir ambætarar</string>
     <string name="button_use_different_server">Vel ein annan ambætara</string>
     <string name="bluetooth_permission_title">Játta Bluetooth rættindi?</string>
-    <string name="bluetooth_permission_message">Appin tørvar Bluetooth rættindi, til tess at varnast nær høvuðlurt ella hátalarir verða sambundnir slitnir frá. Á Android eru hesi rættindi lýst sum atgongd til eindir í nánd, og ávara verður at Bluetooth eindir kunnu brúkast til at sipa til núverandi staðseting. Jellyfin appin fer tó ongantíð at brúka hesi rættindi at varnast tína staðseting.</string>
+    <string name="bluetooth_permission_message">Appin tørvar Bluetooth rættindi, til tess at varnast nær høvuðlurt ella hátalarir verða sambundnir slitnir frá. Á Android eru hesi rættindi lýst sum atgongd til eindir í nánd, og ávara verður at Bluetooth eindir kunnu brúkast til at sipa til núverandi staðseting. Zerifin appin fer tó ongantíð at brúka hesi rættindi at varnast tína staðseting.</string>
     <string name="bluetooth_permission_continue">Hald áfram</string>
     <string name="bluetooth_permission_granted">Bluetooth rættindi vóru játtaði</string>
     <string name="wifi_only">Einans WiFi</string>
@@ -26,7 +26,7 @@
     <string name="media_service_car_section_songs">Sangir</string>
     <string name="media_service_car_section_genres">Greinar</string>
     <string name="media_service_car_item_no_title">Einki heiti</string>
-    <string name="music_notification_channel">Jellyfin tónleikaspælari</string>
+    <string name="music_notification_channel">Zerifin tónleikaspælari</string>
     <string name="notification_action_rewind">Spola aftur</string>
     <string name="notification_action_play">Spæl</string>
     <string name="notification_action_fast_forward">Spola fram</string>
@@ -36,7 +36,7 @@
     <string name="menu_item_hardware_decoding">Tólbúnaðaravkoting</string>
     <string name="menu_item_software_decoding">Ritbúnaðaravkoting</string>
     <string name="skip_media_segment">Leyp um</string>
-    <string name="activity_name_settings">Jellyfin-stillingar</string>
+    <string name="activity_name_settings">Zerifin-stillingar</string>
     <string name="pref_category_music_player">Tónleikaspælari</string>
     <string name="video_player_web">Vevspælari</string>
     <string name="video_player_external">Ytri spælari</string>

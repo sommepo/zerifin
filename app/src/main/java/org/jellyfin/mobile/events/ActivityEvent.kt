@@ -10,6 +10,7 @@ sealed class ActivityEvent {
     class OpenUrl(val uri: String, val grantReadPermission: Boolean = false) : ActivityEvent()
     class DownloadItems(val itemIds: Collection<UUID>) : ActivityEvent()
     class CastMessage(val action: String, val args: JSONArray) : ActivityEvent()
+    class OpenLearningSettings(val destination: String) : ActivityEvent()
     data object RequestBluetoothPermission : ActivityEvent()
     data object OpenSettings : ActivityEvent()
     data object SelectServer : ActivityEvent()

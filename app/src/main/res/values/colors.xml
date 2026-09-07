@@ -4,13 +4,13 @@
     <color name="jellyfin_primary">#202020</color>
     <color name="jellyfin_primary_dark">#101010</color>
     <!-- Secondary -->
-    <color name="jellyfin_accent">#00a4dc</color>
+    <color name="jellyfin_accent">#18b886</color>
 
     <!-- Launcher icon background -->
-    <color name="ic_launcher_background">#000b25</color>
+    <color name="ic_launcher_background">#061b13</color>
 
     <!-- Splash logo color for API < 24. API >= 24 will have the default gradient. -->
-    <color name="splash_fill">#fafafa</color>
+    <color name="splash_fill">#18b886</color>
 
     <!-- App colors -->
     <color name="theme_background">#101010</color>

@@ -14,7 +14,7 @@ fun AppTheme(content: @Composable () -> Unit) {
     val colors = remember {
         @Suppress("MagicNumber")
         darkColors(
-            primary = Color(0xFF00A4DC),
+            primary = Color(0xFF18B886),
             primaryVariant = Color(0xFF202020),
             background = Color(0xFF101010),
             surface = Color(0xFF363636),

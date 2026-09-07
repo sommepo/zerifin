@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="subtitle_anki_new_word">New in Anki</string>
+    <string name="subtitle_anki_existing_word">✓ Already in Anki</string>
+    <string name="subtitle_anki_status_unknown">Anki status unavailable</string>
+    <string name="subtitle_word_audio_play">Play audio for %1$s</string>
+    <string name="subtitle_word_audio_missing">Word audio is unavailable</string>
+    <string name="subtitle_anki_added_partial">Added to AnkiDroid. Unavailable: %1$s</string>
+    <string name="subtitle_anki_media_failed">Could not prepare card media. Please try again.</string>
+    <string name="subtitle_anki_media_translation">English subtitle</string>
+    <string name="subtitle_anki_media_sentence">Japanese sentence audio</string>
+    <string name="subtitle_anki_media_word">word audio</string>
+    <string name="subtitle_anki_media_image">picture</string>
+</resources>

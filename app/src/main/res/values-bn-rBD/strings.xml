@@ -52,7 +52,7 @@
     <string name="media_service_car_section_artists">শিল্পীগণ</string>
     <string name="pref_category_music_player">মিউজিক প্লেয়ার</string>
     <string name="media_service_car_item_no_title">টাইটেল নেই</string>
-    <string name="music_notification_channel">Jellyfin মিউজিক প্লেয়ার</string>
+    <string name="music_notification_channel">Zerifin মিউজিক প্লেয়ার</string>
     <string name="playback_info_audio_streams">অডিও স্ট্রিম</string>
     <string name="music_notification_channel_description">মিউজিক প্লে নিয়ন্ত্রণের জন্য ব্যবহৃত</string>
     <string name="dialog_button_close_app">অ্যাপ ক্লোজ করুন</string>
@@ -79,7 +79,7 @@
     <string name="external_player_not_supported_yet">নির্বাচিত বাহ্যিক প্লেয়ারে প্লেব্যাক ট্র্যাকিং এখনও সমর্থিত নয়। এটির জন্য সমর্থন যোগ করার চেষ্টা করতে ডেভেলপারদের সাথে যোগাযোগ করুন।</string>
     <string name="external_player_invalid_player">কোনো সঠিক বাহ্যিক প্লেয়ার নির্বাচন করা হয়নি। প্লেব্যাক ট্র্যাকিং বন্ধ করা হয়েছে।</string>
     <string name="external_player_unknown_error">বাহ্যিক প্লেয়ারে অজানা ত্রুটি দেখা দিয়েছে। প্লেব্যাক ট্র্যাকিং বন্ধ করা হয়েছে।</string>
-    <string name="activity_name_settings">Jellyfin সেটিংস</string>
+    <string name="activity_name_settings">Zerifin সেটিংস</string>
     <string name="pref_music_notification_always_dismissible_title">বাতিলযোগ্য প্লেয়ার নোটিফিকেশন</string>
     <string name="pref_music_notification_always_dismissible_summary_off">প্লেব্যাক থেমে গেলেই তবেই নোটিফিকেশনটি বাতিল করা যেতে পারে</string>
     <string name="pref_music_notification_always_dismissible_summary_on">নোটিফিকেশনটি সর্বদা বাতিল করা যেতে পারে, এমনকি মিডিয়া প্লে করার সময়ও</string>

@@ -20,7 +20,7 @@
 \nVennligst sjekk tjenernavnet og nettverkstilkoblingen.</string>
     <string name="pref_exoplayer_allow_background_audio">Bakgrunnslyd</string>
     <string name="pref_category_music_player">Musikkspiller</string>
-    <string name="activity_name_settings">Jellyfin-innstillinger</string>
+    <string name="activity_name_settings">Zerifin-innstillinger</string>
     <string name="playback_info_and_x_more">…og %d mer</string>
     <string name="playback_info_play_method">Avspillingsmetode: %s</string>
     <string name="notification_action_stop">Stopp</string>
@@ -53,7 +53,7 @@
     <string name="external_player_mpv_description">En enkel, liten og lett fri videospiller. Den støtter et bredt utvalg av mediefilformater.</string>
     <string name="external_player_app">Ekstern avspiller-app</string>
     <string name="music_notification_channel_description">Brukes til kontroller for avspilling av musikk</string>
-    <string name="music_notification_channel">Jellyfin musikkspiller</string>
+    <string name="music_notification_channel">Zerifin musikkspiller</string>
     <string name="media_service_car_item_no_title">Uten tittel</string>
     <string name="media_service_car_section_genres">Sjangere</string>
     <string name="media_service_car_section_songs">Sanger</string>
@@ -105,7 +105,7 @@
     <string name="bluetooth_permission_continue">Fortsett</string>
     <string name="bluetooth_permission_title">Tillate Bluetooth-tilgang\?</string>
     <string name="bluetooth_permission_granted">Bluetooth-tillatelse ble gitt</string>
-    <string name="bluetooth_permission_message">For å oppdage når trådløse hodetelefoner eller høyttalere er frakoblet, krever appen Bluetooth-tilgang. På Android beskrives denne tillatelsen som tilgang til enheter i nærheten, og advarer om at Bluetooth-enheter kan brukes til å utlede gjeldende posisjon. Jellyfin-appen vil imidlertid aldri bruke denne tillatelsen til å oppdage posisjonen din.</string>
+    <string name="bluetooth_permission_message">For å oppdage når trådløse hodetelefoner eller høyttalere er frakoblet, krever appen Bluetooth-tilgang. På Android beskrives denne tillatelsen som tilgang til enheter i nærheten, og advarer om at Bluetooth-enheter kan brukes til å utlede gjeldende posisjon. Zerifin-appen vil imidlertid aldri bruke denne tillatelsen til å oppdage posisjonen din.</string>
     <string name="wifi_only_summary">Media lastes kun ned på WiFi.</string>
     <string name="mobile_data_summary">Media vil ikke bli lastet ned over WiFi og mobilnett.</string>
     <string name="mobile_data_and_roaming_summary">Media vil bli lastet ned over WiFi, roaming- og mobilnett.</string>

@@ -27,7 +27,7 @@
     <string name="notification_action_rewind">החזר לאחור</string>
     <string name="notification_action_next">הבא</string>
     <string name="menu_item_auto">אוטומטי</string>
-    <string name="activity_name_settings">הגדרות Jellyfin</string>
+    <string name="activity_name_settings">הגדרות Zerifin</string>
     <string name="video_player_external">נגן חיצוני</string>
     <string name="dialog_web_view_outdated">WebView מיושן</string>
     <string name="connect_to_server_title">התחבר לשרת</string>
@@ -48,7 +48,7 @@
     <string name="pref_category_music_player">נגן מוזיקה</string>
     <string name="pref_exoplayer_allow_brightness_volume_gesture">מחוות בהירות ועוצמת קול</string>
     <string name="mobile_data_and_roaming">נתונים סלולריים ורשתות בנדידה</string>
-    <string name="music_notification_channel">נגן מוזיקה של Jellyfin</string>
+    <string name="music_notification_channel">נגן מוזיקה של Zerifin</string>
     <string name="media_service_item_not_found">פריט מדיה לא נמצא</string>
     <string name="player_error_unspecific_exception">משהו השתבש עם הנגן</string>
     <string name="button_use_different_server">השתמש בשרת אחר</string>
@@ -107,7 +107,7 @@
     <string name="bluetooth_permission_title">לאפשר גישה בבלוטות׳\?</string>
     <string name="bluetooth_permission_continue">המשך</string>
     <string name="bluetooth_permission_granted">הוענקה גישה לבלוטות׳</string>
-    <string name="bluetooth_permission_message">כדי לזהות מתי אוזניות או רמקולים מנותקים, היישומון צריך גישה לבלוטות׳. ב־Android, ההרשאה הזאת מתוארת כגישה להתקנים סמוכים ומזהירה שהתקני בלוטות׳ יכולים לשמש להסקת המיקום הנוכחי שלך. עם זאת, היישומון של Jellyfin אף פעם לא ישתמש בהרשאה הזאת כדי לאתר את המקום שלך.</string>
+    <string name="bluetooth_permission_message">כדי לזהות מתי אוזניות או רמקולים מנותקים, היישומון צריך גישה לבלוטות׳. ב־Android, ההרשאה הזאת מתוארת כגישה להתקנים סמוכים ומזהירה שהתקני בלוטות׳ יכולים לשמש להסקת המיקום הנוכחי שלך. עם זאת, היישומון של Zerifin אף פעם לא ישתמש בהרשאה הזאת כדי לאתר את המקום שלך.</string>
     <string name="wifi_only_summary">הורדת מדיה באמצעות WiFi בלבד.</string>
     <string name="mobile_data_summary">הורדת מדיה באמצעות WiFi ונתונים סלולרים.</string>
     <string name="mobile_data_and_roaming_summary">הורדת מדיה באמצעות WiFi, נתונים סלולריים ורשתות בנדידה.</string>

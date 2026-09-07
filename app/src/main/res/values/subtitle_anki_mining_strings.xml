@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="subtitle_anki_setup_required">Set up Anki mining in Client settings first.</string>
+    <string name="subtitle_anki_busy">Wait for the current Anki card to finish.</string>
+    <string name="subtitle_anki_unavailable">AnkiDroid is not installed or its API is disabled.</string>
+    <string name="subtitle_anki_permission_denied">AnkiDroid access was not granted.</string>
+    <string name="subtitle_anki_added">Card added to AnkiDroid.</string>
+    <string name="subtitle_anki_duplicate">This card is already in AnkiDroid.</string>
+    <string name="subtitle_anki_failed">The card could not be added to AnkiDroid.</string>
+</resources>

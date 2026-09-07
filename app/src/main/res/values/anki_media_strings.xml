@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="anki_mapping_media_description">Choose where to save words from the player. Audio, pictures and matching English subtitles are included when available.</string>
+    <string name="anki_mapping_media_fields_description">Choose a value for each field. Use Word for the first field to check whether a word is already in Anki.</string>
+    <string name="anki_mapping_first_field_text">Map “%1$s” to text, such as Word, so duplicates can be checked.</string>
+    <string name="anki_field_source_english_subtitle">English sentence</string>
+    <string name="anki_field_source_sentence_audio">Japanese sentence audio</string>
+    <string name="anki_field_source_word_audio">Word audio</string>
+    <string name="anki_field_source_image">Picture</string>
+    <string name="anki_field_source_source_title">Show / source title</string>
+    <string name="anki_field_source_frequency">Frequency</string>
+</resources>

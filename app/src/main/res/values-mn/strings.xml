@@ -30,7 +30,7 @@
     <string name="available_servers_title">Боломжит серверүүд</string>
     <string name="button_use_different_server">Өөр сервер ашиглах</string>
     <string name="bluetooth_permission_title">Bluetooth-г зөвшөөрөх үү?</string>
-    <string name="bluetooth_permission_message">Утасгүй чихэвч эсвэл чанга яригч салсаныг илрүүлэхийн тулд програмд Bluetooth-д нэвтрэх эрх шаардлагатай. Android-д энэ эрхийг ойролцоох төхөөрөмжүүдэд нэвтрэх эрх гэж тодорхойлдог бөгөөд Bluetooth төхөөрөмжүүдийг ашиглан одоогийн байршлыг тодорхойлж болзошгүй гэж анхааруулдаг. Гэсэн ч Jellyfin аппликейшн энэ эрхийг таны байршлыг илрүүлэхэд ашиглахгүй.</string>
+    <string name="bluetooth_permission_message">Утасгүй чихэвч эсвэл чанга яригч салсаныг илрүүлэхийн тулд програмд Bluetooth-д нэвтрэх эрх шаардлагатай. Android-д энэ эрхийг ойролцоох төхөөрөмжүүдэд нэвтрэх эрх гэж тодорхойлдог бөгөөд Bluetooth төхөөрөмжүүдийг ашиглан одоогийн байршлыг тодорхойлж болзошгүй гэж анхааруулдаг. Гэсэн ч Zerifin аппликейшн энэ эрхийг таны байршлыг илрүүлэхэд ашиглахгүй.</string>
     <string name="bluetooth_permission_continue">Үргэлжлүүлэх</string>
     <string name="bluetooth_permission_granted">Bluetooth-д нэвтрэх эрх олгогдсон</string>
     <string name="battery_optimizations_message">Дэлгэц унтраалттай байх үед медиа тоглуулахад зайны оновчлолыг идэвхгүй болгоно уу.</string>
@@ -49,7 +49,7 @@
     <string name="media_service_car_section_recents">Саяхан тоглуулсан</string>
     <string name="media_service_car_section_albums">Цомгууд</string>
     <string name="media_service_car_item_no_title">Гарчиггүй</string>
-    <string name="music_notification_channel">Jellyfin Хөгжим Тоглуулагч</string>
+    <string name="music_notification_channel">Zerifin Хөгжим Тоглуулагч</string>
     <string name="music_notification_channel_description">Хөгжим тоглуулах хяналтуудад ашиглагдана</string>
     <string name="notification_action_previous">Өмнөх</string>
     <string name="notification_action_rewind">Буцах</string>
@@ -75,7 +75,7 @@
     <string name="external_player_not_supported_yet">Сонгосон гадаад тоглуулагчид тоглуулах явцыг хянах дэмжлэг одоогоор байхгүй байна. Үүнийг нэмэхийн тулд хөгжүүлэгчидтэй холбогдоно уу.</string>
     <string name="external_player_invalid_player">Хүчинтэй гадаад тоглуулагч сонгогдоогүй байна. Тоглуулах хяналт идэвхгүй боллоо.</string>
     <string name="external_player_unknown_error">Гадаад тоглуулагчид тодорхойгүй алдаа гарлаа. Тоглуулах хяналт идэвхгүй боллоо.</string>
-    <string name="activity_name_settings">Jellyfin тохиргоо</string>
+    <string name="activity_name_settings">Zerifin тохиргоо</string>
     <string name="pref_category_music_player">Хөгжим тоглуулагч</string>
     <string name="pref_music_notification_always_dismissible_title">Хаах боломжтой тоглуулагч мэдэгдэл</string>
     <string name="pref_music_notification_always_dismissible_summary_off">Мэдэгдлийг зөвхөн тоглуулахыг түр зогсоосон үед хааж болно</string>

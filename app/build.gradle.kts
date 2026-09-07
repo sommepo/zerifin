@@ -122,7 +122,7 @@ android {
     }
 }
 
-base.archivesName.set("jellyfin-android-v${project.getVersionName()}")
+base.archivesName.set("zerifin-v${project.getVersionName()}")
 
 dependencies {
     val proprietaryImplementation by configurations
@@ -140,6 +140,7 @@ dependencies {
     implementation(libs.androidx.fragment)
     implementation(libs.androidx.documentfile)
     implementation(libs.androidx.work.runtime)
+    implementation(libs.anki.api)
     coreLibraryDesugaring(libs.androiddesugarlibs)
 
     // Lifecycle

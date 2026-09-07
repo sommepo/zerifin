@@ -786,13 +786,17 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application),
             setupPlayer()
             queueManager.tryRestartPlayback()
         } else {
-            Timber.w(error, "Playback error, attempting fallback")
+            if (mediaSourceOrNull is org.jellyfin.mobile.player.source.YouTubeMediaSource) {
+                Timber.w("YouTube playback failed code=%d", error.errorCode)
+            } else Timber.w(error, "Playback error, attempting fallback")
             val startPosition = (playerOrNull?.currentPosition ?: 0L).milliseconds
             fallbackRetryJob?.cancel()
             fallbackRetryJob = viewModelScope.launch {
                 val retried = queueManager.restartPlaybackWithFallback(startPosition)
                 if (!retried) {
-                    _error.postValue(error.localizedMessage.orEmpty())
+                    _error.postValue(if (mediaSourceOrNull is org.jellyfin.mobile.player.source.YouTubeMediaSource) {
+                        "YouTube playback failed or the stream expired. Go back and open the video again."
+                    } else error.localizedMessage.orEmpty())
                 }
             }
         }

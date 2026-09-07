@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="pref_category_music_player">Luajtësi i Muzikës</string>
-    <string name="activity_name_settings">Cilësimet e Jellyfin</string>
+    <string name="activity_name_settings">Cilësimet e Zerifin</string>
     <string name="external_player_unknown_error">Një gabim i panjohur në player-in e jashtëm. Gjurmimi i luajtjes është çaktivizuar.</string>
     <string name="external_player_invalid_player">Nuk është zgjedhur asnjë player i jashtëm. Gjurmimi i luajtjes është çaktivizuar.</string>
     <string name="external_player_not_supported_yet">Gjurmimi i luajtjes nuk suportohet ende për player-in e jashtëm të zgjedhur. Kontaktoni zhvilluesit që të përpiqen ta suportojnë atë.</string>
@@ -65,7 +65,7 @@
     <string name="player_error_network_failure">Nuk mund të ngarkohen informacionet e medias nga serveri</string>
     <string name="player_error_invalid_play_options">Nuk mund të zgjidhen informacionet e luajtjes</string>
     <string name="music_notification_channel_description">Përdoret për kontollimin e lujtjes së muzikës</string>
-    <string name="music_notification_channel">Luajtësi i muzikës Jellyfin</string>
+    <string name="music_notification_channel">Luajtësi i muzikës Zerifin</string>
     <string name="media_service_car_item_no_title">Pa titull</string>
     <string name="media_service_car_section_genres">Zhanret</string>
     <string name="media_service_car_section_songs">Këngët</string>
@@ -108,5 +108,5 @@
     <string name="pref_exoplayer_start_landscape_video_in_landscape">Luaj videot në modalitetin landscape me orientim landscape</string>
     <string name="pref_subtitle_style_summary">Mund ta ndryshosh stilin e titrave në cilësimet e Android-it</string>
     <string name="pref_subtitle_style">Përshtat stilin e titrave</string>
-    <string name="bluetooth_permission_message">Për të gjetur kur shkëputen kufjet ose altoparlantët wireless, aplikacioni kërkon akses në Bluetooth. Në Android, kjo leje përshkruhet si akses në pajisjet afër dhe paralajmëron se pajisjet Bluetooth mund të përdoren për të përcaktuar vendndodhjen aktuale. Megjithatë, aplikacioni Jellyfin nuk do ta përdorë kurrë këtë leje për të zbuluar vendndodhjen tënde.</string>
+    <string name="bluetooth_permission_message">Për të gjetur kur shkëputen kufjet ose altoparlantët wireless, aplikacioni kërkon akses në Bluetooth. Në Android, kjo leje përshkruhet si akses në pajisjet afër dhe paralajmëron se pajisjet Bluetooth mund të përdoren për të përcaktuar vendndodhjen aktuale. Megjithatë, aplikacioni Zerifin nuk do ta përdorë kurrë këtë leje për të zbuluar vendndodhjen tënde.</string>
 </resources>

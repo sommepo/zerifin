@@ -9,7 +9,7 @@
     <string name="mobile_data">Mobiilidata</string>
     <string name="pref_music_notification_always_dismissible_title">Hylättävä soittimen ilmoitus</string>
     <string name="pref_category_music_player">Musiikkisoitin</string>
-    <string name="activity_name_settings">Jellyfinin asetukset</string>
+    <string name="activity_name_settings">Zerifinin asetukset</string>
     <string name="host_input_hint">Isäntä</string>
     <string name="connect_button_text">Yhdistä</string>
     <string name="connect_to_server_title">Yhdistä palvelimeen</string>
@@ -57,7 +57,7 @@
     <string name="pref_exoplayer_allow_brightness_volume_gesture">Kirkkauden ja äänenvoimakkuuden säätö eleillä</string>
     <string name="media_service_car_item_no_title">Nimetön</string>
     <string name="music_notification_channel_description">Käytetään musiikin toiston ohjaukseen</string>
-    <string name="music_notification_channel">Jellyfin-musiikkisoitin</string>
+    <string name="music_notification_channel">Zerifin-musiikkisoitin</string>
     <string name="media_service_car_section_genres">Tyylilajit</string>
     <string name="media_service_car_section_songs">Kappaleet</string>
     <string name="media_service_car_section_artists">Esittäjät</string>
@@ -103,7 +103,7 @@
     <string name="pref_subtitle_style_summary">Voit muuttaa tekstityksen tyyliä Androidin asetuksista</string>
     <string name="button_use_different_server">Käytä eri palvelinta</string>
     <string name="bluetooth_permission_granted">Bluetooth-käyttöoikeus myönnetty</string>
-    <string name="bluetooth_permission_message">Sovellus tarvitsee Bluetooth-käyttöoikeuden havaitakseen langattomien kuulokkeiden tai kaiuttimien irtikytkennän. Androidissa tätä käyttöoikeutta kuvataan pääsyksi lähellä oleviin laitteisiin ja se varoittaa, että Bluetooth-laitteita voidaan käyttää nykyisen sijainnin päättelemiseen. Jellyfin-sovellus ei kuitenkaan koskaan käytä sitä sijaintisi tunnistukseen.</string>
+    <string name="bluetooth_permission_message">Sovellus tarvitsee Bluetooth-käyttöoikeuden havaitakseen langattomien kuulokkeiden tai kaiuttimien irtikytkennän. Androidissa tätä käyttöoikeutta kuvataan pääsyksi lähellä oleviin laitteisiin ja se varoittaa, että Bluetooth-laitteita voidaan käyttää nykyisen sijainnin päättelemiseen. Zerifin-sovellus ei kuitenkaan koskaan käytä sitä sijaintisi tunnistukseen.</string>
     <string name="bluetooth_permission_continue">Jatka</string>
     <string name="bluetooth_permission_title">Myönnetääkö Bluetooth-käyttöoikeus\?</string>
     <string name="wifi_only_summary">Ladataan vain käytettäessä Wi-Fi verkkoa.</string>

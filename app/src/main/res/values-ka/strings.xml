@@ -23,7 +23,7 @@
     <string name="available_servers_title">ხელმისაწვდომი სერვერები</string>
     <string name="button_use_different_server">გამოიყენეთ სხვა სერვერი</string>
     <string name="bluetooth_permission_title">გსურთ ბლუთუსზე წვდომის დაშვება?</string>
-    <string name="bluetooth_permission_message">უსადენო ყურსასმენების ან დინამიკების დასაკვშირებლად და გამოსაყენებლად, აპლიკაციას სჭირდება Bluetooth-ის გამოყენების უფლება. Android-ზე ეს უფლება აღწერილია როგორც „ახლო მდებარეობაზე მოწყობილობების წვდომა“ და გაძლევთ გაფრთხილებას, რომ Bluetoot მოწყობილობები შეიძლება გამოყენებულ იქნას თქვენი ადგილმდებარეობის განსასაზღვრად. თუმცა, Jellyfin აპლიკაცია არასოდეს გამოიყენებს ამ უფლებას თქვენი ადგილმდებარეობის დასადგენად.</string>
+    <string name="bluetooth_permission_message">უსადენო ყურსასმენების ან დინამიკების დასაკვშირებლად და გამოსაყენებლად, აპლიკაციას სჭირდება Bluetooth-ის გამოყენების უფლება. Android-ზე ეს უფლება აღწერილია როგორც „ახლო მდებარეობაზე მოწყობილობების წვდომა“ და გაძლევთ გაფრთხილებას, რომ Bluetoot მოწყობილობები შეიძლება გამოყენებულ იქნას თქვენი ადგილმდებარეობის განსასაზღვრად. თუმცა, Zerifin აპლიკაცია არასოდეს გამოიყენებს ამ უფლებას თქვენი ადგილმდებარეობის დასადგენად.</string>
     <string name="bluetooth_permission_continue">გაგრძელება</string>
     <string name="bluetooth_permission_granted">Bluetooth კავშირი დამყარებულია</string>
     <string name="battery_optimizations_message">გთხოვთ, გამორთოთ ბატარეის ოპტიმიზაცია ვიდეოს გაშვებისათვის, როდესაც ეკრანი გამორთულია.</string>
@@ -45,7 +45,7 @@
     <string name="media_service_car_section_songs">სიმღერები</string>
     <string name="media_service_car_section_genres">ჟანრი</string>
     <string name="media_service_car_item_no_title">სათაური არ მოიძებნა</string>
-    <string name="music_notification_channel">Jellyfin მუსიკის პლეერი</string>
+    <string name="music_notification_channel">Zerifin მუსიკის პლეერი</string>
     <string name="music_notification_channel_description">გამოიყენება მუსიკის დაკვრის კონტროლისთვის</string>
     <string name="notification_action_previous">წინ</string>
     <string name="notification_action_rewind">უკან</string>
@@ -80,7 +80,7 @@
     <string name="network_buffer_large">დიდი</string>
     <string name="media_service_car_section_favorites">რჩეულები</string>
     <string name="media_service_car_section_audiobooks">აუდიოწიგნები</string>
-    <string name="activity_name_settings">Jellyfin-ის მორგება</string>
+    <string name="activity_name_settings">Zerifin-ის მორგება</string>
     <string name="pref_category_music_player">მუსიკის დამკვრელი</string>
     <string name="pref_category_video_player">ვიდეოს დამკვრელი</string>
     <string name="video_player_web">ვების დამკვრელი</string>

@@ -15,7 +15,7 @@
     <string name="media_service_car_section_albums">Албуми</string>
     <string name="media_service_car_section_artists">Изведувачи</string>
     <string name="media_service_car_section_songs">Песни</string>
-    <string name="music_notification_channel">Jellyfin плеер за музика</string>
+    <string name="music_notification_channel">Zerifin плеер за музика</string>
     <string name="music_notification_channel_description">Се користи за контрола на пуштање на музика</string>
     <string name="notification_action_previous">Претходно</string>
     <string name="notification_action_play">Пушти</string>
@@ -31,7 +31,7 @@
     <string name="menu_item_none">Ниедно</string>
     <string name="menu_item_auto">Автоматски</string>
     <string name="external_player_invalid_play_method">Неважечки метод за репродукција.</string>
-    <string name="activity_name_settings">Jellyfin Поставки</string>
+    <string name="activity_name_settings">Zerifin Поставки</string>
     <string name="pref_category_music_player">Плеер за музика</string>
     <string name="pref_category_video_player">Плеер за видео</string>
     <string name="pref_video_player_type_title">Тип на видео плеер</string>
@@ -67,7 +67,7 @@
     <string name="choose_server_button_text">Изберете сервер</string>
     <string name="available_servers_title">Достапни сервери</string>
     <string name="button_use_different_server">Користи друг сервер</string>
-    <string name="bluetooth_permission_message">За да открие кога се исклучени безжични слушалки или звучници, апликацијата бара пристап до Bluetooth. На Android, оваа дозвола е опишана како пристап до уредите во близина и предупредува дека уредите со Bluetooth може да се користат за да се открие моменталната локација. Сепак, апликацијата Jellyfin никогаш нема да ја користи оваа дозвола за да ја открие вашата локација.</string>
+    <string name="bluetooth_permission_message">За да открие кога се исклучени безжични слушалки или звучници, апликацијата бара пристап до Bluetooth. На Android, оваа дозвола е опишана како пристап до уредите во близина и предупредува дека уредите со Bluetooth може да се користат за да се открие моменталната локација. Сепак, апликацијата Zerifin никогаш нема да ја користи оваа дозвола за да ја открие вашата локација.</string>
     <string name="bluetooth_permission_granted">Беше дадена дозвола за Bluetooth</string>
     <string name="battery_optimizations_message">Оневозможете ја оптимизацијата на батеријата за репродукција на медиумски содржини додека екранот е исклучен.</string>
     <string name="network_message">Дали сакате да дозволите преземањето да работи преку мобилни податоци или мрежи во роаминг? Вашиот мобилен оператор може да ви наплати за ова.</string>

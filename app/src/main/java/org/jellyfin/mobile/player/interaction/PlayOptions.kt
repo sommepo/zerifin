@@ -24,6 +24,7 @@ data class PlayOptions(
     val audioStreamIndex: Int?,
     val subtitleStreamIndex: Int?,
     val playFromDownloads: Boolean?,
+    val youTubePlayback: String? = null,
 ) : Parcelable {
     companion object {
         fun fromJson(json: String): PlayOptions? = try {

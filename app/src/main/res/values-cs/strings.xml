@@ -13,7 +13,7 @@
     <string name="pref_category_video_player">Přehrávač videa</string>
     <string name="pref_music_notification_always_dismissible_title">Odstranění oznámení hudebního přehrávače</string>
     <string name="pref_category_music_player">Přehrávač hudby</string>
-    <string name="activity_name_settings">Nastavení Jellyfin</string>
+    <string name="activity_name_settings">Nastavení Zerifin</string>
     <string name="menu_item_none">Žádný</string>
     <string name="playback_info_and_x_more">…a %d dalších</string>
     <string name="playback_info_audio_streams">Audio proudy</string>
@@ -56,7 +56,7 @@
     <string name="external_player_mpv">MPV</string>
     <string name="external_player_app">Externí přehrávač</string>
     <string name="music_notification_channel_description">Používá se pro ovládání přehrávání hudby</string>
-    <string name="music_notification_channel">Přehrávač hudby Jellyfin</string>
+    <string name="music_notification_channel">Přehrávač hudby Zerifin</string>
     <string name="media_service_car_item_no_title">Bez názvu</string>
     <string name="media_service_car_section_genres">Žánry</string>
     <string name="media_service_car_section_songs">Skladby</string>
@@ -107,7 +107,7 @@
     <string name="bluetooth_permission_continue">Pokračovat</string>
     <string name="bluetooth_permission_granted">Oprávnění k Bluetooth bylo uděleno</string>
     <string name="bluetooth_permission_title">Povolit přístup přes Bluetooth\?</string>
-    <string name="bluetooth_permission_message">Aby bylo možné zjistit, zda jsou sluchátka nebo reproduktor odpojené, potřebuje aplikace přístup k Bluetooth. V Androidu je toto oprávnění označeno jako přístup k nedalekým zařízením a upozorňuje, že Bluetooth zařízení může být použito k odhadu aktuální polohy. Nicméně aplikace Jellyfin toto oprávnění nikdy nepoužije ke zjištění vaší polohy.</string>
+    <string name="bluetooth_permission_message">Aby bylo možné zjistit, zda jsou sluchátka nebo reproduktor odpojené, potřebuje aplikace přístup k Bluetooth. V Androidu je toto oprávnění označeno jako přístup k nedalekým zařízením a upozorňuje, že Bluetooth zařízení může být použito k odhadu aktuální polohy. Nicméně aplikace Zerifin toto oprávnění nikdy nepoužije ke zjištění vaší polohy.</string>
     <string name="wifi_only_summary">Média budou stažena pouze přes WiFi.</string>
     <string name="mobile_data_summary">Média budou stažena přes WiFi a mobilní sítě.</string>
     <string name="mobile_data_and_roaming_summary">Média budou stažena přes WiFi, mobilní sítě a mobilní sítě v roamingu.</string>
