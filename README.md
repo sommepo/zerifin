@@ -27,7 +27,7 @@ and save it to AnkiDroid with the sentence and media.
   screen-tap play/pause enabled by default, and common subtitle options. Screen taps control
   playback while Jellyfin's standard player lock is active; unlock it to use the normal controls.
 
-The popup stays hidden until a lookup finishes. Closing it resumes playback only if the lookup paused it.
+The popup stays hidden until a lookup finishes. Closing it resumes playback.
 
 ### Bring your dictionaries
 
