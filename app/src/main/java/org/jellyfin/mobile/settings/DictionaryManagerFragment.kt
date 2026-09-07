@@ -6,7 +6,9 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -23,6 +25,7 @@ class DictionaryManagerFragment : Fragment() {
     private lateinit var tabs: LinearLayout
     private lateinit var importButton: MenuItem
     private lateinit var importHint: android.widget.TextView
+    private var importDialog: AlertDialog? = null
     private var frequencyTab = false
     private var dictionaries = emptyList<InstalledDictionary>()
     private val picker = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
@@ -30,6 +33,7 @@ class DictionaryManagerFragment : Fragment() {
             viewLifecycleOwner.lifecycleScope.launch {
                 importButton.isEnabled = false
                 importHint.setText(R.string.pref_japanese_dictionary_importing)
+                showImportDialog()
                 try {
                     val imported = repository.import(uri)
                     frequencyTab = imported.termCount == 0 && imported.frequencyCount > 0
@@ -40,6 +44,8 @@ class DictionaryManagerFragment : Fragment() {
                 } catch (_: Exception) {
                     requireContext().toast(R.string.learning_import_failed)
                 } finally {
+                    importDialog?.dismiss()
+                    importDialog = null
                     importButton.isEnabled = true
                     importHint.setText(R.string.learning_import_hint)
                 }
@@ -101,6 +107,35 @@ class DictionaryManagerFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putBoolean("frequency_tab", frequencyTab)
         super.onSaveInstanceState(outState)
+    }
+
+    override fun onDestroyView() {
+        importDialog?.dismiss()
+        importDialog = null
+        super.onDestroyView()
+    }
+
+    private fun showImportDialog() {
+        val context = requireContext()
+        val holder = LinearLayout(context).apply {
+            gravity = android.view.Gravity.CENTER
+            setPadding(
+                context.learningDp(32),
+                context.learningDp(20),
+                context.learningDp(32),
+                context.learningDp(24),
+            )
+            addView(ProgressBar(context).apply { isIndeterminate = true })
+        }
+        importDialog = AlertDialog.Builder(context)
+            .setTitle(R.string.pref_japanese_dictionary_importing)
+            .setView(holder)
+            .setCancelable(false)
+            .create()
+            .also { dialog ->
+                dialog.setCanceledOnTouchOutside(false)
+                dialog.show()
+            }
     }
 
     private suspend fun reload() {

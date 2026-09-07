@@ -33,4 +33,12 @@ class EnglishSubtitleTest {
         assertEquals("Second", SubtitleTimeline.atPosition(cues, 3000))
         assertNull(SubtitleTimeline.atPosition(cues, 4000))
     }
+
+    @Test
+    fun `English lookup tolerates a slightly delayed cue without guessing farther ahead`() {
+        val cues = listOf(MiningCue(1_500, 3_000, "Delayed"))
+
+        assertEquals("Delayed", SubtitleTimeline.atPosition(cues, 1_000, 750))
+        assertNull(SubtitleTimeline.atPosition(cues, 1_000, 499))
+    }
 }

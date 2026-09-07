@@ -95,7 +95,7 @@ class PlayerMiningMedia(context: Context, private val api: ApiClient) {
         require(media.youTubeSession != null || api.baseUrl == media.serverUrl) { "Playback server changed" }
         val cached = englishWindow?.takeIf { it.contains(media, index) }
             ?: SubtitleWindow(media, index, subtitles(media, index)).also { englishWindow = it }
-        return SubtitleTimeline.atPosition(cached.cues, media.positionMs)
+        return SubtitleTimeline.atPosition(cached.cues, media.positionMs, ENGLISH_LOOKAHEAD_MS)
     }
 
     /** Seek helper shared by Jellyfin and YouTube, using the selected Japanese subtitle timeline. */
@@ -281,5 +281,9 @@ class PlayerMiningMedia(context: Context, private val api: ApiClient) {
             output.write(buffer, 0, count)
         }
         return output.toByteArray()
+    }
+
+    private companion object {
+        const val ENGLISH_LOOKAHEAD_MS = 750L
     }
 }

@@ -180,6 +180,25 @@ class InteractiveSubtitleOverlay @JvmOverloads constructor(
         return characterBoundsAt(textLayout, line, characterOffset)
     }
 
+    /** Bounds of every rendered subtitle line, used to keep lookup cards clear of the sentence. */
+    fun subtitleBoundsFor(subtitleText: String): PopupAnchorBounds? {
+        if (text.toString() != subtitleText || subtitleText.isBlank()) return null
+        val textLayout = layout ?: return null
+        if (textLayout.lineCount == 0) return null
+        val viewLeft = (0 until textLayout.lineCount).minOf { line ->
+            min(textLayout.getLineLeft(line), textLayout.getLineRight(line))
+        } + totalPaddingLeft - scrollX
+        val viewRight = (0 until textLayout.lineCount).maxOf { line ->
+            max(textLayout.getLineLeft(line), textLayout.getLineRight(line))
+        } + totalPaddingLeft - scrollX
+        return PopupAnchorBounds(
+            left = floor(viewLeft).toInt(),
+            top = textLayout.getLineTop(0) + totalPaddingTop - scrollY,
+            right = ceil(viewRight).toInt(),
+            bottom = textLayout.getLineBottom(textLayout.lineCount - 1) + totalPaddingTop - scrollY,
+        )
+    }
+
     override fun onTouchEvent(event: MotionEvent): Boolean = when (event.actionMasked) {
         MotionEvent.ACTION_DOWN -> beginSubtitleGesture(event)
         MotionEvent.ACTION_MOVE -> continueSubtitleGesture(event)

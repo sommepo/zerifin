@@ -7,9 +7,18 @@ data class MiningCue(val startMs: Long, val endMs: Long, val text: String)
 
 /** Timings use the original media clock, independent of the current playback speed. */
 object SubtitleTimeline {
-    fun atPosition(cues: List<MiningCue>, positionMs: Long): String? = cues
-        .filter { positionMs >= it.startMs && positionMs < it.endMs }
-        .joinToString("\n") { it.text }.takeIf(String::isNotBlank)
+    fun atPosition(cues: List<MiningCue>, positionMs: Long, maximumLeadMs: Long = 0): String? {
+        require(maximumLeadMs >= 0)
+        cues.filter { positionMs >= it.startMs && positionMs < it.endMs }
+            .joinToString("\n") { it.text }
+            .takeIf(String::isNotBlank)
+            ?.let { return it }
+        val nextStart = cues.asSequence()
+            .map(MiningCue::startMs)
+            .filter { it > positionMs && it - positionMs <= maximumLeadMs }
+            .minOrNull() ?: return null
+        return atPosition(cues, nextStart)
+    }
 
     private val timing =
         Regex("^((?:\\d+:)?\\d{2}:\\d{2}[.,]\\d{3})\\s+-->\\s+((?:\\d+:)?\\d{2}:\\d{2}[.,]\\d{3})(?:\\s.*)?$")

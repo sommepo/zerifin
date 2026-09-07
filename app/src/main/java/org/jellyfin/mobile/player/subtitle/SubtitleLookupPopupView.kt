@@ -403,7 +403,7 @@ class SubtitleLookupPopupView @JvmOverloads constructor(
     fun updateAnchor(anchorBounds: RectF) {
         if (visibility != View.VISIBLE) return
         this.anchorBounds = RectF(anchorBounds)
-        post(::reposition)
+        requestLayout()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -415,9 +415,19 @@ class SubtitleLookupPopupView @JvmOverloads constructor(
             (availableWidth - viewportMargins).coerceAtLeast(0),
         )
         card.minimumWidth = min(dp(CARD_MIN_WIDTH_DP), card.maximumWidthPx)
+        val anchor = anchorBounds
+        val nonOverlappingHeight = if (anchor == null) {
+            availableHeight
+        } else {
+            max(
+                floor(anchor.top.toDouble()).toInt() - dp(ANCHOR_GAP_DP) - dp(VIEWPORT_MARGIN_DP),
+                availableHeight - ceil(anchor.bottom.toDouble()).toInt() -
+                    dp(ANCHOR_GAP_DP) - dp(VIEWPORT_MARGIN_DP),
+            ).coerceAtLeast(0)
+        }
         card.maximumHeightPx = min(
             (availableHeight * CARD_MAX_HEIGHT_FRACTION).roundToInt(),
-            (availableHeight - viewportMargins).coerceAtLeast(0),
+            min((availableHeight - viewportMargins).coerceAtLeast(0), nonOverlappingHeight),
         )
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }

@@ -1053,11 +1053,12 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
         binding.playerOverlay.getLocationOnScreen(playerOverlayLocation)
         val offsetX = subtitleLocation[0] - playerOverlayLocation[0] - binding.playerOverlay.paddingLeft
         val offsetY = subtitleLocation[1] - playerOverlayLocation[1] - binding.playerOverlay.paddingTop
+        val subtitleBounds = binding.interactiveSubtitleOverlay.subtitleBoundsFor(subtitleText)
         return RectF(
             characterBounds.left + offsetX.toFloat(),
-            characterBounds.top + offsetY.toFloat(),
+            (subtitleBounds?.top ?: characterBounds.top) + offsetY.toFloat(),
             characterBounds.right + offsetX.toFloat(),
-            characterBounds.bottom + offsetY.toFloat(),
+            (subtitleBounds?.bottom ?: characterBounds.bottom) + offsetY.toFloat(),
         )
     }
 
@@ -1306,26 +1307,28 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
                 val media = activeMiningContext ?: miningMedia.capture(viewModel.mediaSourceOrNull, player.currentPosition)
                 val text = try {
                     val english = media?.let { captured ->
-                        miningMedia.englishAt(captured)
                         // Playback can advance while the initial subtitle window is downloading.
                         val current = if (lookupPlayer == null) captured.copy(positionMs = player.currentPosition) else captured
                         miningMedia.englishAt(current)
                     }
-                    english ?: getString(R.string.learning_english_missing)
+                    englishDisplayText(english, media)
                 } catch (cancelled: CancellationException) {
                     throw cancelled
                 } catch (_: Exception) {
                     getString(R.string.learning_english_error)
                 }
                 _playerBinding?.englishSubtitleText?.apply {
-                    this.text = text
-                    isVisible = true
+                    this.text = text.orEmpty()
+                    isVisible = !text.isNullOrBlank()
                 }
                 if (lookupPlayer != null) break
                 delay(300)
             }
         }
     }
+
+    private fun englishDisplayText(english: String?, media: MiningMediaContext?): String? =
+        english ?: getString(R.string.learning_english_missing).takeIf { media?.englishIndex == null }
 
     private fun dismissSubtitleLookupWithoutResume() {
         finishSubtitleLookup(resumePlayback = false)
