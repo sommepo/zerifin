@@ -23,15 +23,17 @@ names, legal acknowledgements, upstream links and library content are preserved.
 
 The compact popup stays hidden while lookup is pending.
 Lookup pauses by default without opening player controls. **General** in the main side menu contains
-**Pause on lookup**, **Pause on screen tap**, and the common subtitle settings. **Dictionaries →
-Subtitle popup** contains **Popup appearance** (System, Light, Dark); System is the default. Disabling
-pause on lookup keeps playback running while preserving the tapped sentence for mining.
+**Pause on lookup**, **Pause on screen tap enabled by default**, and the common subtitle settings.
+The default applies at the start of each video; the lock button in the movable shortcut panel enables
+or disables screen-tap play/pause for the current video. **Dictionaries → Subtitle popup** contains
+**Popup appearance** (System, Light, Dark); System is the default. Disabling pause on lookup keeps
+playback running while preserving the tapped sentence for mining.
 
 The player’s **EN** button reveals the current English subtitle. The adjacent previous-line button
-seeks to the start of the preceding Japanese subtitle. Drag either shortcut to move both anywhere on
-the player; Zerifin remembers the position. **EN** stays available during word lookup. Tap it again to
-hide the translation. English text follows playback or the frozen lookup position and uses a small
-on-demand memory cache.
+seeks to the start of the preceding Japanese subtitle. Drag any of these buttons or the lock button
+to move the panel anywhere on the player; Zerifin remembers the position. **EN** stays available
+during word lookup. Tap it again to hide the translation. English text follows playback or the
+frozen lookup position and uses a small on-demand memory cache.
 
 Closing the popup resumes playback only when the lookup paused it. Selecting another word replaces
 the card and stops the previous pronunciation. Audio callbacks are tied to the active card. No new

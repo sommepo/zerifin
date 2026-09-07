@@ -15,7 +15,7 @@ class LookupPreferences(context: Context) {
         set(value) { preferences.edit { putBoolean("pause_on_lookup", value) } }
 
     var pauseOnScreenTap: Boolean
-        get() = preferences.getBoolean("pause_on_screen_tap", false)
+        get() = preferences.getBoolean("pause_on_screen_tap", true)
         set(value) { preferences.edit { putBoolean("pause_on_screen_tap", value) } }
 
     var theme: LookupTheme
