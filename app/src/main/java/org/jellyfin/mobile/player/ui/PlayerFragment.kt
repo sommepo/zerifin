@@ -129,6 +129,7 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
     private var previousControllerAutoShow: Boolean? = null
     private var englishVisible = false
     private var englishJob: Job? = null
+    private var subtitleSeekJob: Job? = null
     private var lookupRequestId = 0
     private var activeSubtitleTap: SubtitleTap? = null
     private var ankiMiningJob: Job? = null
@@ -168,6 +169,9 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
 
         override fun onEvents(player: Player, events: Player.Events) {
             if (events.contains(Player.EVENT_MEDIA_ITEM_TRANSITION)) {
+                subtitleSeekJob?.cancel()
+                subtitleSeekJob = null
+                _playerBinding?.previousSubtitleButton?.isEnabled = true
                 hideEnglishSubtitle()
             } else if (events.contains(Player.EVENT_POSITION_DISCONTINUITY) && englishVisible) showEnglishSubtitle()
             if (
@@ -528,6 +532,7 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
         playerBinding.englishSubtitleButton.setOnClickListener {
             if (englishVisible) hideEnglishSubtitle() else showEnglishSubtitle()
         }
+        playerBinding.previousSubtitleButton.setOnClickListener { seekToPreviousSubtitle() }
         playerView.findViewById<ViewGroup>(Media3R.id.exo_content_frame)?.let { subtitleHost ->
             interactiveSubtitleHost?.removeOnLayoutChangeListener(
                 interactiveSubtitleHostLayoutListener,
@@ -1110,7 +1115,9 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
     private fun updateEnglishButton() {
         val binding = _playerBinding ?: return
         // One overlay control is shared by both states, so its position never jumps on lookup.
-        binding.englishSubtitleButton.isVisible = subtitleControllerVisible || lookupPlayer != null || englishVisible
+        val learningControlsVisible = subtitleControllerVisible || lookupPlayer != null || englishVisible
+        binding.englishSubtitleButton.isVisible = learningControlsVisible
+        binding.previousSubtitleButton.isVisible = learningControlsVisible
         binding.englishSubtitleButton.isSelected = englishVisible
         binding.englishSubtitleButton.setTextColor(
             if (englishVisible) {
@@ -1124,6 +1131,37 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
                 if (englishVisible) R.string.learning_english_hide else R.string.learning_english_show
             )
         )
+    }
+
+    @Suppress("TooGenericExceptionCaught")
+    private fun seekToPreviousSubtitle() {
+        val player = viewModel.playerOrNull ?: return
+        val media = miningMedia.capture(viewModel.mediaSourceOrNull, player.currentPosition) ?: run {
+            context?.toast(R.string.learning_previous_subtitle_missing)
+            return
+        }
+        subtitleSeekJob?.cancel()
+        _playerBinding?.previousSubtitleButton?.isEnabled = false
+        subtitleSeekJob = viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val target = miningMedia.previousSubtitlePosition(media)
+                if (target == null) {
+                    context?.toast(R.string.learning_previous_subtitle_missing)
+                    return@launch
+                }
+                if (lookupPlayer != null) dismissSubtitleLookupWithoutResume()
+                playerView.hideController()
+                player.seekTo(target)
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (error: Exception) {
+                Timber.e(error, "Previous subtitle seek failed")
+                context?.toast(R.string.learning_previous_subtitle_missing)
+            } finally {
+                _playerBinding?.previousSubtitleButton?.isEnabled = true
+                subtitleSeekJob = null
+            }
+        }
     }
 
     private fun hideEnglishSubtitle() {
@@ -1245,6 +1283,8 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
     }
 
     override fun onDestroyView() {
+        subtitleSeekJob?.cancel()
+        subtitleSeekJob = null
         finishSubtitleLookup(resumePlayback = activity?.isChangingConfigurations == true)
         subtitleControllerVisible = false
         interactiveSubtitleHost?.removeOnLayoutChangeListener(

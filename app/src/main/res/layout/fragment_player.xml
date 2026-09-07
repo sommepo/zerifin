@@ -58,24 +58,48 @@
             tools:text="そんなこと言われても困るよ"
             tools:visibility="visible" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/english_subtitle_button"
-            android:layout_width="48dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:layout_gravity="top|end"
             android:layout_marginTop="64dp"
             android:layout_marginEnd="@dimen/exo_player_controls_display_padding"
-            android:background="@drawable/playback_unlock_background"
             android:gravity="center"
-            android:text="@string/learning_english_button"
-            android:textColor="@android:color/white"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:contentDescription="@string/learning_english_show"
-            android:clickable="true"
-            android:focusable="true"
+            android:orientation="horizontal"
             android:translationZ="19dp"
-            android:visibility="gone" />
+            tools:visibility="visible">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/previous_subtitle_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/playback_unlock_background"
+                android:clickable="true"
+                android:contentDescription="@string/learning_previous_subtitle"
+                android:focusable="true"
+                android:padding="12dp"
+                android:src="@drawable/ic_skip_previous_black_32dp"
+                android:visibility="gone"
+                app:tint="@android:color/white"
+                tools:visibility="visible" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/english_subtitle_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/playback_unlock_background"
+                android:clickable="true"
+                android:contentDescription="@string/learning_english_show"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="@string/learning_english_button"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                tools:visibility="visible" />
+        </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/english_subtitle_text"

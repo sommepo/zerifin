@@ -546,6 +546,13 @@ class SubtitleLookupPopupView @JvmOverloads constructor(
         gravity = Gravity.CENTER_VERTICAL
         val details = LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
+            if (entry.conjugations.isNotEmpty()) {
+                val conjugations = entry.conjugations.joinToString(" · ") { context.getString(it.labelRes) }
+                addView(textView(PRIMARY_TEXT_COLOR, 12f).apply {
+                    text = context.getString(R.string.subtitle_lookup_conjugation, entry.matchedText.orEmpty(), conjugations)
+                    setPadding(0, 0, 0, dp(4))
+                })
+            }
             val frequency = entry.frequencies.joinToString(" · ") { "${it.dictionaryTitle}: ${it.displayValue}" }
             listOfNotNull(entry.dictionaryTitle, frequency.takeIf(String::isNotBlank)).forEach { label ->
                 addView(textView(SECONDARY_TEXT_COLOR, 11f).apply { text = label })
@@ -691,3 +698,22 @@ class SubtitleLookupPopupView @JvmOverloads constructor(
         }
     }
 }
+
+private val JapaneseConjugation.labelRes: Int
+    get() = when (this) {
+        JapaneseConjugation.ADVERBIAL -> R.string.subtitle_conjugation_adverbial
+        JapaneseConjugation.CAUSATIVE -> R.string.subtitle_conjugation_causative
+        JapaneseConjugation.COLLOQUIAL -> R.string.subtitle_conjugation_colloquial
+        JapaneseConjugation.COMPLETIVE -> R.string.subtitle_conjugation_completive
+        JapaneseConjugation.CONDITIONAL -> R.string.subtitle_conjugation_conditional
+        JapaneseConjugation.DESIDERATIVE -> R.string.subtitle_conjugation_desiderative
+        JapaneseConjugation.NEGATIVE -> R.string.subtitle_conjugation_negative
+        JapaneseConjugation.PASSIVE -> R.string.subtitle_conjugation_passive
+        JapaneseConjugation.PASSIVE_OR_POTENTIAL -> R.string.subtitle_conjugation_passive_or_potential
+        JapaneseConjugation.PAST -> R.string.subtitle_conjugation_past
+        JapaneseConjugation.POLITE -> R.string.subtitle_conjugation_polite
+        JapaneseConjugation.POTENTIAL -> R.string.subtitle_conjugation_potential
+        JapaneseConjugation.PROGRESSIVE -> R.string.subtitle_conjugation_progressive
+        JapaneseConjugation.TE_FORM -> R.string.subtitle_conjugation_te_form
+        JapaneseConjugation.VOLITIONAL -> R.string.subtitle_conjugation_volitional
+    }

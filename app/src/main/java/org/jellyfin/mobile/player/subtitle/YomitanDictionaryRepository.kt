@@ -174,8 +174,7 @@ class YomitanDictionaryRepository private constructor(context: Context) {
             val matchedCandidate = rankedResults.firstOrNull()?.candidate
             DictionaryLookupResult(
                 entries = rankedResults.map { ranked ->
-                    ranked.entry.copy(matchedSourceStart = ranked.candidate.sourceStart,
-                        matchedSourceLength = ranked.candidate.sourceLength)
+                    ranked.entry.withMatch(ranked.candidate, subtitleText)
                 },
                 matchedSourceStart = matchedCandidate?.sourceStart,
                 matchedSourceLength = matchedCandidate?.sourceLength,

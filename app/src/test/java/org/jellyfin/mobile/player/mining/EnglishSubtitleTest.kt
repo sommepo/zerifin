@@ -8,20 +8,20 @@ class EnglishSubtitleTest {
 
     @Test
     fun `subtitle cache expires before its downloaded window ends`() {
-        val window = EnglishWindow(media, emptyList())
-        assertTrue(window.contains(media.copy(positionMs = 144_999)))
-        assertTrue(window.contains(media.copy(positionMs = 55_001)))
-        assertFalse(window.contains(media.copy(positionMs = 145_000)))
-        assertFalse(window.contains(media.copy(positionMs = 55_000)))
+        val window = SubtitleWindow(media, 2, emptyList())
+        assertTrue(window.contains(media.copy(positionMs = 144_999), 2))
+        assertTrue(window.contains(media.copy(positionMs = 55_001), 2))
+        assertFalse(window.contains(media.copy(positionMs = 145_000), 2))
+        assertFalse(window.contains(media.copy(positionMs = 55_000), 2))
     }
 
     @Test
     fun `switching server item source or English track invalidates the window`() {
-        val window = EnglishWindow(media, emptyList())
-        assertFalse(window.contains(media.copy(serverUrl = "https://other.invalid")))
-        assertFalse(window.contains(media.copy(itemId = "other")))
-        assertFalse(window.contains(media.copy(sourceId = "other")))
-        assertFalse(window.contains(media.copy(englishIndex = 4)))
+        val window = SubtitleWindow(media, 2, emptyList())
+        assertFalse(window.contains(media.copy(serverUrl = "https://other.invalid"), 2))
+        assertFalse(window.contains(media.copy(itemId = "other"), 2))
+        assertFalse(window.contains(media.copy(sourceId = "other"), 2))
+        assertFalse(window.contains(media.copy(englishIndex = 4), 4))
     }
 
     @Test

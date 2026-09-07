@@ -39,6 +39,19 @@ class SubtitleTimelineTest {
     }
 
     @Test
+    fun `previous line skips the active cue and otherwise uses the latest earlier cue`() {
+        val cues = listOf(
+            MiningCue(1_000, 2_000, "一"),
+            MiningCue(3_000, 4_000, "二"),
+            MiningCue(5_000, 6_000, "三"),
+        )
+
+        assertEquals(1_000, SubtitleTimeline.previousCueStart(cues, 3_500))
+        assertEquals(3_000, SubtitleTimeline.previousCueStart(cues, 4_500))
+        assertNull(SubtitleTimeline.previousCueStart(cues, 1_500))
+    }
+
+    @Test
     fun `accepts short VTT timestamps and rejects malformed intervals`() {
         assertEquals(
             MiningCue(1500, 2300, "A & B"),

@@ -16,6 +16,8 @@
     <string name="learning_popup_settings">Subtitle popup</string>
     <string name="learning_english_show">Show English subtitle</string>
     <string name="learning_english_hide">Hide English subtitle</string>
+    <string name="learning_previous_subtitle">Previous subtitle line</string>
+    <string name="learning_previous_subtitle_missing">No previous subtitle line was found.</string>
     <string name="learning_english_missing">No matching English subtitle</string>
     <string name="learning_english_error">English subtitle is unavailable</string>
     <string name="learning_import_failed">Could not import this dictionary. Please choose a Yomitan ZIP archive.</string>

@@ -8,6 +8,8 @@ data class DictionaryEntry(
     val dictionaryTitle: String? = null,
     val matchedSourceStart: Int? = null,
     val matchedSourceLength: Int? = null,
+    val matchedText: String? = null,
+    val conjugations: List<JapaneseConjugation> = emptyList(),
 )
 
 data class DictionaryFrequency(
@@ -25,4 +27,12 @@ data class DictionaryLookupResult(
     val entries: List<DictionaryEntry>,
     val matchedSourceStart: Int? = null,
     val matchedSourceLength: Int? = null,
+)
+
+/** Keep the visible word, highlight and mined sentence attached to the same literal source span. */
+internal fun DictionaryEntry.withMatch(candidate: JapaneseTextCandidate, subtitleText: String): DictionaryEntry = copy(
+    matchedSourceStart = candidate.sourceStart,
+    matchedSourceLength = candidate.sourceLength,
+    matchedText = subtitleText.substring(candidate.sourceStart, candidate.sourceStart + candidate.sourceLength),
+    conjugations = candidate.conjugations,
 )

@@ -59,6 +59,29 @@ class JapaneseTextCandidateGeneratorTest {
     }
 
     @Test
+    fun `adverbial adjective retains the complete surface form and conjugation`() {
+        val candidate = JapaneseTextCandidateGenerator.generate("気安く触んないでよ", 1)
+            .first { it.text == "気安い" }
+
+        candidate.sourceStart shouldBe 0
+        candidate.sourceLength shouldBe 3
+        candidate.conjugations shouldBe listOf(JapaneseConjugation.ADVERBIAL)
+    }
+
+    @Test
+    fun `colloquial negative verb retains the complete surface form and conjugations`() {
+        val candidate = JapaneseTextCandidateGenerator.generate("気安く触んないでよ", 3)
+            .first { it.text == "触る" }
+
+        candidate.sourceStart shouldBe 3
+        candidate.sourceLength shouldBe 4
+        candidate.conjugations shouldBe listOf(
+            JapaneseConjugation.NEGATIVE,
+            JapaneseConjugation.COLLOQUIAL,
+        )
+    }
+
+    @Test
     fun `normalized half width kana retain original source offsets`() {
         val candidate = JapaneseTextCandidateGenerator.generate("昨日はｺｰﾋｰ", 5).first { it.text == "コーヒー" }
         candidate.sourceStart shouldBe 3

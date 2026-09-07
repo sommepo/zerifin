@@ -30,6 +30,17 @@ object SubtitleTimeline {
     fun matchingCue(cues: List<MiningCue>, positionMs: Long, text: String): MiningCue? = cues
         .firstOrNull { positionMs >= it.startMs && positionMs < it.endMs && normalized(it.text) == normalized(text) }
 
+    fun previousCueStart(cues: List<MiningCue>, positionMs: Long): Long? {
+        val activeStart = cues
+            .filter { positionMs >= it.startMs && positionMs < it.endMs }
+            .minOfOrNull(MiningCue::startMs)
+        val boundary = activeStart ?: positionMs
+        return cues.asSequence()
+            .map(MiningCue::startMs)
+            .filter { it < boundary }
+            .maxOrNull()
+    }
+
     fun translation(cue: MiningCue, english: List<MiningCue>): String? = english
         .filter {
             val overlap = min(cue.endMs, it.endMs) - max(cue.startMs, it.startMs)

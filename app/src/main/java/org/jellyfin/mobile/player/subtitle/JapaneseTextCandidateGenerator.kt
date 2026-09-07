@@ -1,5 +1,20 @@
 package org.jellyfin.mobile.player.subtitle
 
+import org.jellyfin.mobile.player.subtitle.JapaneseConjugation.ADVERBIAL
+import org.jellyfin.mobile.player.subtitle.JapaneseConjugation.CAUSATIVE
+import org.jellyfin.mobile.player.subtitle.JapaneseConjugation.COLLOQUIAL
+import org.jellyfin.mobile.player.subtitle.JapaneseConjugation.COMPLETIVE
+import org.jellyfin.mobile.player.subtitle.JapaneseConjugation.CONDITIONAL
+import org.jellyfin.mobile.player.subtitle.JapaneseConjugation.DESIDERATIVE
+import org.jellyfin.mobile.player.subtitle.JapaneseConjugation.NEGATIVE
+import org.jellyfin.mobile.player.subtitle.JapaneseConjugation.PASSIVE
+import org.jellyfin.mobile.player.subtitle.JapaneseConjugation.PASSIVE_OR_POTENTIAL
+import org.jellyfin.mobile.player.subtitle.JapaneseConjugation.PAST
+import org.jellyfin.mobile.player.subtitle.JapaneseConjugation.POLITE
+import org.jellyfin.mobile.player.subtitle.JapaneseConjugation.POTENTIAL
+import org.jellyfin.mobile.player.subtitle.JapaneseConjugation.PROGRESSIVE
+import org.jellyfin.mobile.player.subtitle.JapaneseConjugation.TE_FORM
+import org.jellyfin.mobile.player.subtitle.JapaneseConjugation.VOLITIONAL
 import java.text.Normalizer
 
 /** A dictionary query and its distance from the literal tapped text. */
@@ -8,6 +23,7 @@ data class JapaneseTextCandidate(
     val sourceStart: Int,
     val sourceLength: Int,
     val deinflectionDepth: Int,
+    val conjugations: List<JapaneseConjugation> = emptyList(),
 )
 
 /**
@@ -21,141 +37,163 @@ object JapaneseTextCandidateGenerator {
     private const val MAX_DEINFLECTION_DEPTH = 4
     private const val MAX_FORMS_PER_LITERAL = 96
 
-    private val suffixRules = listOf(
-        "きませんでした" to listOf("く"),
-        "ぎませんでした" to listOf("ぐ"),
-        "しませんでした" to listOf("す", "する"),
-        "ちませんでした" to listOf("つ"),
-        "にませんでした" to listOf("ぬ"),
-        "びませんでした" to listOf("ぶ"),
-        "みませんでした" to listOf("む"),
-        "りませんでした" to listOf("る"),
-        "いませんでした" to listOf("う"),
-        "ませんでした" to listOf("る", "う", "く", "ぐ", "す", "つ", "ぬ", "ぶ", "む"),
-        "きません" to listOf("く"),
-        "ぎません" to listOf("ぐ"),
-        "しません" to listOf("す", "する"),
-        "ちません" to listOf("つ"),
-        "にません" to listOf("ぬ"),
-        "びません" to listOf("ぶ"),
-        "みません" to listOf("む"),
-        "りません" to listOf("る"),
-        "いません" to listOf("う"),
-        "ません" to listOf("る", "う", "く", "ぐ", "す", "つ", "ぬ", "ぶ", "む"),
-        "きました" to listOf("く"),
-        "ぎました" to listOf("ぐ"),
-        "しました" to listOf("す", "する"),
-        "ちました" to listOf("つ"),
-        "にました" to listOf("ぬ"),
-        "びました" to listOf("ぶ"),
-        "みました" to listOf("む"),
-        "りました" to listOf("る"),
-        "いました" to listOf("う"),
-        "ました" to listOf("る"),
-        "きます" to listOf("く"),
-        "ぎます" to listOf("ぐ"),
-        "します" to listOf("す", "する"),
-        "ちます" to listOf("つ"),
-        "にます" to listOf("ぬ"),
-        "びます" to listOf("ぶ"),
-        "みます" to listOf("む"),
-        "ります" to listOf("る"),
-        "います" to listOf("う"),
-        "ます" to listOf("る"),
-        "かない" to listOf("く"),
-        "がない" to listOf("ぐ"),
-        "さない" to listOf("す"),
-        "たない" to listOf("つ"),
-        "なない" to listOf("ぬ"),
-        "ばない" to listOf("ぶ"),
-        "まない" to listOf("む"),
-        "らない" to listOf("る"),
-        "わない" to listOf("う"),
-        "なかった" to listOf("ない"),
-        "なくて" to listOf("ない"),
-        "なければ" to listOf("ない"),
-        "ない" to listOf("る", "う"),
-        "かった" to listOf("い"),
-        "くない" to listOf("い"),
-        "くて" to listOf("い"),
-        "ければ" to listOf("い"),
-        "かれる" to listOf("く"),
-        "がれる" to listOf("ぐ"),
-        "される" to listOf("す", "する"),
-        "たれる" to listOf("つ"),
-        "なれる" to listOf("ぬ"),
-        "ばれる" to listOf("ぶ"),
-        "まれる" to listOf("む"),
-        "られる" to listOf("る"),
-        "われる" to listOf("う"),
-        "かせる" to listOf("く"),
-        "がせる" to listOf("ぐ"),
-        "させる" to listOf("す", "する", "る"),
-        "たせる" to listOf("つ"),
-        "なせる" to listOf("ぬ"),
-        "ばせる" to listOf("ぶ"),
-        "ませる" to listOf("む"),
-        "らせる" to listOf("る"),
-        "わせる" to listOf("う"),
-        "ける" to listOf("く"),
-        "げる" to listOf("ぐ"),
-        "せる" to listOf("す"),
-        "てる" to listOf("つ", "ている"),
-        "ねる" to listOf("ぬ"),
-        "べる" to listOf("ぶ"),
-        "める" to listOf("む"),
-        "れる" to listOf("る"),
-        "える" to listOf("う"),
-        "ている" to listOf("て"),
-        "でいる" to listOf("で"),
-        "でる" to listOf("でいる"),
-        "てしまう" to listOf("て"),
-        "でしまう" to listOf("で"),
-        "ちゃう" to listOf("て"),
-        "じゃう" to listOf("で"),
-        "たい" to listOf("ます"),
-        "こう" to listOf("く"),
-        "ごう" to listOf("ぐ"),
-        "そう" to listOf("す"),
-        "とう" to listOf("つ"),
-        "のう" to listOf("ぬ"),
-        "ぼう" to listOf("ぶ"),
-        "もう" to listOf("む"),
-        "ろう" to listOf("る"),
-        "おう" to listOf("う"),
-        "よう" to listOf("る"),
-        "けば" to listOf("く"),
-        "げば" to listOf("ぐ"),
-        "せば" to listOf("す"),
-        "てば" to listOf("つ"),
-        "ねば" to listOf("ぬ"),
-        "べば" to listOf("ぶ"),
-        "めば" to listOf("む"),
-        "れば" to listOf("る"),
-        "えば" to listOf("う"),
-        "った" to listOf("う", "つ", "る"),
-        "って" to listOf("う", "つ", "る"),
-        "んだ" to listOf("ぬ", "ぶ", "む"),
-        "んで" to listOf("ぬ", "ぶ", "む"),
-        "いた" to listOf("く"),
-        "いて" to listOf("く"),
-        "いだ" to listOf("ぐ"),
-        "いで" to listOf("ぐ"),
-        "した" to listOf("す", "する"),
-        "して" to listOf("す", "する"),
-        "た" to listOf("る"),
-        "て" to listOf("る"),
+    private data class SuffixRule(
+        val suffix: String,
+        val replacements: List<String>,
+        val conjugations: List<JapaneseConjugation>,
     )
 
+    private fun rule(suffix: String, replacements: List<String>, vararg conjugations: JapaneseConjugation) =
+        SuffixRule(suffix, replacements, conjugations.toList())
+
+    private val suffixRules = listOf(
+        rule("きませんでした", listOf("く"), POLITE, NEGATIVE, PAST),
+        rule("ぎませんでした", listOf("ぐ"), POLITE, NEGATIVE, PAST),
+        rule("しませんでした", listOf("す", "する"), POLITE, NEGATIVE, PAST),
+        rule("ちませんでした", listOf("つ"), POLITE, NEGATIVE, PAST),
+        rule("にませんでした", listOf("ぬ"), POLITE, NEGATIVE, PAST),
+        rule("びませんでした", listOf("ぶ"), POLITE, NEGATIVE, PAST),
+        rule("みませんでした", listOf("む"), POLITE, NEGATIVE, PAST),
+        rule("りませんでした", listOf("る"), POLITE, NEGATIVE, PAST),
+        rule("いませんでした", listOf("う"), POLITE, NEGATIVE, PAST),
+        rule("ませんでした", listOf("る", "う", "く", "ぐ", "す", "つ", "ぬ", "ぶ", "む"), POLITE, NEGATIVE, PAST),
+        rule("きません", listOf("く"), POLITE, NEGATIVE),
+        rule("ぎません", listOf("ぐ"), POLITE, NEGATIVE),
+        rule("しません", listOf("す", "する"), POLITE, NEGATIVE),
+        rule("ちません", listOf("つ"), POLITE, NEGATIVE),
+        rule("にません", listOf("ぬ"), POLITE, NEGATIVE),
+        rule("びません", listOf("ぶ"), POLITE, NEGATIVE),
+        rule("みません", listOf("む"), POLITE, NEGATIVE),
+        rule("りません", listOf("る"), POLITE, NEGATIVE),
+        rule("いません", listOf("う"), POLITE, NEGATIVE),
+        rule("ません", listOf("る", "う", "く", "ぐ", "す", "つ", "ぬ", "ぶ", "む"), POLITE, NEGATIVE),
+        rule("きました", listOf("く"), POLITE, PAST),
+        rule("ぎました", listOf("ぐ"), POLITE, PAST),
+        rule("しました", listOf("す", "する"), POLITE, PAST),
+        rule("ちました", listOf("つ"), POLITE, PAST),
+        rule("にました", listOf("ぬ"), POLITE, PAST),
+        rule("びました", listOf("ぶ"), POLITE, PAST),
+        rule("みました", listOf("む"), POLITE, PAST),
+        rule("りました", listOf("る"), POLITE, PAST),
+        rule("いました", listOf("う"), POLITE, PAST),
+        rule("ました", listOf("る"), POLITE, PAST),
+        rule("きます", listOf("く"), POLITE),
+        rule("ぎます", listOf("ぐ"), POLITE),
+        rule("します", listOf("す", "する"), POLITE),
+        rule("ちます", listOf("つ"), POLITE),
+        rule("にます", listOf("ぬ"), POLITE),
+        rule("びます", listOf("ぶ"), POLITE),
+        rule("みます", listOf("む"), POLITE),
+        rule("ります", listOf("る"), POLITE),
+        rule("います", listOf("う"), POLITE),
+        rule("ます", listOf("る"), POLITE),
+        rule("かない", listOf("く"), NEGATIVE),
+        rule("がない", listOf("ぐ"), NEGATIVE),
+        rule("さない", listOf("す"), NEGATIVE),
+        rule("たない", listOf("つ"), NEGATIVE),
+        rule("なない", listOf("ぬ"), NEGATIVE),
+        rule("ばない", listOf("ぶ"), NEGATIVE),
+        rule("まない", listOf("む"), NEGATIVE),
+        rule("らない", listOf("る"), NEGATIVE),
+        rule("わない", listOf("う"), NEGATIVE),
+        rule("なかった", listOf("ない"), PAST),
+        rule("なくて", listOf("ない"), TE_FORM),
+        rule("なければ", listOf("ない"), CONDITIONAL),
+        rule("ない", listOf("る", "う"), NEGATIVE),
+        rule("かった", listOf("い"), PAST),
+        rule("くない", listOf("い"), NEGATIVE),
+        rule("くて", listOf("い"), TE_FORM),
+        rule("ければ", listOf("い"), CONDITIONAL),
+        rule("かれる", listOf("く"), PASSIVE),
+        rule("がれる", listOf("ぐ"), PASSIVE),
+        rule("される", listOf("す", "する"), PASSIVE),
+        rule("たれる", listOf("つ"), PASSIVE),
+        rule("なれる", listOf("ぬ"), PASSIVE),
+        rule("ばれる", listOf("ぶ"), PASSIVE),
+        rule("まれる", listOf("む"), PASSIVE),
+        rule("られる", listOf("る"), PASSIVE_OR_POTENTIAL),
+        rule("われる", listOf("う"), PASSIVE),
+        rule("かせる", listOf("く"), CAUSATIVE),
+        rule("がせる", listOf("ぐ"), CAUSATIVE),
+        rule("させる", listOf("す", "する", "る"), CAUSATIVE),
+        rule("たせる", listOf("つ"), CAUSATIVE),
+        rule("なせる", listOf("ぬ"), CAUSATIVE),
+        rule("ばせる", listOf("ぶ"), CAUSATIVE),
+        rule("ませる", listOf("む"), CAUSATIVE),
+        rule("らせる", listOf("る"), CAUSATIVE),
+        rule("わせる", listOf("う"), CAUSATIVE),
+        rule("ける", listOf("く"), POTENTIAL),
+        rule("げる", listOf("ぐ"), POTENTIAL),
+        rule("せる", listOf("す"), POTENTIAL),
+        rule("てる", listOf("つ"), POTENTIAL),
+        rule("てる", listOf("ている"), COLLOQUIAL),
+        rule("ねる", listOf("ぬ"), POTENTIAL),
+        rule("べる", listOf("ぶ"), POTENTIAL),
+        rule("める", listOf("む"), POTENTIAL),
+        rule("れる", listOf("る"), POTENTIAL),
+        rule("える", listOf("う"), POTENTIAL),
+        rule("ている", listOf("て"), PROGRESSIVE),
+        rule("でいる", listOf("で"), PROGRESSIVE),
+        rule("でる", listOf("でいる"), COLLOQUIAL),
+        rule("てしまう", listOf("て"), COMPLETIVE),
+        rule("でしまう", listOf("で"), COMPLETIVE),
+        rule("ちゃう", listOf("て"), COMPLETIVE, COLLOQUIAL),
+        rule("じゃう", listOf("で"), COMPLETIVE, COLLOQUIAL),
+        rule("こう", listOf("く"), VOLITIONAL),
+        rule("ごう", listOf("ぐ"), VOLITIONAL),
+        rule("そう", listOf("す"), VOLITIONAL),
+        rule("とう", listOf("つ"), VOLITIONAL),
+        rule("のう", listOf("ぬ"), VOLITIONAL),
+        rule("ぼう", listOf("ぶ"), VOLITIONAL),
+        rule("もう", listOf("む"), VOLITIONAL),
+        rule("ろう", listOf("る"), VOLITIONAL),
+        rule("おう", listOf("う"), VOLITIONAL),
+        rule("よう", listOf("る"), VOLITIONAL),
+        rule("けば", listOf("く"), CONDITIONAL),
+        rule("げば", listOf("ぐ"), CONDITIONAL),
+        rule("せば", listOf("す"), CONDITIONAL),
+        rule("てば", listOf("つ"), CONDITIONAL),
+        rule("ねば", listOf("ぬ"), CONDITIONAL),
+        rule("べば", listOf("ぶ"), CONDITIONAL),
+        rule("めば", listOf("む"), CONDITIONAL),
+        rule("れば", listOf("る"), CONDITIONAL),
+        rule("えば", listOf("う"), CONDITIONAL),
+        rule("った", listOf("う", "つ", "る"), PAST),
+        rule("って", listOf("う", "つ", "る"), TE_FORM),
+        rule("んだ", listOf("ぬ", "ぶ", "む"), PAST),
+        rule("んで", listOf("ぬ", "ぶ", "む"), TE_FORM),
+        rule("いた", listOf("く"), PAST),
+        rule("いて", listOf("く"), TE_FORM),
+        rule("いだ", listOf("ぐ"), PAST),
+        rule("いで", listOf("ぐ"), TE_FORM),
+        rule("した", listOf("す", "する"), PAST),
+        rule("して", listOf("す", "する"), TE_FORM),
+        rule("た", listOf("る"), PAST),
+        rule("て", listOf("る"), TE_FORM),
+        rule("く", listOf("い"), ADVERBIAL),
+        rule("んない", listOf("らない"), COLLOQUIAL),
+        rule("きたい", listOf("く"), DESIDERATIVE),
+        rule("ぎたい", listOf("ぐ"), DESIDERATIVE),
+        rule("したい", listOf("す", "する"), DESIDERATIVE),
+        rule("ちたい", listOf("つ"), DESIDERATIVE),
+        rule("にたい", listOf("ぬ"), DESIDERATIVE),
+        rule("びたい", listOf("ぶ"), DESIDERATIVE),
+        rule("みたい", listOf("む"), DESIDERATIVE),
+        rule("りたい", listOf("る"), DESIDERATIVE),
+        rule("いたい", listOf("う"), DESIDERATIVE),
+        rule("たい", listOf("る"), DESIDERATIVE),
+    ).groupBy { it.suffix.last() }
+
     private val irregularForms = mapOf(
-        "した" to "する",
-        "して" to "する",
-        "しない" to "する",
-        "しよう" to "する",
-        "きた" to "くる",
-        "きて" to "くる",
-        "きます" to "くる",
-        "こない" to "くる",
+        "した" to ("する" to listOf(PAST)),
+        "して" to ("する" to listOf(TE_FORM)),
+        "しない" to ("する" to listOf(NEGATIVE)),
+        "しよう" to ("する" to listOf(VOLITIONAL)),
+        "したい" to ("する" to listOf(DESIDERATIVE)),
+        "きた" to ("くる" to listOf(PAST)),
+        "きて" to ("くる" to listOf(TE_FORM)),
+        "きます" to ("くる" to listOf(POLITE)),
+        "こない" to ("くる" to listOf(NEGATIVE)),
     )
 
     fun generate(subtitleText: String, tappedCharacterOffset: Int): List<JapaneseTextCandidate> {
@@ -203,10 +241,12 @@ object JapaneseTextCandidateGenerator {
                 normalized,
                 JapaneseTextCandidate(normalized, literal.sourceStart, literal.text.length, 0),
             )
-            deinflect(normalized).forEach { (term, depth) ->
+            deinflect(normalized).forEach { form ->
                 results.putIfAbsent(
-                    term,
-                    JapaneseTextCandidate(term, literal.sourceStart, literal.text.length, depth),
+                    form.text,
+                    JapaneseTextCandidate(
+                        form.text, literal.sourceStart, literal.text.length, form.depth, form.conjugations,
+                    ),
                 )
             }
         }
@@ -218,27 +258,36 @@ object JapaneseTextCandidateGenerator {
         val sourceStart: Int,
     )
 
-    @Suppress("NestedBlockDepth")
-    private fun deinflect(source: String): Map<String, Int> {
-        val discovered = linkedMapOf(source to 0)
-        val queue = ArrayDeque<String>().apply { add(source) }
+    private data class DeinflectedForm(
+        val text: String,
+        val depth: Int,
+        val conjugations: List<JapaneseConjugation>,
+    )
+
+    private fun deinflect(source: String): Collection<DeinflectedForm> {
+        val initial = DeinflectedForm(source, 0, emptyList())
+        val discovered = linkedMapOf(source to initial)
+        val queue = ArrayDeque<DeinflectedForm>().apply { add(initial) }
         while (queue.isNotEmpty() && discovered.size < MAX_FORMS_PER_LITERAL) {
             val current = queue.removeFirst()
-            val depth = discovered.getValue(current)
-            if (depth >= MAX_DEINFLECTION_DEPTH) continue
-            irregularForms[current]?.let { candidate ->
-                if (discovered.putIfAbsent(candidate, depth + 1) == null) queue.add(candidate)
+            if (current.depth >= MAX_DEINFLECTION_DEPTH) continue
+            fun discover(text: String, conjugations: List<JapaneseConjugation>) {
+                if (discovered.size >= MAX_FORMS_PER_LITERAL || text in discovered) return
+                // Rules unwind the surface form. Display the explanation from base to surface.
+                val form = DeinflectedForm(text, current.depth + 1, (conjugations + current.conjugations).distinct())
+                discovered[text] = form
+                queue.add(form)
             }
-            suffixRules.forEach { (suffix, replacements) ->
-                if (!current.endsWith(suffix) || current.length <= suffix.length) return@forEach
-                replacements.forEach { replacement ->
-                    val candidate = current.dropLast(suffix.length) + replacement
-                    if (discovered.putIfAbsent(candidate, depth + 1) == null) queue.add(candidate)
+            irregularForms[current.text]?.let { (text, conjugations) -> discover(text, conjugations) }
+            suffixRules[current.text.last()].orEmpty().forEach { rule ->
+                if (!current.text.endsWith(rule.suffix) || current.text.length <= rule.suffix.length) return@forEach
+                rule.replacements.forEach { replacement ->
+                    discover(current.text.dropLast(rule.suffix.length) + replacement, rule.conjugations)
                 }
             }
         }
         discovered.remove(source)
-        return discovered
+        return discovered.values
     }
 
     private fun isJapanese(character: Int): Boolean = character in 0x3040..0x30ff ||

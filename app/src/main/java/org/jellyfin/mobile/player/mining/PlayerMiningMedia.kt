@@ -44,9 +44,9 @@ data class MiningMediaContext(
 
 data class MiningSentence(val cue: MiningCue?, val english: String?)
 
-internal data class EnglishWindow(val media: MiningMediaContext, val cues: List<MiningCue>) {
-    fun contains(other: MiningMediaContext): Boolean = media.serverUrl == other.serverUrl &&
-        media.itemId == other.itemId && media.sourceId == other.sourceId && media.englishIndex == other.englishIndex &&
+internal data class SubtitleWindow(val media: MiningMediaContext, val index: Int, val cues: List<MiningCue>) {
+    fun contains(other: MiningMediaContext, otherIndex: Int): Boolean = index == otherIndex &&
+        media.serverUrl == other.serverUrl && media.itemId == other.itemId && media.sourceId == other.sourceId &&
         kotlin.math.abs(media.positionMs - other.positionMs) < 45_000
 }
 
@@ -86,15 +86,25 @@ class PlayerMiningMedia(context: Context, private val api: ApiClient) {
         )
     }
 
-    private var englishWindow: EnglishWindow? = null
+    private var englishWindow: SubtitleWindow? = null
+    private var japaneseWindow: SubtitleWindow? = null
 
     /** Only requested while the English overlay is open; a bounded in-memory window avoids repeat downloads. */
     suspend fun englishAt(media: MiningMediaContext): String? {
         val index = media.englishIndex ?: return null
         require(media.youTubeSession != null || api.baseUrl == media.serverUrl) { "Playback server changed" }
-        val cached = englishWindow?.takeIf { it.contains(media) }
-            ?: EnglishWindow(media, subtitles(media, index)).also { englishWindow = it }
+        val cached = englishWindow?.takeIf { it.contains(media, index) }
+            ?: SubtitleWindow(media, index, subtitles(media, index)).also { englishWindow = it }
         return SubtitleTimeline.atPosition(cached.cues, media.positionMs)
+    }
+
+    /** Seek helper shared by Jellyfin and YouTube, using the selected Japanese subtitle timeline. */
+    suspend fun previousSubtitlePosition(media: MiningMediaContext): Long? {
+        val index = media.subtitleIndex.takeIf { it >= 0 } ?: return null
+        require(media.youTubeSession != null || api.baseUrl == media.serverUrl) { "Playback server changed" }
+        val cached = japaneseWindow?.takeIf { it.contains(media, index) }
+            ?: SubtitleWindow(media, index, subtitles(media, index)).also { japaneseWindow = it }
+        return SubtitleTimeline.previousCueStart(cached.cues, media.positionMs)
     }
 
     suspend fun sentence(media: MiningMediaContext, text: String, includeEnglish: Boolean): MiningSentence = withContext(
