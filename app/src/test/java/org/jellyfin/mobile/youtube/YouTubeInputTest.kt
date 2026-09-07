@@ -2,6 +2,7 @@ package org.jellyfin.mobile.youtube
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 
 class YouTubeInputTest {
@@ -23,5 +24,15 @@ class YouTubeInputTest {
             "https://user@youtube.com/watch?v=nS4m2eXb4nU", "https://youtube.com:8765/watch?v=nS4m2eXb4nU",
             "日本語 lesson", "https://youtube.com/watch?v=short",
         ).forEach { assertNull(YouTubeInput.videoId(it)) }
+    }
+
+    @Test
+    fun `resolver address accepts MagicDNS names without boilerplate`() {
+        assertEquals("http://media-pc:8767", normalizeResolverAddress("media-pc"))
+        assertEquals("http://media-pc.example.ts.net:8767", normalizeResolverAddress("media-pc.example.ts.net"))
+        assertEquals("https://resolver.example.test", normalizeResolverAddress("https://resolver.example.test"))
+        assertThrows(IllegalArgumentException::class.java) {
+            normalizeResolverAddress("http://user@media-pc:8767/private")
+        }
     }
 }

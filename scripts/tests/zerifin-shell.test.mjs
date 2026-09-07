@@ -16,7 +16,7 @@ function fixture(body) {
     window.zerifinShellReady = false;
     const calls = [];
     window.NativeInterface = {
-        getLearningMenuLabels: () => JSON.stringify({ title: 'Japanese learning', dictionary: 'Dictionaries', anki: 'Anki mining', youtube: 'YouTube' }),
+        getLearningMenuLabels: () => JSON.stringify({ title: 'Japanese learning', general: 'General', dictionary: 'Dictionaries', anki: 'Anki mining', youtube: 'YouTube' }),
         openLearningSettings: destination => calls.push(destination),
     };
     const context = { window, document: window.document, Element: window.Element, MutationObserver: window.MutationObserver };
@@ -30,9 +30,9 @@ test('side menu routes dictionary and mining directly to native settings without
     document.body.addEventListener('click', () => serverClicks++);
     runInNewContext(source, context);
     const buttons = document.querySelectorAll('.zerifin-learning-button');
-    assert.equal(buttons.length, 3);
+    assert.equal(buttons.length, 4);
     for (const button of buttons) button.dispatchEvent(new window.Event('click', { bubbles: true, cancelable: true }));
-    assert.deepEqual(calls, ['youtube', 'dictionary', 'anki']);
+    assert.deepEqual(calls, ['youtube', 'dictionary', 'anki', 'general']);
     assert.equal(serverClicks, 0);
     assert.equal(document.querySelectorAll('link[href="/native/zerifin-shell.css"]').length, 1);
     await settle();

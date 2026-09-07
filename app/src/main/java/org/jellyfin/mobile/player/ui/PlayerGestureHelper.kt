@@ -167,6 +167,7 @@ class PlayerGestureHelper(
             }
 
             override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+                fragment.onPlayerScreenTapped()
                 playerView.apply {
                     if (!isControllerFullyVisible) showController() else hideController()
                 }

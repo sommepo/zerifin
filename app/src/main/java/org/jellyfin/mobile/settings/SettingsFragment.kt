@@ -347,6 +347,7 @@ class SettingsFragment : Fragment(), BackPressInterceptor {
 
     companion object {
         const val ARG_LEARNING_DESTINATION = "learning_destination"
+        const val DESTINATION_GENERAL = "general"
         const val DESTINATION_DICTIONARY = "dictionary"
         const val DESTINATION_ANKI = "anki"
         private const val PREF_CATEGORY_LEARNING = "pref_category_learning"

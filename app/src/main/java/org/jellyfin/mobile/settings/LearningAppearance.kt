@@ -14,10 +14,36 @@ class LookupPreferences(context: Context) {
         get() = preferences.getBoolean("pause_on_lookup", true)
         set(value) { preferences.edit { putBoolean("pause_on_lookup", value) } }
 
+    var pauseOnScreenTap: Boolean
+        get() = preferences.getBoolean("pause_on_screen_tap", false)
+        set(value) { preferences.edit { putBoolean("pause_on_screen_tap", value) } }
+
     var theme: LookupTheme
         get() = LookupTheme.entries.firstOrNull { it.name == preferences.getString("theme", null) } ?: LookupTheme.SYSTEM
         set(value) { preferences.edit { putString("theme", value.name) } }
+
+    var learningControlsPosition: LearningControlsPosition?
+        get() {
+            if (!preferences.contains("learning_controls_x") || !preferences.contains("learning_controls_y")) return null
+            return LearningControlsPosition(
+                preferences.getFloat("learning_controls_x", 1f).coerceIn(0f, 1f),
+                preferences.getFloat("learning_controls_y", 0f).coerceIn(0f, 1f),
+            )
+        }
+        set(value) {
+            preferences.edit {
+                if (value == null) {
+                    remove("learning_controls_x")
+                    remove("learning_controls_y")
+                } else {
+                    putFloat("learning_controls_x", value.x.coerceIn(0f, 1f))
+                    putFloat("learning_controls_y", value.y.coerceIn(0f, 1f))
+                }
+            }
+        }
 }
+
+data class LearningControlsPosition(val x: Float, val y: Float)
 
 data class LearningPalette(
     val background: Int,

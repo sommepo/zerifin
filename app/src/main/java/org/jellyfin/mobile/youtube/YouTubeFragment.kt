@@ -40,6 +40,7 @@ class YouTubeFragment : Fragment() {
     private lateinit var status: TextView
     private lateinit var results: LinearLayout
     private lateinit var submit: Button
+    private lateinit var resolverTest: Button
     private var entries = emptyList<YouTubeVideo>()
     private var operation: Job? = null
     private var initialConsumed = false
@@ -63,10 +64,14 @@ class YouTubeFragment : Fragment() {
         address.inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_URI
         address.visibility = View.GONE
         val server = learningButton(context, "Resolver address") {
-            address.visibility = if (address.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+            val visible = address.visibility != View.VISIBLE
+            address.visibility = if (visible) View.VISIBLE else View.GONE
+            resolverTest.visibility = if (visible) View.VISIBLE else View.GONE
         }
         content.addView(server, row())
         content.addView(address, row())
+        resolverTest = learningButton(context, "Test resolver") { testResolver() }.apply { visibility = View.GONE }
+        content.addView(resolverTest, row())
         status = learningText(context, "Search for a video or open a link. Japanese captions are selected automatically.", 14f, true)
         content.addView(status, row())
         results = LinearLayout(context).apply { orientation = LinearLayout.VERTICAL }
@@ -108,6 +113,7 @@ class YouTubeFragment : Fragment() {
             status.text = "Enter the resolver address, for example http://192.168.1.10:8767."
             return
         }
+        address.setText(base)
         val id = YouTubeInput.videoId(query)
         if (id == null && (query.contains("://") || query.contains("youtu.be/"))) {
             status.text = "Paste a YouTube video link, not a playlist or channel."
@@ -144,6 +150,35 @@ class YouTubeFragment : Fragment() {
                 Timber.w("YouTube operation failed type=%s", error.javaClass.simpleName)
             } finally {
                 submit.isEnabled = true
+            }
+        }
+    }
+
+    private fun testResolver() {
+        if (operation?.isActive == true) return
+        val base = try {
+            YouTubePreferences(requireContext()).saveAddress(address.text.toString())
+        } catch (_: IllegalArgumentException) {
+            status.text = "Enter a hostname or address, for example media-pc:8767 or 100.72.163.64:8767."
+            return
+        }
+        address.setText(base)
+        operation = viewLifecycleOwner.lifecycleScope.launch {
+            resolverTest.isEnabled = false
+            status.text = "Checking resolver…"
+            try {
+                val health = client.health(base)
+                status.text = if (health.status == "ok") {
+                    if (health.sentenceAudio) "Resolver ready · sentence audio ready" else "Resolver ready · ffmpeg unavailable"
+                } else {
+                    "The resolver returned an unsupported health response."
+                }
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (error: Exception) {
+                status.text = error.message ?: "Could not reach the resolver."
+            } finally {
+                resolverTest.isEnabled = true
             }
         }
     }

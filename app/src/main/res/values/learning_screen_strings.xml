@@ -9,6 +9,11 @@
     <string name="learning_import_hint">Import a Yomitan dictionary ZIP</string>
     <string name="learning_dictionary_entries">%1$s entries</string>
     <string name="learning_pause_lookup">Pause on lookup</string>
+    <string name="learning_general_title">General</string>
+    <string name="learning_playback_section">Playback</string>
+    <string name="learning_subtitle_section">Subtitles and lookup</string>
+    <string name="learning_pause_screen_tap">Pause on screen tap</string>
+    <string name="learning_drag_controls_hint">Drag the EN or previous-line button during playback to move both shortcuts. Their position is remembered.</string>
     <string name="learning_popup_theme">Popup appearance</string>
     <string name="learning_system_theme">System</string>
     <string name="learning_light_theme">Light</string>

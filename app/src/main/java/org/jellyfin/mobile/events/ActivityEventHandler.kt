@@ -107,6 +107,8 @@ class ActivityEventHandler(
             is ActivityEvent.OpenLearningSettings -> {
                 if (event.destination == "youtube") {
                     supportFragmentManager.addFragment<org.jellyfin.mobile.youtube.YouTubeFragment>()
+                } else if (event.destination == SettingsFragment.DESTINATION_GENERAL) {
+                    supportFragmentManager.addFragment<org.jellyfin.mobile.settings.LearningSettingsFragment>()
                 } else if (event.destination == SettingsFragment.DESTINATION_ANKI) {
                     supportFragmentManager.addFragment<org.jellyfin.mobile.settings.AnkiMappingFragment>()
                 } else {

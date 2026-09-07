@@ -15,12 +15,19 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Response
+import java.net.ConnectException
 import java.io.IOException
+import java.net.SocketTimeoutException
+import java.net.URI
+import java.net.UnknownHostException
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 class YouTubeClient {
+    suspend fun health(base: String): YouTubeResolverHealth =
+        json.decodeFromString(bytes(Request.Builder().url("${base.trimEnd('/')}/health").build()).toString(Charsets.UTF_8))
+
     suspend fun search(base: String, query: String): List<YouTubeVideo> =
         json.decodeFromString<YouTubeSearch>(post(base, "search", query)).results
 
@@ -53,7 +60,7 @@ class YouTubeClient {
             call.enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     if (continuation.isActive) continuation.resumeWithException(
-                        IOException("Could not reach the YouTube resolver. Check its address and that it is running.")
+                        resolverFailure(call.request(), e)
                     )
                 }
                 override fun onResponse(call: Call, response: Response) {
@@ -86,6 +93,19 @@ class YouTubeClient {
                 }
             })
         }
+
+        private fun resolverFailure(request: Request, error: IOException): IOException {
+            val endpoint = "${request.url.host}:${request.url.port}"
+            return when (error) {
+                is UnknownHostException -> IOException(
+                    "Could not find ${request.url.host}. Connect Tailscale or use the resolver's Tailscale IP.",
+                    error,
+                )
+                is ConnectException -> IOException("Nothing answered at $endpoint. Start the resolver and try again.", error)
+                is SocketTimeoutException -> IOException("The resolver at $endpoint timed out.", error)
+                else -> IOException("Could not reach the YouTube resolver at $endpoint.", error)
+            }
+        }
     }
 }
 
@@ -96,10 +116,19 @@ class YouTubePreferences(context: Context) {
     }.getOrDefault("http://127.0.0.1:8767")
 
     fun saveAddress(value: String): String {
-        val url = value.trim().toHttpUrl()
-        require(url.username.isEmpty() && url.password.isEmpty() && url.query == null && url.fragment == null)
-        val normalized = url.toString().trimEnd('/')
+        val normalized = normalizeResolverAddress(value)
         prefs.edit().putString("resolver", normalized).apply()
         return normalized
     }
+}
+
+internal fun normalizeResolverAddress(value: String): String {
+    val supplied = value.trim().let { if (it.contains("://")) it else "http://$it" }
+    val uri = runCatching { URI(supplied) }.getOrElse { throw IllegalArgumentException("Invalid resolver address") }
+    val url = supplied.toHttpUrl()
+    require(url.scheme == "http" || url.scheme == "https")
+    require(url.username.isEmpty() && url.password.isEmpty() && url.query == null && url.fragment == null)
+    require(url.encodedPath == "/")
+    return (if (uri.port == -1 && url.scheme == "http") url.newBuilder().port(8767).build() else url)
+        .toString().trimEnd('/')
 }

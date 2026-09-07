@@ -22,7 +22,7 @@
         heading.textContent = labels.title;
         menu.appendChild(heading);
 
-        for (const [destination, icon] of [['youtube', '▶'], ['dictionary', '字'], ['anki', '+']]) {
+        for (const [destination, icon] of [['youtube', '▶'], ['dictionary', '字'], ['anki', '+'], ['general', '⚙']]) {
             const button = document.createElement('button');
             button.type = 'button';
             button.className = 'zerifin-learning-button';

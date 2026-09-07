@@ -181,6 +181,7 @@ class NativeInterface(private val context: Context) : KoinComponent {
     @JavascriptInterface
     fun getLearningMenuLabels(): String = buildJsonObject {
         put("title", context.getString(R.string.zerifin_learning_settings))
+        put("general", context.getString(R.string.learning_general_title))
         put("dictionary", context.getString(R.string.pref_japanese_dictionary))
         put("anki", context.getString(R.string.pref_anki_mining))
         put("youtube", "YouTube")
@@ -188,7 +189,7 @@ class NativeInterface(private val context: Context) : KoinComponent {
 
     @JavascriptInterface
     fun openLearningSettings(destination: String) {
-        if (destination == "youtube" || destination == SettingsFragment.DESTINATION_DICTIONARY || destination == SettingsFragment.DESTINATION_ANKI) {
+        if (destination == "youtube" || destination == SettingsFragment.DESTINATION_GENERAL || destination == SettingsFragment.DESTINATION_DICTIONARY || destination == SettingsFragment.DESTINATION_ANKI) {
             emitEvent(ActivityEvent.OpenLearningSettings(destination))
         }
     }

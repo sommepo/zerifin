@@ -1,53 +1,51 @@
-# YouTube setup
+# YouTube quick setup
 
-YouTube is optional. Jellyfin playback, dictionary lookup and AnkiDroid mining work without this
-companion. YouTube videos use the same native player and learning UI once resolved.
+YouTube is optional. Normal Jellyfin playback, dictionary lookup and AnkiDroid mining do not need
+this companion.
 
-## Start the companion
+Zerifin needs the companion running on another Windows, macOS or Linux computer while you watch.
+It does not need to be a Linux server. The computer and phone only need to share a LAN or Tailscale
+network.
 
-On a Linux x86_64 server with Python 3.10+ and Node 22+ installed, run these commands from the
-repository root:
+## Start in three steps
 
-```sh
-python3 companion/youtube/install.py
-companion/youtube/run.sh --bind 192.168.1.10
-```
+1. Install [Python 3.10 or newer](https://www.python.org/downloads/) and the current
+   [Node.js LTS](https://nodejs.org/). On Windows, enable Python's **Add python.exe to PATH** option.
+2. Download and unzip this repository, then open Terminal or PowerShell in the unzipped folder.
+3. Run one command:
 
-**Replace `192.168.1.10` with your server's LAN or Tailscale IPv4 address.** The installer downloads
-checksum-pinned yt-dlp, its EJS helper and ffmpeg into the ignored `companion/youtube/.runtime/`
-directory. It does not need sudo or pip, and makes no system package changes. Node is supplied
-by your system. The server listens on port **8767**; use `--port` to change it.
+   **Windows PowerShell**
 
-Without `--bind`, it listens only on `127.0.0.1`. Wildcard and public-address binds are rejected.
-Keep it running while watching; Ctrl+C stops it. No boot-time service is installed. To keep a
-manually started instance alive after closing the terminal:
+   ```powershell
+   py companion\youtube\start.py
+   ```
 
-```sh
-nohup companion/youtube/run.sh --bind 192.168.1.10 > companion/youtube/youtube.log 2>&1 &
-```
+   **macOS or Linux**
 
-This is a **trusted-network service without account authentication**. Use a LAN or Tailscale address
-reachable by your phone. Do not port-forward it or expose it as a public internet service. It
-rejects browser cross-origin requests and does not accept arbitrary non-YouTube URLs.
+   ```sh
+   python3 companion/youtube/start.py
+   ```
 
-On other platforms, use a Python virtual environment with `companion/youtube/requirements.txt`,
-then run `python companion/youtube/resolver.py --bind <private-IPv4>`. Install Node 22+ separately.
-An existing `ffmpeg` is preferred; `ZERIFIN_FFMPEG=/path/to/ffmpeg` overrides discovery. Otherwise
-the bundled binary is used where supported. A healthy server answers `GET /health` with
-`{"status":"ok","sentenceAudio":true}` when ffmpeg is available.
+The first run installs the pinned components and ffmpeg inside `companion/youtube/.runtime`; it does
+not need administrator access. If Windows asks about network access, allow **Private networks**.
+Keep the terminal open while using YouTube. The launcher prefers Tailscale when available and prints
+the exact resolver address to enter in Zerifin.
+
+This is a trusted-network service without account authentication. Never port-forward port `8767` or
+expose it to the public internet.
 
 ## Use it in Zerifin
 
 1. Open **YouTube** in the main side menu.
-2. Expand **Resolver address** and enter your companion's address, for example
-   `http://192.168.1.10:8767`. It is saved when **Search / Open** is pressed.
-   The default is your Jellyfin hostname on port 8767; change it if the companion runs elsewhere.
-3. Search for a Japanese video, paste a YouTube URL, or share a link to Zerifin from another Android app.
-4. Choose a result. If YouTube has not labelled its audio language, confirm **Japanese** only when
+2. Expand **Resolver address** and enter the address printed by the companion. A Tailscale IP,
+   `media-pc`, or a full MagicDNS name is accepted without `http://` or `:8767`.
+3. Press **Test resolver**. Continue when it says **Resolver ready**.
+4. Search for a Japanese video, paste a YouTube URL, or share a link to Zerifin from another Android app.
+5. Choose a result. If YouTube has not labelled its audio language, confirm **Japanese** only when
    the speech is Japanese. Otherwise choose **Skip sentence audio**.
-5. Japanese captions are selected automatically when available. Tap a word for the existing dictionary
+6. Japanese captions are selected automatically when available. Tap a word for the existing dictionary
    popup; use pronunciation, **EN**, or **+** as you would with a Jellyfin video.
-6. Seek forward and backward to check caption alignment. Press Back to return and open another video.
+7. Seek forward and backward to check caption alignment. Press Back to return and open another video.
 
 AnkiDroid must be configured in **Anki mining** for card creation. AnkiConnect is not used.
 YouTube sentence media, word audio, picture and title use the same [field mappings](anki-mining.md).
@@ -73,6 +71,18 @@ then wrapped in WAV by the existing Android mining helper. ffmpeg reads through 
 relay for compatibility with the bundled binary's HTTPS implementation. No full video is permanently
 stored or transcoded. Android imports mapped media into AnkiDroid and cleans its temporary files.
 
+## Resolver connection help
+
+- Keep the companion terminal open. MagicDNS cannot reach a resolver that has stopped.
+- Try the printed Tailscale or LAN IPv4 address first. This separates a DNS issue from a stopped
+  companion or firewall problem.
+- Confirm the phone and companion computer are both connected in Tailscale before using MagicDNS.
+- Open `http://<address>:8767/health` in the phone browser. A healthy companion returns
+  `{"status":"ok","sentenceAudio":true}`.
+- On Windows, allow Python on Private networks when the firewall prompt appears.
+- If automatic detection chooses the wrong interface, pass it directly, for example
+  `python3 companion/youtube/start.py --bind 192.168.1.10`.
+
 ## Limits and troubleshooting
 
 - Recorded videos only; live/upcoming videos, accounts, subscriptions, playlists and history are not supported.
@@ -85,6 +95,9 @@ stored or transcoded. Android imports mapped media into AnkiDroid and cleans its
   Explicitly non-Japanese audio is not automatically relabelled.
 - The companion needs to remain reachable for captions, sentence clips and relay playback.
   YouTube support currently starts from the app's normal connected-server flow.
+
+Advanced Linux users can still use `companion/youtube/run.sh`; it now performs first-run setup and
+address selection automatically. Use `--bind` or `--port` only when the defaults are wrong.
 
 For a problem report, include the public video URL, exact message and relevant companion log lines.
 Logs contain video IDs, format choices, caption selection/normalization and categorized errors;

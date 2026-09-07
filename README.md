@@ -21,7 +21,10 @@ and save it to AnkiDroid with the sentence and media.
 - Tap Japanese words in SRT and ordinary WebVTT subtitles in the integrated player.
 - See definitions, readings and frequency information in a compact popup beside the word.
 - Pause automatically on lookup without opening the player controls, or keep playback running.
-- Reveal the matching English subtitle with **EN**, including while a dictionary popup is open.
+- Reveal the matching English subtitle with **EN**, or jump to the previous line; drag the two
+  shortcuts anywhere on the player.
+- Keep playback controls simple from the side-menu **General** page, including pause on lookup,
+  pause on any screen tap, and common subtitle options.
 
 The popup stays hidden until a lookup finishes. Closing it resumes playback only if the lookup paused it.
 
@@ -62,13 +65,17 @@ so cards can play their media and sync normally. [Full mapping guide →](docs/a
 Search YouTube, paste a video URL, or share a link to Zerifin from another Android app. Videos open
 in the same native player and use the same subtitles, dictionary popup and mining actions.
 
-A small optional **yt-dlp companion** runs on your server. It selects manual Japanese captions first,
-then original Japanese auto-captions, and supplies normalized WebVTT to the existing renderer.
-Playback uses direct media URLs where possible, with a server relay fallback. Only short sentence
-clips are transcoded; videos are not permanently downloaded.
+A small companion must run on any Windows, macOS or Linux computer on the same LAN or Tailscale
+network. Install Python and Node.js, download this repository, then run one command; Zerifin prints
+the exact address to enter in the app and includes a **Test resolver** button. A Linux server is not
+required.
+
+The companion selects Japanese captions and supplies them to the native player. Playback uses direct
+media URLs where possible, with a relay fallback. Only short sentence clips are transcoded; videos
+are not permanently downloaded.
 
 YouTube is an early feature: recorded videos, up to 720p, basic search and no account features.
-The companion is intended for a trusted LAN or Tailscale network. [Set up YouTube →](docs/youtube.md)
+The companion is intended for a trusted LAN or Tailscale network. [Quick YouTube setup →](docs/youtube.md)
 
 ## Get started
 

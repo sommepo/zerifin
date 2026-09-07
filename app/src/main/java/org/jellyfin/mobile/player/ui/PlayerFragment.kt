@@ -17,6 +17,7 @@ import android.view.MotionEvent
 import android.view.OrientationEventListener
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewConfiguration
 import android.view.WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
 import android.widget.ImageButton
 import androidx.activity.result.contract.ActivityResultContracts
@@ -524,6 +525,7 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
             finishSubtitleLookup(resumePlayback = true)
         }
         playerBinding.subtitleLookupBackdrop.setOnClickListener {
+            onPlayerScreenTapped()
             playerView.hideController()
             finishSubtitleLookup(resumePlayback = true)
         }
@@ -533,6 +535,7 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
             if (englishVisible) hideEnglishSubtitle() else showEnglishSubtitle()
         }
         playerBinding.previousSubtitleButton.setOnClickListener { seekToPreviousSubtitle() }
+        setUpLearningControlsDrag()
         playerView.findViewById<ViewGroup>(Media3R.id.exo_content_frame)?.let { subtitleHost ->
             interactiveSubtitleHost?.removeOnLayoutChangeListener(
                 interactiveSubtitleHostLayoutListener,
@@ -914,6 +917,7 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
     }
 
     private fun onSubtitleTapped(tap: SubtitleTap): Boolean {
+        onPlayerScreenTapped()
         val hasJapaneseCandidate =
             JapaneseTextCandidateGenerator.generate(
                 tap.subtitleText,
@@ -1116,8 +1120,8 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
         val binding = _playerBinding ?: return
         // One overlay control is shared by both states, so its position never jumps on lookup.
         val learningControlsVisible = subtitleControllerVisible || lookupPlayer != null || englishVisible
-        binding.englishSubtitleButton.isVisible = learningControlsVisible
-        binding.previousSubtitleButton.isVisible = learningControlsVisible
+        binding.learningControls.isVisible = learningControlsVisible
+        if (learningControlsVisible) binding.learningControls.post { restoreLearningControlsPosition(binding) }
         binding.englishSubtitleButton.isSelected = englishVisible
         binding.englishSubtitleButton.setTextColor(
             if (englishVisible) {
@@ -1131,6 +1135,93 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
                 if (englishVisible) R.string.learning_english_hide else R.string.learning_english_show
             )
         )
+    }
+
+    fun onPlayerScreenTapped() {
+        if (LookupPreferences(requireContext()).pauseOnScreenTap) viewModel.pause()
+    }
+
+    @Suppress("ClickableViewAccessibility", "CyclomaticComplexMethod")
+    private fun setUpLearningControlsDrag() {
+        val binding = _playerBinding ?: return
+        val controls = binding.learningControls
+        val parent = controls.parent as? ViewGroup ?: return
+        val preferences = LookupPreferences(requireContext())
+        val touchSlop = ViewConfiguration.get(requireContext()).scaledTouchSlop
+        var downRawX = 0f
+        var downRawY = 0f
+        var startX = 0f
+        var startY = 0f
+        var dragging = false
+
+        fun availableWidth() = parent.width - parent.paddingLeft - parent.paddingRight - controls.width
+        fun availableHeight() = parent.height - parent.paddingTop - parent.paddingBottom - controls.height
+        fun moveTo(rawX: Float, rawY: Float) {
+            controls.x = (startX + rawX - downRawX).coerceIn(
+                parent.paddingLeft.toFloat(),
+                (parent.paddingLeft + availableWidth().coerceAtLeast(0)).toFloat(),
+            )
+            controls.y = (startY + rawY - downRawY).coerceIn(
+                parent.paddingTop.toFloat(),
+                (parent.paddingTop + availableHeight().coerceAtLeast(0)).toFloat(),
+            )
+        }
+        val dragListener = View.OnTouchListener { button, event ->
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN -> {
+                    downRawX = event.rawX
+                    downRawY = event.rawY
+                    startX = controls.x
+                    startY = controls.y
+                    dragging = false
+                    parent.requestDisallowInterceptTouchEvent(true)
+                    true
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    if (!dragging &&
+                        (kotlin.math.abs(event.rawX - downRawX) > touchSlop ||
+                            kotlin.math.abs(event.rawY - downRawY) > touchSlop)
+                    ) {
+                        dragging = true
+                    }
+                    if (dragging) moveTo(event.rawX, event.rawY)
+                    true
+                }
+                MotionEvent.ACTION_UP -> {
+                    if (dragging) {
+                        moveTo(event.rawX, event.rawY)
+                        preferences.learningControlsPosition = LearningControlsPositioner.normalize(
+                            controls.x - parent.paddingLeft,
+                            controls.y - parent.paddingTop,
+                            availableWidth(),
+                            availableHeight(),
+                        )
+                    } else {
+                        button.performClick()
+                    }
+                    parent.requestDisallowInterceptTouchEvent(false)
+                    true
+                }
+                MotionEvent.ACTION_CANCEL -> {
+                    parent.requestDisallowInterceptTouchEvent(false)
+                    true
+                }
+                else -> true
+            }
+        }
+        binding.englishSubtitleButton.setOnTouchListener(dragListener)
+        binding.previousSubtitleButton.setOnTouchListener(dragListener)
+    }
+
+    private fun restoreLearningControlsPosition(binding: FragmentPlayerBinding) {
+        val controls = binding.learningControls
+        val parent = controls.parent as? ViewGroup ?: return
+        val position = LookupPreferences(requireContext()).learningControlsPosition ?: return
+        val availableWidth = parent.width - parent.paddingLeft - parent.paddingRight - controls.width
+        val availableHeight = parent.height - parent.paddingTop - parent.paddingBottom - controls.height
+        val (x, y) = LearningControlsPositioner.toPixels(position, availableWidth, availableHeight)
+        controls.x = parent.paddingLeft + x
+        controls.y = parent.paddingTop + y
     }
 
     @Suppress("TooGenericExceptionCaught")

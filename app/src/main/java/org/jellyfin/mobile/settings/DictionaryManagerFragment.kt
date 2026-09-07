@@ -76,12 +76,6 @@ class DictionaryManagerFragment : Fragment() {
         val preferences = LookupPreferences(context)
         content.addView(learningText(context, getString(R.string.learning_popup_settings), 18f), rowParams())
         content.addView(
-            learningSwitch(context, getString(R.string.learning_pause_lookup), preferences.pauseOnLookup) {
-                preferences.pauseOnLookup = it
-            },
-            rowParams()
-        )
-        content.addView(
             LearningChoice(context, getString(R.string.learning_popup_theme)).apply {
                 setItems(
                     listOf(

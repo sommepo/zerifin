@@ -10,6 +10,9 @@ data class YouTubeVideo(val id: String, val title: String, val channel: String =
 data class YouTubeSearch(val results: List<YouTubeVideo>)
 
 @Serializable
+data class YouTubeResolverHealth(val status: String, val sentenceAudio: Boolean = false)
+
+@Serializable
 data class YouTubePlayback(
     val id: String,
     val title: String,

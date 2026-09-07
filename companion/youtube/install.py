@@ -37,7 +37,7 @@ def main():
         print(f'Installed {name} {version}')
     for binary in (directory / 'imageio_ffmpeg' / 'binaries').glob('ffmpeg-*'):
         binary.chmod(0o755)
-    print('Ready. Node 22+ must be on PATH. Run ./run.sh --bind <LAN-IP>.')
+    print('Runtime ready.')
 
 
 if __name__ == '__main__':
