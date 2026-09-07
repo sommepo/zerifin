@@ -17,7 +17,7 @@ Create a **GitHub fork of `jellyfin/jellyfin-android`**, named `zerifin`, so Git
 relationship. The fork can be created through the web UI or [GitHub CLI](https://cli.github.com/manual/gh_repo_fork):
 
 ```sh
-gh repo fork jellyfin/jellyfin-android --fork-name zerifin --clone=false --remote=false
+gh repo fork jellyfin/jellyfin-android --fork-name zerifin --clone=false --default-branch-only
 ```
 
 After checking that it is the correct owner/repository, add a publication remote in your prepared
