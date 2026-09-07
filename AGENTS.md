@@ -2,8 +2,9 @@
 
 - Read README.md and docs/building.md before changing the project.
 - Preserve existing work and inspect Git status before edits.
-- Keep the Zerifin application label and green branding. Preserve application IDs and signing
-  compatibility unless a migration is explicitly requested.
+- Keep the Zerifin application label and green branding. Public release builds use
+  `io.github.sommepo.zerifin`; debug builds add `.debug`. Preserve these IDs and the public release
+  signing identity unless a migration is explicitly requested. Keep the upstream Kotlin namespace.
 - Reuse the native player, interactive subtitle renderer, dictionary repository and Anki gateway.
 - Preserve upstream licenses, copyrights and dependency acknowledgements.
 - Do not commit credentials, signing keys, APKs, dictionaries, app data, runtime caches or device logs.

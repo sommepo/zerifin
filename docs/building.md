@@ -24,10 +24,16 @@ The APK is under `app/build/outputs/apk/libre/debug/`. Use `assembleProprietaryD
 with Chromecast. The default version is `0.0.0-dev.1`; the upstream-compatible version property is
 still named `jellyfin.version`, for example `./gradlew -Pjellyfin.version=0.1.0 assembleLibreDebug`.
 
-The app label is Zerifin. The debug application ID remains `org.jellyfin.mobile.debug`; release uses
-`org.jellyfin.mobile`. Application ID migration is deliberately outside this publication change.
-Different signing keys cannot update the same installed application. Keep your local debug key
-if you need to update your own development installation without removing its data.
+The app label is Zerifin. Release builds use `io.github.sommepo.zerifin`; debug builds use
+`io.github.sommepo.zerifin.debug`. The Kotlin namespace remains `org.jellyfin.mobile`.
+These IDs let Zerifin coexist with official Jellyfin and the earlier development app. Settings,
+dictionaries and Anki permissions are separate for each installed app.
+
+Starting with `0.1.0-beta.2`, public APKs use the dedicated Zerifin ID and the retained Zerifin release
+signing identity. They install as a separate app from beta 1 and the earlier development builds.
+They do not overwrite or migrate those apps or their data. Future public releases must retain both
+this application ID and signing identity to update in place. Different signing keys cannot update
+the same installed application.
 
 ## Checks
 
@@ -50,7 +56,8 @@ releases, use repository secrets or upload anything to Jellyfin infrastructure.
 
 ## Release signing
 
-Stable signed releases are not configured yet. `assembleLibreRelease` produces an unsigned APK
+Public beta APKs are signed locally with the retained Zerifin release identity. CI remains unsigned.
+`assembleLibreRelease` produces an unsigned APK
 unless all four signing properties are supplied. Existing Gradle support accepts these environment
 variables: `KEYSTORE_FILE`, `KEYSTORE_PASSWORD`, `SIGNING_KEY_ALIAS`, `SIGNING_KEY_PASSWORD`.
 Keep keys outside the repository and supply secrets through a secure local environment or a future

@@ -44,9 +44,10 @@ The repository is prepared for source publication and unsigned build artifacts. 
 a public repository or publish a release by itself. CI has read-only repository permissions and
 contains no upstream deployment jobs or signing secrets.
 
-Choose and securely retain a release signing identity, decide the version, and test updates before
-publishing installable releases. The existing IDs are deliberately preserved; a debug build from
-an unrelated signing key cannot update an existing debug installation. See [building.md](building.md).
+Reuse the retained Zerifin release signing identity, decide the version, and test installation and
+updates before publishing installable releases. Starting with beta 2, public releases use
+`io.github.sommepo.zerifin` so they coexist with Jellyfin and the earlier development app. Preserve
+that ID and signing identity for future updates. See [building.md](building.md).
 The green application identity and APK archive name are Zerifin; technical upstream namespaces
 and dependency coordinates remain unchanged.
 
