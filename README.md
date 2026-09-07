@@ -22,10 +22,10 @@ and save it to AnkiDroid with the sentence and media.
 - See definitions, readings and frequency information in a compact popup beside the word.
 - Pause automatically on lookup without opening the player controls, or keep playback running.
 - Reveal the matching English subtitle with **EN**, or jump to the previous line; drag the
-  three-button panel anywhere on the player.
+  learning panel anywhere on the player.
 - Keep playback controls simple from the side-menu **General** page, including pause on lookup,
-  screen-tap play/pause enabled by default, and common subtitle options. Override screen taps for
-  the current video from the movable shortcut panel.
+  screen-tap play/pause enabled by default, and common subtitle options. Screen taps control
+  playback while Jellyfin's standard player lock is active; unlock it to use the normal controls.
 
 The popup stays hidden until a lookup finishes. Closing it resumes playback only if the lookup paused it.
 

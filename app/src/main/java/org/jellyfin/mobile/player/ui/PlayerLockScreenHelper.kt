@@ -18,6 +18,8 @@ class PlayerLockScreenHelper(
 ) {
     private val playerView: PlayerView by playerBinding::playerView
     private val unlockScreenButton: ImageButton by playerBinding::unlockScreenButton
+    var isLocked = false
+        private set
 
     /**
      * Runnable that hides the unlock screen button, used by [peekUnlockButton]
@@ -34,6 +36,7 @@ class PlayerLockScreenHelper(
     }
 
     fun lockScreen() {
+        isLocked = true
         playerView.useController = false
         orientationListener.disable()
         playerFragment.requireActivity().lockOrientation()
@@ -41,6 +44,7 @@ class PlayerLockScreenHelper(
     }
 
     private fun unlockScreen() {
+        isLocked = false
         hideUnlockButton()
         val activity = playerFragment.requireActivity()
         if (activity.isAutoRotateOn()) {

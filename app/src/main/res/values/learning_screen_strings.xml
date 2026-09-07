@@ -13,7 +13,7 @@
     <string name="learning_playback_section">Playback</string>
     <string name="learning_subtitle_section">Subtitles and lookup</string>
     <string name="learning_pause_screen_tap">Pause on screen tap enabled by default</string>
-    <string name="learning_drag_controls_hint">Use the lock button to enable or disable tap-to-play/pause for the current video. Drag any of the three controls to move the panel; its position is remembered.</string>
+    <string name="learning_drag_controls_hint">When enabled, videos start with the standard player lock on: screen taps play or pause without showing controls. Tap the padlock to unlock normal controls. Drag EN or previous-line to move the learning panel.</string>
     <string name="learning_popup_theme">Popup appearance</string>
     <string name="learning_system_theme">System</string>
     <string name="learning_light_theme">Light</string>
@@ -23,8 +23,7 @@
     <string name="learning_english_hide">Hide English subtitle</string>
     <string name="learning_previous_subtitle">Previous subtitle line</string>
     <string name="learning_previous_subtitle_missing">No previous subtitle line was found.</string>
-    <string name="learning_tap_playback_enable">Enable screen tap play and pause</string>
-    <string name="learning_tap_playback_disable">Disable screen tap play and pause</string>
+    <string name="learning_tap_playback_enable">Unlock normal player controls</string>
     <string name="learning_english_missing">No matching English subtitle</string>
     <string name="learning_english_error">English subtitle is unavailable</string>
     <string name="learning_import_failed">Could not import this dictionary. Please choose a Yomitan ZIP archive.</string>

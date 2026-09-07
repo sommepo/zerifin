@@ -136,7 +136,7 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
     private var ankiMiningJob: Job? = null
     private var pendingAnkiMining: PendingAnkiMining? = null
     private var subtitleControllerVisible = false
-    private var tapPlaybackEnabled = true
+    private var lockPlayerOnViewCreated = true
     private var interactiveSubtitleBottomPaddingFraction =
         SubtitleView.DEFAULT_BOTTOM_PADDING_FRACTION
     private var interactiveSubtitleHost: View? = null
@@ -214,9 +214,9 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pendingAnkiMining = savedInstanceState?.restorePendingAnkiMining()
-        tapPlaybackEnabled = savedInstanceState
-            ?.takeIf { it.containsKey(STATE_TAP_PLAYBACK_ENABLED) }
-            ?.getBoolean(STATE_TAP_PLAYBACK_ENABLED)
+        lockPlayerOnViewCreated = savedInstanceState
+            ?.takeIf { it.containsKey(STATE_PLAYER_LOCKED) }
+            ?.getBoolean(STATE_PLAYER_LOCKED)
             ?: LookupPreferences(requireContext()).pauseOnScreenTap
 
         val window = requireActivity().window
@@ -281,7 +281,10 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putBoolean(STATE_TAP_PLAYBACK_ENABLED, tapPlaybackEnabled)
+        outState.putBoolean(
+            STATE_PLAYER_LOCKED,
+            if (::playerLockScreenHelper.isInitialized) playerLockScreenHelper.isLocked else lockPlayerOnViewCreated,
+        )
         pendingAnkiMining?.let { pending ->
             outState.putString(STATE_ANKI_WORD, pending.snapshot.word)
             outState.putString(STATE_ANKI_READING, pending.snapshot.reading)
@@ -370,7 +373,9 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
 
         playerLockScreenHelper = PlayerLockScreenHelper(this, playerBinding, orientationListener)
         playerGestureHelper = PlayerGestureHelper(this, playerBinding, playerLockScreenHelper)
+        if (lockPlayerOnViewCreated) playerLockScreenHelper.lockScreen()
         playerBinding.interactiveSubtitleOverlay.onPlayerGesture = ::onSubtitlePlayerGesture
+        updateEnglishButton()
 
         // Handle fullscreen switcher
         fullscreenSwitcher.setOnClickListener {
@@ -541,10 +546,6 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
             if (englishVisible) hideEnglishSubtitle() else showEnglishSubtitle()
         }
         playerBinding.previousSubtitleButton.setOnClickListener { seekToPreviousSubtitle() }
-        playerBinding.tapPlaybackButton.setOnClickListener {
-            tapPlaybackEnabled = !tapPlaybackEnabled
-            updateTapPlaybackButton()
-        }
         setUpLearningControlsDrag()
         playerView.findViewById<ViewGroup>(Media3R.id.exo_content_frame)?.let { subtitleHost ->
             interactiveSubtitleHost?.removeOnLayoutChangeListener(
@@ -1131,7 +1132,6 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
         // One overlay control is shared by both states, so its position never jumps on lookup.
         val learningControlsVisible = activity?.isInPictureInPictureMode != true
         binding.learningControls.isVisible = learningControlsVisible
-        updateTapPlaybackButton()
         if (learningControlsVisible) {
             binding.learningControls.post {
                 if (_playerBinding === binding) restoreLearningControlsPosition(binding)
@@ -1153,25 +1153,9 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
     }
 
     fun onPlayerScreenTapped() {
-        if (!tapPlaybackEnabled) return
+        if (!::playerLockScreenHelper.isInitialized || !playerLockScreenHelper.isLocked) return
         val player = viewModel.playerOrNull ?: return
         if (player.playWhenReady) viewModel.pause() else viewModel.play()
-    }
-
-    private fun updateTapPlaybackButton() {
-        val button = _playerBinding?.tapPlaybackButton ?: return
-        button.setImageResource(
-            if (tapPlaybackEnabled) R.drawable.ic_screen_unlock_white_24dp
-            else R.drawable.ic_screen_lock_white_24dp,
-        )
-        button.imageTintList = android.content.res.ColorStateList.valueOf(
-            if (tapPlaybackEnabled) android.graphics.Color.rgb(80, 213, 151)
-            else android.graphics.Color.WHITE,
-        )
-        button.contentDescription = button.context.getString(
-            if (tapPlaybackEnabled) R.string.learning_tap_playback_disable
-            else R.string.learning_tap_playback_enable,
-        )
     }
 
     @Suppress("ClickableViewAccessibility", "CyclomaticComplexMethod")
@@ -1244,7 +1228,6 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
         }
         binding.englishSubtitleButton.setOnTouchListener(dragListener)
         binding.previousSubtitleButton.setOnTouchListener(dragListener)
-        binding.tapPlaybackButton.setOnTouchListener(dragListener)
     }
 
     private fun restoreLearningControlsPosition(binding: FragmentPlayerBinding) {
@@ -1381,7 +1364,7 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
     }
 
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
-        playerView.useController = !isInPictureInPictureMode
+        playerView.useController = !isInPictureInPictureMode && !playerLockScreenHelper.isLocked
         if (isInPictureInPictureMode) {
             playerMenus?.dismissPlaybackInfo()
             playerLockScreenHelper.hideUnlockButton()
@@ -1498,7 +1481,7 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
         const val STATE_ANKI_HIGHLIGHT_START = "anki_highlight_start"
         const val STATE_ANKI_HIGHLIGHT_LENGTH = "anki_highlight_length"
         const val STATE_ANKI_CONTEXT = "anki_media_context"
-        const val STATE_TAP_PLAYBACK_ENABLED = "tap_playback_enabled"
+        const val STATE_PLAYER_LOCKED = "player_locked"
     }
 }
 

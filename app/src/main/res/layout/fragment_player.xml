@@ -72,19 +72,6 @@
             tools:visibility="visible">
 
             <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/tap_playback_button"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/playback_unlock_background"
-                android:clickable="true"
-                android:contentDescription="@string/learning_tap_playback_disable"
-                android:focusable="true"
-                android:padding="12dp"
-                android:src="@drawable/ic_screen_unlock_white_24dp"
-                app:tint="@android:color/white" />
-
-            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/previous_subtitle_button"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
@@ -111,6 +98,20 @@
                 android:textColor="@android:color/white"
                 android:textSize="15sp"
                 android:textStyle="bold"
+                tools:visibility="visible" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/unlock_screen_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/playback_unlock_background"
+                android:clickable="true"
+                android:contentDescription="@string/learning_tap_playback_enable"
+                android:focusable="true"
+                android:padding="12dp"
+                android:src="@drawable/ic_screen_unlock_white_24dp"
+                android:visibility="gone"
                 tools:visibility="visible" />
         </LinearLayout>
 
@@ -228,23 +229,6 @@
             android:background="@drawable/playback_info_background"
             android:clickable="true"
             android:padding="16dp"
-            android:visibility="gone"
-            tools:ignore="KeyboardInaccessibleWidget"
-            tools:visibility="visible" />
-
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/unlock_screen_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|top"
-            android:layout_marginStart="@dimen/exo_player_controls_display_padding"
-            android:layout_marginTop="48dp"
-            android:layout_marginEnd="@dimen/exo_player_controls_display_padding"
-            android:background="@drawable/playback_unlock_background"
-            android:clickable="true"
-            android:padding="16dp"
-            android:src="@drawable/ic_screen_unlock_white_24dp"
-            android:translationZ="18dp"
             android:visibility="gone"
             tools:ignore="KeyboardInaccessibleWidget"
             tools:visibility="visible" />
