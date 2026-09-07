@@ -138,7 +138,12 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
     private var subtitleControllerVisible = false
     private var lockPlayerOnViewCreated = true
     private val hideLearningControlsAction = Runnable {
-        _playerBinding?.learningControls?.isVisible = false
+        val binding = _playerBinding ?: return@Runnable
+        if (viewModel.playerOrNull?.playWhenReady == false) {
+            binding.learningControls.isVisible = true
+        } else {
+            binding.learningControls.isVisible = false
+        }
     }
     private var interactiveSubtitleBottomPaddingFraction =
         SubtitleView.DEFAULT_BOTTOM_PADDING_FRACTION
@@ -173,6 +178,9 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
         }
 
         override fun onEvents(player: Player, events: Player.Events) {
+            if (events.contains(Player.EVENT_PLAY_WHEN_READY_CHANGED)) {
+                peekLearningControls()
+            }
             if (events.contains(Player.EVENT_MEDIA_ITEM_TRANSITION)) {
                 subtitleSeekJob?.cancel()
                 subtitleSeekJob = null
@@ -931,7 +939,6 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
     }
 
     private fun onSubtitleTapped(tap: SubtitleTap): Boolean {
-        onPlayerScreenTapped()
         val hasJapaneseCandidate =
             JapaneseTextCandidateGenerator.generate(
                 tap.subtitleText,
@@ -1160,8 +1167,10 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
         binding.learningControls.post {
             if (_playerBinding === binding) restoreLearningControlsPosition(binding)
         }
-        LookupPreferences(binding.root.context).learningControlsTimeout.milliseconds?.let { timeout ->
-            binding.learningControls.postDelayed(hideLearningControlsAction, timeout)
+        if (viewModel.playerOrNull?.playWhenReady != false) {
+            LookupPreferences(binding.root.context).learningControlsTimeout.milliseconds?.let { timeout ->
+                binding.learningControls.postDelayed(hideLearningControlsAction, timeout)
+            }
         }
     }
 
