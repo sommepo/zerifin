@@ -12,7 +12,7 @@
 
 Zerifin is an independent fork of [Jellyfin for Android](https://github.com/jellyfin/jellyfin-android)
 for learning Japanese while watching videos. Tap a subtitle word, look it up, hear its pronunciation,
-and save it to AnkiDroid with the sentence and media—all in the player.
+and save it to AnkiDroid with the sentence and media.
 
 ## What's added
 
@@ -20,12 +20,10 @@ and save it to AnkiDroid with the sentence and media—all in the player.
 
 - Tap Japanese words in SRT and ordinary WebVTT subtitles in the integrated player.
 - See definitions, readings and frequency information in a compact popup beside the word.
-- Look up common conjugated forms while keeping the original subtitle selection highlighted.
 - Pause automatically on lookup without opening the player controls, or keep playback running.
-- Follow the system theme, or choose a light or dark popup.
 - Reveal the matching English subtitle with **EN**, including while a dictionary popup is open.
 
-The popup stays hidden until a lookup finishes. Closing it resumes playback only if lookup paused it.
+The popup stays hidden until a lookup finishes. Closing it resumes playback only if the lookup paused it.
 
 ### Bring your dictionaries
 
@@ -34,14 +32,12 @@ tabs show your installed dictionaries; enable or disable each one independently.
 dictionaries can coexist, and reimporting a title replaces it without clearing the others.
 
 Definitions and frequency data are stored locally. Word pronunciation is fetched on demand and
-cached; the same audio can be included on a card. Dictionary archives are not bundled—bring
-ones you are permitted to use.
+cached; the same audio can be included on a card. 
 
 ### Mine complete Anki cards
 
-Connect to **AnkiDroid on the same device**. Choose an existing deck and note type, then map your
-fields once. **AnkiConnect is not required.**
-
+Connect to AnkiDroid on the same device. Choose an existing deck and note type, then map your
+fields once.
 | Map a field to… | What you get |
 | --- | --- |
 | Word / Reading / Definition | The selected dictionary entry |
@@ -76,7 +72,8 @@ The companion is intended for a trusted LAN or Tailscale network. [Set up YouTub
 
 ## Get started
 
-1. Build Zerifin using the [build guide](docs/building.md), install it, and connect to your Jellyfin server.
+1. Download the Zerifin APK from this repository’s **Releases** section, install it, and connect to your
+   Jellyfin server. If you prefer to build it yourself, follow the optional [build guide](docs/building.md).
 2. Open **Dictionaries** in the main side menu and import a Japanese term dictionary. Add frequency
    dictionaries if you want frequency information.
 3. Open **Anki mining**, grant AnkiDroid access, choose your deck and note type, and map your fields.
