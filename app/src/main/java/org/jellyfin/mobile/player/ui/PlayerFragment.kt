@@ -5,6 +5,7 @@ import android.app.PictureInPictureParams
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.database.SQLException
+import android.graphics.Bitmap
 import android.graphics.Rect
 import android.graphics.RectF
 import android.media.MediaPlayer
@@ -12,9 +13,13 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.OrientationEventListener
+import android.view.PixelCopy
+import android.view.SurfaceView
+import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewConfiguration
@@ -148,6 +153,10 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
     private var interactiveSubtitleBottomPaddingFraction =
         SubtitleView.DEFAULT_BOTTOM_PADDING_FRACTION
     private var interactiveSubtitleHost: View? = null
+    private var blurAreaCaptureInFlight = false
+    private var blurAreaCaptureGeneration = 0
+    private val blurAreaCaptureHandler = Handler(Looper.getMainLooper())
+    private val blurAreaPreferences by lazy { LookupPreferences(requireContext()) }
     private val interactiveSubtitleHostLayoutListener =
         View.OnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
             updateInteractiveSubtitleBottomMargin(subtitleControllerVisible)
@@ -320,6 +329,7 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
         super.onViewCreated(view, savedInstanceState)
 
         setUpInteractiveSubtitleOverlay()
+        setUpBlurAreaOverlay()
 
         // Insets handling
         ViewCompat.setOnApplyWindowInsetsListener(playerBinding.root) { _, insets ->
@@ -401,6 +411,8 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
 
     override fun onResume() {
         super.onResume()
+
+        scheduleBlurAreaCapture()
 
         // When returning from another app, fullscreen mode for landscape orientation has to be set again
         if (isLandscape()) {
@@ -565,6 +577,7 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
             interactiveSubtitleHost = subtitleHost
             subtitleHost.addOnLayoutChangeListener(interactiveSubtitleHostLayoutListener)
             overlay.setSubtitleViewport(subtitleHost)
+            playerBinding.blurAreaOverlay.setVideoViewport(subtitleHost)
         }
         // Keep glyph lookup available while controls are hidden or locked. This view lives in
         // player_overlay, above PlayerView, so the controller surface cannot steal its first tap.
@@ -572,6 +585,149 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
         overlay.onSubtitleTapped = ::onSubtitleTapped
         playerView.setControllerVisibilityListener(controllerVisibilityListener)
         updateInteractiveSubtitleBottomMargin(playerView.isControllerFullyVisible)
+    }
+
+    private fun setUpBlurAreaOverlay() {
+        val binding = playerBinding
+        val overlay = binding.blurAreaOverlay
+        overlay.setArea(blurAreaPreferences.blurArea)
+        overlay.onAreaChanged = { scheduleBlurAreaCapture(delayMs = 120) }
+        overlay.onEditFinished = {
+            blurAreaPreferences.blurArea = it
+            scheduleBlurAreaCapture()
+        }
+        binding.blurAreaButton.setOnClickListener {
+            when {
+                !overlay.isVisible -> {
+                    overlay.isVisible = true
+                    overlay.isEditMode = true
+                    if (!AndroidVersion.isAtLeastO) {
+                        requireContext().toast(R.string.learning_blur_area_unsupported)
+                    }
+                    scheduleBlurAreaCapture()
+                }
+                overlay.isEditMode -> overlay.isEditMode = false
+                else -> {
+                    overlay.isVisible = false
+                    overlay.setBlurBitmap(null)
+                    stopBlurAreaCapture()
+                }
+            }
+            updateBlurAreaButtonDescription()
+        }
+        updateBlurAreaButtonDescription()
+    }
+
+    private fun updateBlurAreaButtonDescription() {
+        val binding = _playerBinding ?: return
+        binding.blurAreaButton.contentDescription = getString(
+            when {
+                !binding.blurAreaOverlay.isVisible -> R.string.learning_blur_area_show
+                binding.blurAreaOverlay.isEditMode -> R.string.learning_blur_area_lock
+                else -> R.string.learning_blur_area_hide
+            },
+        )
+    }
+
+    private fun scheduleBlurAreaCapture(delayMs: Long = 250) {
+        val binding = _playerBinding ?: return
+        if (!binding.blurAreaOverlay.isVisible || !AndroidVersion.isAtLeastO || blurAreaCaptureInFlight) return
+        blurAreaCaptureHandler.removeCallbacksAndMessages(BLUR_AREA_CAPTURE_TOKEN)
+        blurAreaCaptureHandler.postAtTime(
+            { captureBlurAreaFrame() },
+            BLUR_AREA_CAPTURE_TOKEN,
+            SystemClock.uptimeMillis() + delayMs,
+        )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun captureBlurAreaFrame() {
+        val binding = _playerBinding ?: return
+        val overlay = binding.blurAreaOverlay
+        if (!overlay.isVisible || blurAreaCaptureInFlight) return
+        val surface = playerView.videoSurfaceView ?: return
+        val area = overlay.areaOnScreen() ?: return
+        val surfaceLocation = IntArray(2)
+        surface.getLocationOnScreen(surfaceLocation)
+        val source = Rect(area).apply { offset(-surfaceLocation[0], -surfaceLocation[1]) }
+        if (!source.intersect(0, 0, surface.width, surface.height)) return
+        if (source.width() < 2 || source.height() < 2) return
+
+        val generation = blurAreaCaptureGeneration
+        when (surface) {
+            is TextureView -> captureTextureBlurArea(surface, source, generation)
+            is SurfaceView -> captureSurfaceBlurArea(surface, source, generation)
+            else -> Unit
+        }
+    }
+
+    private fun captureTextureBlurArea(surface: TextureView, source: Rect, generation: Int) {
+        val captureWidth = minOf(surface.width, BLUR_TEXTURE_CAPTURE_WIDTH)
+        val captureHeight = (surface.height * captureWidth / surface.width).coerceAtLeast(1)
+        val frame = surface.getBitmap(captureWidth, captureHeight) ?: return
+        val scaledSource = Rect(
+            source.left * captureWidth / surface.width,
+            source.top * captureHeight / surface.height,
+            source.right * captureWidth / surface.width,
+            source.bottom * captureHeight / surface.height,
+        )
+        if (!scaledSource.intersect(0, 0, frame.width, frame.height) || scaledSource.isEmpty()) {
+            frame.recycle()
+            return
+        }
+        val bitmap = Bitmap.createBitmap(
+            frame,
+            scaledSource.left,
+            scaledSource.top,
+            scaledSource.width(),
+            scaledSource.height(),
+        )
+        frame.recycle()
+        blurAreaCaptureInFlight = true
+        submitBlurBitmap(bitmap, generation)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun captureSurfaceBlurArea(surface: SurfaceView, source: Rect, generation: Int) {
+        val bitmap = Bitmap.createBitmap(source.width(), source.height(), Bitmap.Config.ARGB_8888)
+        blurAreaCaptureInFlight = true
+        try {
+            PixelCopy.request(surface, source, bitmap, copyResult@{ result ->
+                if (result != PixelCopy.SUCCESS || generation != blurAreaCaptureGeneration || _playerBinding == null) {
+                    bitmap.recycle()
+                    blurAreaCaptureInFlight = false
+                    if (result != PixelCopy.SUCCESS) {
+                        Timber.w("Blur-area PixelCopy failed with result %d", result)
+                    }
+                    if (generation == blurAreaCaptureGeneration) scheduleBlurAreaCapture()
+                    return@copyResult
+                }
+                submitBlurBitmap(bitmap, generation)
+            }, blurAreaCaptureHandler)
+        } catch (error: IllegalArgumentException) {
+            bitmap.recycle()
+            blurAreaCaptureInFlight = false
+            Timber.d(error, "Unable to copy video pixels for blur area")
+        }
+    }
+
+    private fun submitBlurBitmap(bitmap: Bitmap, generation: Int) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val blurred = withContext(Dispatchers.Default) { BlurBitmapProcessor.blur(bitmap) }
+            if (generation == blurAreaCaptureGeneration && _playerBinding?.blurAreaOverlay?.isVisible == true) {
+                _playerBinding?.blurAreaOverlay?.setBlurBitmap(blurred)
+            } else {
+                blurred.recycle()
+            }
+            blurAreaCaptureInFlight = false
+            scheduleBlurAreaCapture()
+        }
+    }
+
+    private fun stopBlurAreaCapture() {
+        blurAreaCaptureGeneration++
+        blurAreaCaptureInFlight = false
+        blurAreaCaptureHandler.removeCallbacksAndMessages(BLUR_AREA_CAPTURE_TOKEN)
     }
 
     private fun updateInteractiveSubtitleBottomMargin(controllerVisible: Boolean) {
@@ -1253,6 +1409,7 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
         }
         binding.englishSubtitleButton.setOnTouchListener(dragListener)
         binding.previousSubtitleButton.setOnTouchListener(dragListener)
+        binding.blurAreaButton.setOnTouchListener(dragListener)
     }
 
     private fun restoreLearningControlsPosition(binding: FragmentPlayerBinding) {
@@ -1416,6 +1573,7 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
 
     override fun onStop() {
         super.onStop()
+        stopBlurAreaCapture()
         stopWordAudio()
         hideEnglishSubtitle()
         orientationListener.disable()
@@ -1423,6 +1581,7 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
 
     override fun onDestroyView() {
         playerBinding.learningControls.removeCallbacks(hideLearningControlsAction)
+        stopBlurAreaCapture()
         subtitleSeekJob?.cancel()
         subtitleSeekJob = null
         finishSubtitleLookup(resumePlayback = activity?.isChangingConfigurations == true)
@@ -1439,6 +1598,9 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
             interactiveSubtitleOverlayLayoutListener,
         )
         playerBinding.interactiveSubtitleOverlay.setSubtitleViewport(null)
+        playerBinding.blurAreaOverlay.setVideoViewport(null)
+        playerBinding.blurAreaOverlay.onAreaChanged = null
+        playerBinding.blurAreaOverlay.onEditFinished = null
         playerBinding.interactiveSubtitleOverlay.onSubtitleTapped = null
         playerBinding.interactiveSubtitleOverlay.onPlayerGesture = null
         playerBinding.subtitleLookupBackdrop.setOnClickListener(null)
@@ -1511,6 +1673,8 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
         const val STATE_ANKI_HIGHLIGHT_LENGTH = "anki_highlight_length"
         const val STATE_ANKI_CONTEXT = "anki_media_context"
         const val STATE_PLAYER_LOCKED = "player_locked"
+        const val BLUR_TEXTURE_CAPTURE_WIDTH = 480
+        val BLUR_AREA_CAPTURE_TOKEN = Any()
     }
 }
 

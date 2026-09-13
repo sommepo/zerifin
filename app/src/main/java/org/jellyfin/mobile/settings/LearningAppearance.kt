@@ -54,9 +54,43 @@ class LookupPreferences(context: Context) {
                 }
             }
         }
+
+    var blurArea: BlurArea?
+        get() {
+            if (
+                !preferences.contains("blur_area_x") ||
+                !preferences.contains("blur_area_y") ||
+                !preferences.contains("blur_area_width") ||
+                !preferences.contains("blur_area_height")
+            ) return null
+            return BlurArea(
+                x = preferences.getFloat("blur_area_x", 0.1f).coerceIn(0f, 1f),
+                y = preferences.getFloat("blur_area_y", 0.72f).coerceIn(0f, 1f),
+                width = preferences.getFloat("blur_area_width", 0.8f).coerceIn(0.05f, 1f),
+                height = preferences.getFloat("blur_area_height", 0.16f).coerceIn(0.05f, 1f),
+            )
+        }
+        set(value) {
+            preferences.edit {
+                if (value == null) {
+                    remove("blur_area_x")
+                    remove("blur_area_y")
+                    remove("blur_area_width")
+                    remove("blur_area_height")
+                } else {
+                    putFloat("blur_area_x", value.x.coerceIn(0f, 1f))
+                    putFloat("blur_area_y", value.y.coerceIn(0f, 1f))
+                    putFloat("blur_area_width", value.width.coerceIn(0.05f, 1f))
+                    putFloat("blur_area_height", value.height.coerceIn(0.05f, 1f))
+                }
+            }
+        }
 }
 
 data class LearningControlsPosition(val x: Float, val y: Float)
+
+/** A blur rectangle expressed as fractions of the displayed video frame. */
+data class BlurArea(val x: Float, val y: Float, val width: Float, val height: Float)
 
 data class LearningPalette(
     val background: Int,

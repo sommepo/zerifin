@@ -33,4 +33,9 @@
     <string name="learning_english_error">English subtitle is unavailable</string>
     <string name="learning_import_failed">Could not import this dictionary. Please choose a Yomitan ZIP archive.</string>
     <string name="learning_english_button" translatable="false">EN</string>
+    <string name="learning_blur_area_show">Show and edit blur area</string>
+    <string name="learning_blur_area_lock">Lock blur area</string>
+    <string name="learning_blur_area_hide">Hide blur area</string>
+    <string name="learning_blur_area_edit_hint">Drag to move · drag the corner to resize</string>
+    <string name="learning_blur_area_unsupported">Blur needs Android 8.0 or newer; a black mask is shown instead.</string>
 </resources>

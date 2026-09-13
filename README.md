@@ -23,6 +23,8 @@ and save it to AnkiDroid with the sentence and media.
 - Pause automatically on lookup without opening the player controls, or keep playback running.
 - Reveal the matching English subtitle with **EN**, or jump to the previous line; drag the
   learning panel anywhere on the player. It hides after a configurable delay or can stay visible.
+- Hide hard-coded translations with a movable, resizable blur area. It stays above video pixels
+  but below Zerifin's interactive subtitle text, so Japanese lookup remains available.
 - Keep playback controls simple from the side-menu **General** page, including pause on lookup,
   screen-tap play/pause enabled by default, and common subtitle options. Screen taps control
   playback while Jellyfin's standard player lock is active; unlock it to use the normal controls.
@@ -103,6 +105,8 @@ Jellyfin store builds do not contain these features.
 - Japanese audio must be identified by its language tag, or confirmed when YouTube leaves it unlabelled.
   Captions, translations and pronunciation are only available when the source provides them.
 - Dictionary image rendering, pitch/kanji dictionaries and full morphological analysis are not implemented.
+- The blur area samples the integrated player's video texture on Android 8.0 or newer; Android 6–7
+  use an opaque black mask instead.
 - YouTube extraction can be affected by login, age, region or network restrictions and upstream changes.
 
 ## Development and feedback
