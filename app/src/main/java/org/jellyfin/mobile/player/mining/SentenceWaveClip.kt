@@ -78,6 +78,12 @@ object SentenceWaveClip {
         }
         val samples = output.toByteArray()
         require(samples.size == wanted) { "Incomplete sentence audio" }
+        return wav(samples, sampleRate, channels)
+    }
+
+    /** Wrap signed little-endian 16-bit PCM in a minimal WAV header. */
+    fun wav(samples: ByteArray, sampleRate: Int, channels: Int): ByteArray {
+        val blockSize = channels * 2
         val length = samples.size - samples.size % blockSize
         return ByteBuffer.allocate(44 + length).order(ByteOrder.LITTLE_ENDIAN).apply {
             put("RIFF".toByteArray(Charsets.US_ASCII));

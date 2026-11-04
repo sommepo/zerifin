@@ -14,6 +14,9 @@ internal interface AnkiApi {
     fun importMedia(media: AnkiMediaFile): String?
 
     fun addNote(modelId: Long, deckId: Long, fields: List<String>, tags: Set<String>): Long?
+
+    /** One field of every note with this note type, for known-word highlighting. */
+    fun noteFieldValues(modelId: Long, fieldIndex: Int): List<String>? = null
 }
 
 internal class AnkiMiningEngine(

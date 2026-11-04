@@ -19,4 +19,6 @@
     <dimen name="exo_chapter_marking_width">3dp</dimen>
     <dimen name="exo_chapter_marking_height">15dp</dimen>
     <dimen name="trickplay_thumbnail_height">160dp</dimen>
+    <!-- Leaves the bottom subtitle line visible beside the subtitle line list. -->
+    <dimen name="subtitle_list_bottom_margin">76dp</dimen>
 </resources>

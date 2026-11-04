@@ -24,7 +24,14 @@ and save it to AnkiDroid with the sentence and media.
 - Reveal the matching English subtitle with **EN**, or jump to the previous line; drag the
   learning panel anywhere on the player. It hides after a configurable delay or can stay visible.
 - Hide hard-coded translations with a movable, resizable blur area. It stays above video pixels
-  but below Zerifin's interactive subtitle text, so Japanese lookup remains available.
+  but below Zerifin's interactive subtitle text, so Japanese lookup remains available. Long-press
+  its button or tap the video with two fingers to toggle it; it is remembered for each show.
+- Tap words in ASS/SSA subtitles too; signs stay on the normal renderer.
+- Browse every subtitle line in a side list and tap one to jump to it.
+- Tint words you already know (from your Anki note type or an imported word list).
+- Mine offline: downloads keep their Japanese and English subtitles, and sentence audio is cut
+  from the downloaded file.
+- Get told when a new Zerifin release is available.
 - Keep playback controls simple from the side-menu **General** page, including pause on lookup,
   screen-tap play/pause enabled by default, and common subtitle options. Screen taps control
   playback while Jellyfin's standard player lock is active; unlock it to use the normal controls.

@@ -36,8 +36,17 @@ object SubtitleTimeline {
             if (end <= start || text.isBlank()) null else MiningCue(start, end, text)
         }.sortedBy(MiningCue::startMs)
 
-    fun matchingCue(cues: List<MiningCue>, positionMs: Long, text: String): MiningCue? = cues
-        .firstOrNull { positionMs >= it.startMs && positionMs < it.endMs && normalized(it.text) == normalized(text) }
+    /**
+     * The timed cue behind a displayed sentence. Simultaneous ASS dialogue lines are shown joined,
+     * so an active cue that is one of the displayed lines also matches.
+     */
+    fun matchingCue(cues: List<MiningCue>, positionMs: Long, text: String): MiningCue? {
+        val active = cues.filter { positionMs >= it.startMs && positionMs < it.endMs }
+        val shown = normalized(text)
+        active.firstOrNull { normalized(it.text) == shown }?.let { return it }
+        val shownLines = text.lines().map(::normalized).filter(String::isNotEmpty).toSet()
+        return active.firstOrNull { normalized(it.text) in shownLines }
+    }
 
     fun previousCueStart(cues: List<MiningCue>, positionMs: Long): Long? {
         val activeStart = cues

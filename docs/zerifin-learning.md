@@ -43,6 +43,39 @@ Closing the popup resumes playback only when the lookup paused it. Selecting ano
 the card and stops the previous pronunciation. Audio callbacks are tied to the active card. No new
 track-selection, clipping, caching or dictionary-category settings are required.
 
+## Subtitle lines, known words and blur
+
+- **ASS/SSA subtitles** are tappable. Bottom-centred dialogue lines move to Zerifin's interactive
+  text; signs and positioned text stay on Media3's renderer. Simultaneous speakers are shown as
+  one block. The optional libass renderer (**SSA/ASS direct play** with libass) draws pictures,
+  so lookup is unavailable while it is on.
+- **Subtitle lines**: the list button in the learning panel opens every Japanese line with its
+  start time. The playing line is highlighted and followed; tap a line to jump to it. Back or the
+  close button hides the list.
+- **Known words** (General → Known words, on by default) tints words already in the configured
+  Anki note type's Word field, plus an optional imported list (a text file with one word per line,
+  such as an exported known-word list). Inflected forms count. AnkiDroid is only read; a newly
+  mined word is tinted straight away.
+- **Blur area**: long-press the blur button, or tap the video with two fingers, to show or hide the
+  blur without editing it. The position and on/off state are remembered for each series (films
+  per item; YouTube as one group) unless **Remember the blur area for each show** is off.
+
+## Offline downloads
+
+New downloads also save the item's Japanese, English and untagged text subtitles as WebVTT beside
+the video. Offline playback uses those copies for the line list, English reveal, sentence and
+translation fields, and decodes sentence audio from the downloaded file on the phone (mono WAV).
+Sidecar subtitle files are offered as subtitle tracks offline. Episodes downloaded before 0.1.3 have
+no saved subtitles; download them again to add them. Audio formats the phone cannot decode (often
+DTS or TrueHD) leave sentence audio unavailable.
+
+## Updates
+
+Release builds check for a newer version when Zerifin opens, at most once a day, and offer the APK.
+General → Updates chooses GitHub releases (default) or a custom address: a SER9-style downloads
+`index.json` (entry `zerifin-android`) or a GitHub releases API URL. **Check for updates now** runs it
+on demand. Debug builds never check.
+
 ## Data and performance
 
 Definitions and frequency data live in app-private SQLite with expression/reading indexes. ZIP
@@ -74,10 +107,10 @@ logs. AnkiDroid imports media into its own collection for playback and synchroni
 
 ## Current limits
 
-- Tap lookup still requires ordinary centered text cues in the integrated player; styled/positioned
-  ASS and image subtitles retain the normal renderer.
+- Tap lookup needs text cues: image subtitles (PGS, VobSub) and the libass renderer keep the normal
+  renderer. ASS signs and vertical or positioned text are not tappable.
 - Sentence timing, translation and sentence audio require a Jellyfin stream or resolved YouTube source.
-  Offline downloaded media does not yet provide these values. A sentence audio clip is at most
+  Offline downloads provide them only when their subtitles were saved (downloads from 0.1.3 on). A sentence audio clip is at most
   30 seconds. Unknown Japanese audio language tags leave the field unavailable.
 - A picture needs an available video surface and Android 7+ for SurfaceView capture. A changed frame
   after an interrupted permission flow is not substituted. TextureView capture is also supported.

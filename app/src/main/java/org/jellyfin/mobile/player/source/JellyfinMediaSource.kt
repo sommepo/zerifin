@@ -78,7 +78,10 @@ sealed class JellyfinMediaSource(
                     // In the latter case, subtitles are extracted from the source file by the server.
                     if (mediaStream.deliveryMethod == SubtitleDeliveryMethod.EXTERNAL) {
                         val deliveryUrl = mediaStream.deliveryUrl
-                        val mimeType = CodecHelpers.getSubtitleMimeType(mediaStream.codec)
+                        // The server converts formats the device profile lacks (for example ASS to
+                        // SRT); the delivery URL's extension names the format actually sent.
+                        val mimeType = CodecHelpers.getSubtitleMimeType(deliveryUrl?.let(::deliveredSubtitleFormat))
+                            ?: CodecHelpers.getSubtitleMimeType(mediaStream.codec)
                         if (deliveryUrl != null && mimeType != null) {
                             externalSubtitles += ExternalSubtitleStream(
                                 index = mediaStream.index,
@@ -197,3 +200,10 @@ data class PlaybackDetails(
     val audioStreamIndex: Int?,
     val subtitleStreamIndex: Int?,
 )
+
+internal fun deliveredSubtitleFormat(deliveryUrl: String): String? = deliveryUrl
+    .substringBefore('?')
+    .substringAfterLast('/')
+    .substringAfterLast('.', "")
+    .lowercase()
+    .takeIf(String::isNotEmpty)

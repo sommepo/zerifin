@@ -13,6 +13,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jellyfin.mobile.data.dao.DownloadDao
 import org.jellyfin.mobile.downloads.DownloadFileType
+import org.jellyfin.mobile.downloads.DownloadStatus
+import org.jellyfin.mobile.downloads.DownloadedSubtitles
 import org.jellyfin.mobile.player.PlayerException
 import org.jellyfin.mobile.player.PlayerViewModel
 import org.jellyfin.mobile.player.deviceprofile.DeviceProfileBuilder
@@ -23,6 +25,7 @@ import org.jellyfin.mobile.player.source.LocalJellyfinMediaSource
 import org.jellyfin.mobile.player.source.MediaSourceResolver
 import org.jellyfin.mobile.player.source.PlaybackDetails
 import org.jellyfin.mobile.player.source.YouTubeMediaSource
+import org.jellyfin.mobile.utils.Constants
 import org.jellyfin.mobile.youtube.YouTubeClient
 import org.jellyfin.mobile.youtube.YouTubePlayback
 import org.jellyfin.mobile.player.source.RemoteJellyfinMediaSource
@@ -133,6 +136,10 @@ class QueueManager(
             playSessionId = download.id.toString(),
             playbackDetails = PlaybackDetails(startTime, audioStreamIndex, subtitleStreamIndex),
             remoteFileUri = mainFile.uri,
+            subtitleFiles = files
+                .filter { it.type == DownloadFileType.SUBTITLE && it.status == DownloadStatus.DOWNLOADED }
+                .mapNotNull { file -> DownloadedSubtitles.streamIndex(file.fileName)?.let { it to file.uri } }
+                .toMap(),
         )
         startTime?.let { duration -> mediaSource.startTime = duration }
         audioStreamIndex?.let { index -> mediaSource.selectAudioStream(mediaSource.audioStreams[index]) }
@@ -333,7 +340,17 @@ class QueueManager(
      */
     @CheckResult
     private fun prepareStreams(source: LocalJellyfinMediaSource): MediaSource {
-        return createDownloadVideoMediaSource(source.id, source.remoteFileUri)
+        // Sidecar subtitle files are not inside the downloaded video; offer their saved copies.
+        val externalSubtitles = source.subtitleStreams.filter { it.isExternal }.mapNotNull { stream ->
+            val uri = source.subtitleFiles[stream.index] ?: return@mapNotNull null
+            MediaItem.SubtitleConfiguration.Builder(uri).apply {
+                setId("${ExternalSubtitleStream.ID_PREFIX}${stream.index}")
+                setLabel(stream.displayTitle.orEmpty())
+                setMimeType(MimeTypes.TEXT_VTT)
+                setLanguage(stream.language ?: Constants.LANGUAGE_UNDEFINED)
+            }.build()
+        }
+        return createDownloadVideoMediaSource(source.id, source.remoteFileUri, externalSubtitles)
     }
 
     private fun prepareStreams(source: RemoteJellyfinMediaSource): MediaSource {
@@ -432,13 +449,18 @@ class QueueManager(
     }
 
     @CheckResult
-    private fun createDownloadVideoMediaSource(mediaSourceId: String, fileUri: Uri): MediaSource {
+    private fun createDownloadVideoMediaSource(
+        mediaSourceId: String,
+        fileUri: Uri,
+        subtitleConfigurations: List<MediaItem.SubtitleConfiguration> = emptyList(),
+    ): MediaSource {
         val factory: MediaSource.Factory = get()
 
         val mediaItem = MediaItem.Builder()
             .setMediaId(mediaSourceId)
             .setUri(fileUri)
             .setCustomCacheKey(fileUri.toString())
+            .setSubtitleConfigurations(subtitleConfigurations)
             .build()
 
         return factory.createMediaSource(mediaItem)

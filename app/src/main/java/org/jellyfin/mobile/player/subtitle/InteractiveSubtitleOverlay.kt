@@ -6,6 +6,7 @@ import android.graphics.Typeface
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.BackgroundColorSpan
+import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.MotionEvent
@@ -40,6 +41,8 @@ class InteractiveSubtitleOverlay @JvmOverloads constructor(
         const val EDGE_RADIUS_DP = 2f
         const val TEXT_HIT_SLOP_DP = 8
         val LOOKUP_HIGHLIGHT_COLOR: Int = Color.rgb(77, 83, 86)
+        val KNOWN_WORD_COLOR: Int = Color.rgb(134, 224, 168)
+        const val KNOWN_WORD_CACHE_SIZE = 16
     }
 
     var isSubtitleInteractionEnabled: () -> Boolean = { true }
@@ -65,6 +68,28 @@ class InteractiveSubtitleOverlay @JvmOverloads constructor(
     private var pendingText: CharSequence? = null
     private var lookupHighlightStart: Int? = null
     private var lookupHighlightLength = 0
+    private val knownWordRanges = object : LinkedHashMap<String, List<KnownWordRange>>(KNOWN_WORD_CACHE_SIZE, 0.75f, true) {
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, List<KnownWordRange>>?): Boolean =
+            size > KNOWN_WORD_CACHE_SIZE
+    }
+
+    /** The plain text of the newest cue group, including one held back while lookup is open. */
+    val latestCueText: String
+        get() = (pendingText ?: currentCueText).toString()
+
+    /** Tint known words in [cueText] whenever it is shown. An empty list clears the tint. */
+    fun setKnownWordRanges(cueText: String, ranges: List<KnownWordRange>) {
+        knownWordRanges[cueText] = ranges
+        if (currentCueText.toString() == cueText) render(currentCueText)
+    }
+
+    fun hasKnownWordRanges(cueText: String): Boolean = knownWordRanges.containsKey(cueText)
+
+    fun clearKnownWordRanges() {
+        if (knownWordRanges.isEmpty()) return
+        knownWordRanges.clear()
+        render(currentCueText)
+    }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
@@ -288,6 +313,12 @@ class InteractiveSubtitleOverlay @JvmOverloads constructor(
                     length,
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
                 )
+            }
+            knownWordRanges[cueText.toString()]?.forEach { range ->
+                val end = range.start + range.length
+                if (range.start >= 0 && end <= length) {
+                    setSpan(ForegroundColorSpan(KNOWN_WORD_COLOR), range.start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
             }
             lookupHighlightStart?.let { start ->
                 val end = (start + lookupHighlightLength).coerceAtMost(length)

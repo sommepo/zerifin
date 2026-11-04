@@ -69,7 +69,11 @@ import org.jellyfin.mobile.player.mining.MiningMediaContext
 import org.jellyfin.mobile.player.mining.PlayerMiningMedia
 import org.jellyfin.mobile.player.subtitle.DictionaryEntry
 import org.jellyfin.mobile.player.subtitle.DictionaryLookupResult
+import org.jellyfin.mobile.player.source.JellyfinMediaSource
+import org.jellyfin.mobile.player.source.YouTubeMediaSource
 import org.jellyfin.mobile.player.subtitle.InteractiveSubtitleCuePolicy
+import org.jellyfin.mobile.player.subtitle.KnownWordMatcher
+import org.jellyfin.mobile.player.subtitle.KnownWordsRepository
 import org.jellyfin.mobile.player.subtitle.JapaneseTextCandidateGenerator
 import org.jellyfin.mobile.player.subtitle.JapaneseWordAudioRepository
 import org.jellyfin.mobile.player.subtitle.SubtitleMiningState
@@ -126,7 +130,12 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
     private var duplicateJob: Job? = null
     private var wordAudioJob: Job? = null
     private var wordAudioPlayer: MediaPlayer? = null
-    private val interactiveSubtitleCodecs = setOf("srt", "subrip", "vtt", "webvtt")
+    private val interactiveSubtitleCodecs = setOf("srt", "subrip", "vtt", "webvtt", "ass", "ssa")
+    private val styledSubtitleCodecs = setOf("ass", "ssa")
+    private var stockSubtitleCues: List<Cue> = emptyList()
+    private val knownWords by lazy { KnownWordsRepository.get(requireContext()) }
+    private var knownWordSet: Set<String> = emptySet()
+    private var knownWordJob: Job? = null
     private var subtitlePlayer: Player? = null
     private var lookupJob: Job? = null
     private var lookupPlayer: Player? = null
@@ -136,6 +145,15 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
     private var englishVisible = false
     private var englishJob: Job? = null
     private var subtitleSeekJob: Job? = null
+    private var subtitleListJob: Job? = null
+    private val subtitleListTicker = object : Runnable {
+        override fun run() {
+            val panel = _playerBinding?.subtitleListPanel ?: return
+            if (!panel.isVisible) return
+            viewModel.playerOrNull?.let { panel.updatePosition(it.currentPosition) }
+            panel.postDelayed(this, SUBTITLE_LIST_TICK_MS)
+        }
+    }
     private var lookupRequestId = 0
     private var activeSubtitleTap: SubtitleTap? = null
     private var ankiMiningJob: Job? = null
@@ -191,6 +209,7 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
                 peekLearningControls()
             }
             if (events.contains(Player.EVENT_MEDIA_ITEM_TRANSITION)) {
+                hideSubtitleList()
                 subtitleSeekJob?.cancel()
                 subtitleSeekJob = null
                 _playerBinding?.previousSubtitleButton?.isEnabled = true
@@ -278,6 +297,8 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
                 requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
             }
 
+            applyBlurAreaFor(mediaSource)
+
             // Update title and player menus
             toolbar.title = mediaSource.getName(requireContext())
             playerMenus?.onQueueItemChanged(mediaSource, viewModel.queueManager.hasNext())
@@ -330,6 +351,7 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
 
         setUpInteractiveSubtitleOverlay()
         setUpBlurAreaOverlay()
+        loadKnownWords()
 
         // Insets handling
         ViewCompat.setOnApplyWindowInsetsListener(playerBinding.root) { _, insets ->
@@ -569,6 +591,13 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
             if (englishVisible) hideEnglishSubtitle() else showEnglishSubtitle()
         }
         playerBinding.previousSubtitleButton.setOnClickListener { seekToPreviousSubtitle() }
+        playerBinding.subtitleListButton.setOnClickListener { toggleSubtitleList() }
+        playerBinding.subtitleListPanel.onCloseRequested = ::hideSubtitleList
+        playerBinding.subtitleListPanel.onLineSelected = { cue ->
+            if (lookupPlayer != null) dismissSubtitleLookupWithoutResume()
+            viewModel.playerOrNull?.seekTo(cue.startMs)
+            _playerBinding?.subtitleListPanel?.updatePosition(cue.startMs, forceScroll = true)
+        }
         setUpLearningControlsDrag()
         playerView.findViewById<ViewGroup>(Media3R.id.exo_content_frame)?.let { subtitleHost ->
             interactiveSubtitleHost?.removeOnLayoutChangeListener(
@@ -590,32 +619,74 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
     private fun setUpBlurAreaOverlay() {
         val binding = playerBinding
         val overlay = binding.blurAreaOverlay
-        overlay.setArea(blurAreaPreferences.blurArea)
+        overlay.setArea(blurAreaPreferences.blurAreaFor(blurAreaKey))
         overlay.onAreaChanged = { scheduleBlurAreaCapture(delayMs = 120) }
         overlay.onEditFinished = {
-            blurAreaPreferences.blurArea = it
+            blurAreaPreferences.saveBlurArea(blurAreaKey, it)
             scheduleBlurAreaCapture()
         }
         binding.blurAreaButton.setOnClickListener {
             when {
-                !overlay.isVisible -> {
-                    overlay.isVisible = true
-                    overlay.isEditMode = true
-                    if (!AndroidVersion.isAtLeastO) {
-                        requireContext().toast(R.string.learning_blur_area_unsupported)
-                    }
-                    scheduleBlurAreaCapture()
-                }
+                !overlay.isVisible -> setBlurAreaShown(shown = true, edit = true)
                 overlay.isEditMode -> overlay.isEditMode = false
-                else -> {
-                    overlay.isVisible = false
-                    overlay.setBlurBitmap(null)
-                    stopBlurAreaCapture()
-                }
+                else -> setBlurAreaShown(shown = false)
             }
             updateBlurAreaButtonDescription()
         }
+        binding.blurAreaButton.setOnLongClickListener {
+            toggleBlurArea()
+            true
+        }
         updateBlurAreaButtonDescription()
+    }
+
+    /** The show (series), film or YouTube key the blur area is remembered under. */
+    private var blurAreaKey: String? = null
+
+    private fun applyBlurAreaFor(mediaSource: JellyfinMediaSource) {
+        val item = mediaSource.item
+        val key = when {
+            mediaSource is YouTubeMediaSource -> "youtube"
+            item?.seriesId != null -> "series:${item.seriesId}"
+            else -> "item:${mediaSource.itemId}"
+        }
+        if (key == blurAreaKey) return
+        blurAreaKey = key
+        val binding = _playerBinding ?: return
+        binding.blurAreaOverlay.isEditMode = false
+        binding.blurAreaOverlay.setArea(blurAreaPreferences.blurAreaFor(key))
+        if (blurAreaPreferences.blurAreaPerShow) {
+            // A show that never used the blur starts without it.
+            val shown = blurAreaPreferences.blurAreaShownFor(key) ?: false
+            if (shown != binding.blurAreaOverlay.isVisible) setBlurAreaShown(shown, remember = false)
+        }
+        scheduleBlurAreaCapture()
+        updateBlurAreaButtonDescription()
+    }
+
+    /** Show or hide the blur area without entering edit mode (two-finger tap or long press). */
+    fun toggleBlurArea() {
+        val binding = _playerBinding ?: return
+        val show = !binding.blurAreaOverlay.isVisible
+        setBlurAreaShown(show)
+        context?.toast(if (show) R.string.learning_blur_area_on else R.string.learning_blur_area_off)
+        updateBlurAreaButtonDescription()
+    }
+
+    private fun setBlurAreaShown(shown: Boolean, edit: Boolean = false, remember: Boolean = true) {
+        val overlay = _playerBinding?.blurAreaOverlay ?: return
+        if (remember) blurAreaPreferences.setBlurAreaShown(blurAreaKey, shown)
+        if (shown) {
+            overlay.isVisible = true
+            overlay.isEditMode = edit
+            if (!AndroidVersion.isAtLeastO) requireContext().toast(R.string.learning_blur_area_unsupported)
+            scheduleBlurAreaCapture()
+        } else {
+            overlay.isEditMode = false
+            overlay.isVisible = false
+            overlay.setBlurBitmap(null)
+            stopBlurAreaCapture()
+        }
     }
 
     private fun updateBlurAreaButtonDescription() {
@@ -838,6 +909,14 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
                 context?.toast(R.string.subtitle_anki_duplicate)
             }
             is AnkiMineResult.Added -> {
+                if (LookupPreferences(requireContext()).highlightKnownWords) {
+                    knownWords.add(pending.snapshot.word)
+                    knownWordSet = knownWords.words
+                    _playerBinding?.interactiveSubtitleOverlay?.let { overlay ->
+                        overlay.clearKnownWordRanges()
+                        requestKnownWordHighlight(overlay.latestCueText)
+                    }
+                }
                 org.jellyfin.mobile.player.anki.AnkiMiningPreferences.get(requireContext()).lastFailure = null
                 popup?.setMiningState(pending.entry, SubtitleMiningState.ADDED)
                 val unavailable = unavailableMappedMedia(pending.snapshot)
@@ -886,13 +965,22 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
                 }
             }
             val media = pending.mediaContext
+            if (media != null && miningMedia.isMissingOfflineSubtitles(media)) {
+                context?.toast(R.string.learning_offline_subtitles_missing)
+            }
             if (media != null && (AnkiFieldSource.ENGLISH_SUBTITLE in sources || AnkiFieldSource.SENTENCE_AUDIO in sources)) {
                 val sentence = try {
                     miningMedia.sentence(media, snapshot.subtitle, AnkiFieldSource.ENGLISH_SUBTITLE in sources)
                 } catch (cancelled: CancellationException) {
                     throw cancelled
                 } catch (_: Exception) {
-                    throw MiningPreparationException("Could not read subtitle timing from the playback server. Check the subtitle track or reopen the video.")
+                    throw MiningPreparationException(
+                        if (media.isLocal) {
+                            "Could not read this download's saved subtitles. Download it again to refresh them."
+                        } else {
+                            "Could not read subtitle timing from the playback server. Check the subtitle track or reopen the video."
+                        },
+                    )
                 }
                 snapshot = snapshot.copy(englishSubtitle = sentence.english)
                 if (AnkiFieldSource.SENTENCE_AUDIO in sources && sentence.cue != null) {
@@ -901,7 +989,13 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
                     } catch (cancelled: CancellationException) {
                         throw cancelled
                     } catch (_: Exception) {
-                        throw MiningPreparationException("Could not extract Japanese sentence audio. Check ffmpeg on the playback server or reopen the video.")
+                        throw MiningPreparationException(
+                            if (media.isLocal) {
+                                "This phone could not decode the download's Japanese audio track."
+                            } else {
+                                "Could not extract Japanese sentence audio. Check ffmpeg on the playback server or reopen the video."
+                            },
+                        )
                     }
                     audio?.let(temporary::add)
                     snapshot = snapshot.copy(sentenceAudio = audio)
@@ -1073,11 +1167,15 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
         val selectedCodec = viewModel.mediaSourceOrNull?.selectedSubtitleStream?.codec
         val supportsInteractiveCodec =
             interactiveSubtitleCodecs.any { selectedCodec.equals(it, ignoreCase = true) }
-        val bottomPaddingFraction = if (supportsInteractiveCodec) {
-            InteractiveSubtitleCuePolicy.bottomPaddingFraction(cues)
+        val styledSource = styledSubtitleCodecs.any { selectedCodec.equals(it, ignoreCase = true) }
+        // The libass option draws ASS as pictures, which have no text to look up.
+        val libassDrawsSubtitles = styledSource && appPreferences.exoPlayerDirectPlayAss
+        val selection = if (supportsInteractiveCodec && !libassDrawsSubtitles) {
+            InteractiveSubtitleCuePolicy.select(cues, styledSource)
         } else {
             null
         }
+        val bottomPaddingFraction = selection?.bottomPaddingFraction
         if (
             bottomPaddingFraction != null &&
             bottomPaddingFraction != interactiveSubtitleBottomPaddingFraction
@@ -1086,11 +1184,52 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
             updateInteractiveSubtitleBottomMargin(subtitleControllerVisible)
         }
         val interactiveSubtitleVisible = binding.interactiveSubtitleOverlay.submitCues(
-            if (bottomPaddingFraction != null) cues else emptyList(),
+            selection?.interactive.orEmpty(),
         )
-        binding.playerView.subtitleView?.visibility = when {
-            interactiveSubtitleVisible -> View.INVISIBLE
-            else -> View.VISIBLE
+        stockSubtitleCues = selection?.remaining.orEmpty()
+        updateStockSubtitleView(binding, interactiveSubtitleVisible)
+        requestKnownWordHighlight(binding.interactiveSubtitleOverlay.latestCueText)
+    }
+
+    private fun loadKnownWords() {
+        if (!LookupPreferences(requireContext()).highlightKnownWords) return
+        viewLifecycleOwner.lifecycleScope.launch {
+            knownWordSet = knownWords.refresh()
+            _playerBinding?.interactiveSubtitleOverlay?.let { overlay ->
+                overlay.clearKnownWordRanges()
+                requestKnownWordHighlight(overlay.latestCueText)
+            }
+        }
+    }
+
+    /** Tint words the viewer already knows; matching runs off the main thread, once per line. */
+    private fun requestKnownWordHighlight(cueText: String) {
+        val overlay = _playerBinding?.interactiveSubtitleOverlay ?: return
+        val known = knownWordSet
+        if (known.isEmpty() || cueText.isBlank() || overlay.hasKnownWordRanges(cueText)) return
+        knownWordJob?.cancel()
+        knownWordJob = viewLifecycleOwner.lifecycleScope.launch {
+            val ranges = withContext(Dispatchers.Default) { KnownWordMatcher.find(cueText, known) }
+            _playerBinding?.interactiveSubtitleOverlay?.setKnownWordRanges(cueText, ranges)
+        }
+    }
+
+    /**
+     * Hide Media3's renderer while the overlay draws the cues. ASS signs that the overlay leaves
+     * behind stay on Media3's renderer; posting runs after PlayerView has pushed the full group.
+     */
+    private fun updateStockSubtitleView(binding: FragmentPlayerBinding, interactiveSubtitleVisible: Boolean) {
+        val subtitleView = binding.playerView.subtitleView ?: return
+        val remaining = stockSubtitleCues
+        when {
+            !interactiveSubtitleVisible -> subtitleView.visibility = View.VISIBLE
+            remaining.isEmpty() -> subtitleView.visibility = View.INVISIBLE
+            else -> {
+                subtitleView.visibility = View.VISIBLE
+                subtitleView.post {
+                    if (stockSubtitleCues === remaining) subtitleView.setCues(remaining)
+                }
+            }
         }
     }
 
@@ -1274,10 +1413,7 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
             binding.subtitleLookupPopup.hide()
             binding.interactiveSubtitleOverlay.clearLookupHighlight()
             val interactiveSubtitleVisible = binding.interactiveSubtitleOverlay.setCuesFrozen(false)
-            binding.playerView.subtitleView?.visibility = when {
-                interactiveSubtitleVisible -> View.INVISIBLE
-                else -> View.VISIBLE
-            }
+            updateStockSubtitleView(binding, interactiveSubtitleVisible)
         }
 
         val playerToResume = playerPausedForLookup
@@ -1348,6 +1484,15 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
         var startX = 0f
         var startY = 0f
         var dragging = false
+        var longPressed = false
+        var pressedButton: View? = null
+        val longPressAction = Runnable {
+            val button = pressedButton ?: return@Runnable
+            if (!dragging && button.isLongClickable) {
+                longPressed = true
+                button.performLongClick()
+            }
+        }
 
         fun availableWidth() = parent.width - parent.paddingLeft - parent.paddingRight - controls.width
         fun availableHeight() = parent.height - parent.paddingTop - parent.paddingBottom - controls.height
@@ -1365,6 +1510,9 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
                     controls.removeCallbacks(hideLearningControlsAction)
+                    longPressed = false
+                    pressedButton = button
+                    button.postDelayed(longPressAction, ViewConfiguration.getLongPressTimeout().toLong())
                     downRawX = event.rawX
                     downRawY = event.rawY
                     startX = controls.x
@@ -1379,12 +1527,17 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
                             kotlin.math.abs(event.rawY - downRawY) > touchSlop)
                     ) {
                         dragging = true
+                        button.removeCallbacks(longPressAction)
                     }
                     if (dragging) moveTo(event.rawX, event.rawY)
                     true
                 }
                 MotionEvent.ACTION_UP -> {
-                    if (dragging) {
+                    button.removeCallbacks(longPressAction)
+                    pressedButton = null
+                    if (longPressed) {
+                        longPressed = false
+                    } else if (dragging) {
                         moveTo(event.rawX, event.rawY)
                         preferences.learningControlsPosition = LearningControlsPositioner.normalize(
                             controls.x - parent.paddingLeft,
@@ -1400,6 +1553,8 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
                     true
                 }
                 MotionEvent.ACTION_CANCEL -> {
+                    button.removeCallbacks(longPressAction)
+                    pressedButton = null
                     parent.requestDisallowInterceptTouchEvent(false)
                     peekLearningControls()
                     true
@@ -1410,6 +1565,7 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
         binding.englishSubtitleButton.setOnTouchListener(dragListener)
         binding.previousSubtitleButton.setOnTouchListener(dragListener)
         binding.blurAreaButton.setOnTouchListener(dragListener)
+        binding.subtitleListButton.setOnTouchListener(dragListener)
     }
 
     private fun restoreLearningControlsPosition(binding: FragmentPlayerBinding) {
@@ -1452,6 +1608,52 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
                 subtitleSeekJob = null
             }
         }
+    }
+
+    private fun toggleSubtitleList() {
+        if (_playerBinding?.subtitleListPanel?.isVisible == true) hideSubtitleList() else showSubtitleList()
+    }
+
+    @Suppress("TooGenericExceptionCaught")
+    private fun showSubtitleList() {
+        val player = viewModel.playerOrNull ?: return
+        val media = miningMedia.capture(viewModel.mediaSourceOrNull, player.currentPosition) ?: run {
+            context?.toast(R.string.learning_subtitle_list_missing)
+            return
+        }
+        subtitleListJob?.cancel()
+        subtitleListJob = viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val cues = miningMedia.fullJapaneseTimeline(media)
+                val binding = _playerBinding ?: return@launch
+                if (cues.isEmpty()) {
+                    context?.toast(R.string.learning_subtitle_list_missing)
+                    return@launch
+                }
+                binding.subtitleListPanel.setCues(cues)
+                binding.subtitleListPanel.isVisible = true
+                binding.subtitleListPanel.post {
+                    binding.subtitleListPanel.updatePosition(player.currentPosition, forceScroll = true)
+                }
+                binding.subtitleListPanel.removeCallbacks(subtitleListTicker)
+                binding.subtitleListPanel.postDelayed(subtitleListTicker, SUBTITLE_LIST_TICK_MS)
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (error: Exception) {
+                Timber.e(error, "Subtitle line list failed")
+                context?.toast(R.string.learning_subtitle_list_missing)
+            } finally {
+                subtitleListJob = null
+            }
+        }
+    }
+
+    private fun hideSubtitleList() {
+        subtitleListJob?.cancel()
+        subtitleListJob = null
+        val panel = _playerBinding?.subtitleListPanel ?: return
+        panel.removeCallbacks(subtitleListTicker)
+        panel.isVisible = false
     }
 
     private fun hideEnglishSubtitle() {
@@ -1502,6 +1704,10 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
 
     override fun onInterceptBackPressed(): Boolean {
         if (lookupPlayer == null) {
+            if (_playerBinding?.subtitleListPanel?.isVisible == true) {
+                hideSubtitleList()
+                return true
+            }
             if (!englishVisible) return false
             hideEnglishSubtitle()
             return true
@@ -1554,6 +1760,7 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
             playerLockScreenHelper.hideUnlockButton()
             playerBinding.learningControls.removeCallbacks(hideLearningControlsAction)
             playerBinding.learningControls.isVisible = false
+            hideSubtitleList()
         } else {
             updateEnglishButton()
         }
@@ -1581,6 +1788,9 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
 
     override fun onDestroyView() {
         playerBinding.learningControls.removeCallbacks(hideLearningControlsAction)
+        hideSubtitleList()
+        playerBinding.subtitleListPanel.onLineSelected = null
+        playerBinding.subtitleListPanel.onCloseRequested = null
         stopBlurAreaCapture()
         subtitleSeekJob?.cancel()
         subtitleSeekJob = null
@@ -1674,6 +1884,7 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
         const val STATE_ANKI_CONTEXT = "anki_media_context"
         const val STATE_PLAYER_LOCKED = "player_locked"
         const val BLUR_TEXTURE_CAPTURE_WIDTH = 480
+        const val SUBTITLE_LIST_TICK_MS = 500L
         val BLUR_AREA_CAPTURE_TOKEN = Any()
     }
 }

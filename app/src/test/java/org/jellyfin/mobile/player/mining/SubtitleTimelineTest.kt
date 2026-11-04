@@ -30,6 +30,14 @@ class SubtitleTimelineTest {
     }
 
     @Test
+    fun `matches one of two simultaneous ASS dialogue lines shown together`() {
+        val cues = listOf(MiningCue(1_000, 4_000, "おはよう"), MiningCue(1_500, 4_000, "遅いぞ"))
+
+        assertEquals(cues[1], SubtitleTimeline.matchingCue(cues, 2_000, "遅いぞ\n知らない"))
+        assertNull(SubtitleTimeline.matchingCue(cues, 2_000, "別の文"))
+    }
+
+    @Test
     fun `does not guess timing for a stale or different sentence`() {
         val cues = listOf(MiningCue(1000, 4000, "同じ文"), MiningCue(9000, 11000, "同じ文"))
         assertNull(SubtitleTimeline.matchingCue(cues, 5000, "同じ文"))

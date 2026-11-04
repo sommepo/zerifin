@@ -1,6 +1,7 @@
 package org.jellyfin.mobile.player.mining
 
 import android.content.Context
+import android.net.Uri
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.async
@@ -19,6 +20,7 @@ import okhttp3.Request
 import okhttp3.Response
 import org.jellyfin.mobile.player.anki.AnkiMediaFile
 import org.jellyfin.mobile.player.source.JellyfinMediaSource
+import org.jellyfin.mobile.player.source.LocalJellyfinMediaSource
 import org.jellyfin.mobile.player.source.RemoteJellyfinMediaSource
 import org.jellyfin.sdk.api.client.ApiClient
 import org.jellyfin.sdk.api.client.util.AuthorizationHeaderBuilder
@@ -40,19 +42,30 @@ data class MiningMediaContext(
     val japaneseAudioIndex: Int?,
     val positionMs: Long,
     val youTubeSession: String? = null,
-)
+    /** Downloaded playback: the video file and saved subtitle copies by stream index. */
+    val localMedia: String? = null,
+    val localSubtitles: Map<Int, String> = emptyMap(),
+    /** Position of the Japanese track among the downloaded file's audio tracks. */
+    val localAudioOrdinal: Int? = null,
+) {
+    val isLocal: Boolean
+        get() = localMedia != null
+}
 
 data class MiningSentence(val cue: MiningCue?, val english: String?)
 
 internal data class SubtitleWindow(val media: MiningMediaContext, val index: Int, val cues: List<MiningCue>) {
-    fun contains(other: MiningMediaContext, otherIndex: Int): Boolean = index == otherIndex &&
-        media.serverUrl == other.serverUrl && media.itemId == other.itemId && media.sourceId == other.sourceId &&
+    fun contains(other: MiningMediaContext, otherIndex: Int): Boolean = sameTrack(other, otherIndex) &&
         kotlin.math.abs(media.positionMs - other.positionMs) < 45_000
+
+    fun sameTrack(other: MiningMediaContext, otherIndex: Int): Boolean = index == otherIndex &&
+        media.serverUrl == other.serverUrl && media.itemId == other.itemId && media.sourceId == other.sourceId
 }
 
 /** Authenticated media stays in private cache; URLs and credentials never enter card fields. */
 @Suppress("MagicNumber")
 class PlayerMiningMedia(context: Context, private val api: ApiClient) {
+    private val appContext = context.applicationContext
     private val directory = File(context.applicationContext.cacheDir, "anki-media")
     private val client = OkHttpClient.Builder().followRedirects(false).followSslRedirects(false)
         .connectTimeout(10, TimeUnit.SECONDS).readTimeout(20, TimeUnit.SECONDS)
@@ -67,6 +80,7 @@ class PlayerMiningMedia(context: Context, private val api: ApiClient) {
                 source.subtitleStreams.firstOrNull { it.language == "en" }?.index,
                 if (playback.japaneseAudio) 1 else null, positionMs, playback.session)
         }
+        if (source is LocalJellyfinMediaSource) return captureLocal(source, positionMs)
         if (source !is RemoteJellyfinMediaSource) return null
         val base = api.baseUrl ?: return null
         val subtitle = source.selectedSubtitleStream
@@ -86,22 +100,61 @@ class PlayerMiningMedia(context: Context, private val api: ApiClient) {
         )
     }
 
+    private fun captureLocal(source: LocalJellyfinMediaSource, positionMs: Long): MiningMediaContext {
+        val english = source.subtitleStreams
+            .filter { SubtitleTimeline.languageMatches(it.language, "en") && it.index in source.subtitleFiles }
+            .minByOrNull { if (it.isForced) 1 else 0 }
+        val embeddedAudio = source.audioStreams.filterNot { it.isExternal }
+        val japanese = source.selectedAudioStream?.takeIf { SubtitleTimeline.languageMatches(it.language, "ja") }
+            ?: embeddedAudio.firstOrNull { SubtitleTimeline.languageMatches(it.language, "ja") }
+        return MiningMediaContext(
+            serverUrl = LOCAL_SERVER,
+            itemId = source.itemId.toString(),
+            sourceId = source.id,
+            subtitleIndex = source.selectedSubtitleStream?.index ?: -1,
+            englishIndex = english?.index,
+            japaneseAudioIndex = japanese?.index,
+            positionMs = positionMs,
+            localMedia = source.remoteFileUri.toString(),
+            localSubtitles = source.subtitleFiles.mapValues { it.value.toString() },
+            localAudioOrdinal = japanese?.let(embeddedAudio::indexOf)?.takeIf { it >= 0 },
+        )
+    }
+
+    /** Downloaded video whose subtitle was not saved (downloaded before Zerifin kept subtitles). */
+    fun isMissingOfflineSubtitles(media: MiningMediaContext): Boolean =
+        media.isLocal && media.subtitleIndex >= 0 && media.subtitleIndex !in media.localSubtitles
+
     private var englishWindow: SubtitleWindow? = null
     private var japaneseWindow: SubtitleWindow? = null
 
     /** Only requested while the English overlay is open; a bounded in-memory window avoids repeat downloads. */
     suspend fun englishAt(media: MiningMediaContext): String? {
         val index = media.englishIndex ?: return null
-        require(media.youTubeSession != null || api.baseUrl == media.serverUrl) { "Playback server changed" }
+        requireSameServer(media)
         val cached = englishWindow?.takeIf { it.contains(media, index) }
             ?: SubtitleWindow(media, index, subtitles(media, index)).also { englishWindow = it }
         return SubtitleTimeline.atPosition(cached.cues, media.positionMs, ENGLISH_LOOKAHEAD_MS)
     }
 
+    private var fullTimeline: SubtitleWindow? = null
+
+    /**
+     * Every line of the selected Japanese subtitle, for the line list. One bounded download per
+     * item and track; later calls reuse it.
+     */
+    suspend fun fullJapaneseTimeline(media: MiningMediaContext): List<MiningCue> {
+        val index = media.subtitleIndex.takeIf { it >= 0 } ?: return emptyList()
+        fullTimeline?.takeIf { it.sameTrack(media, index) }?.let { return it.cues }
+        val cues = subtitles(media, index, whole = true)
+        fullTimeline = SubtitleWindow(media, index, cues)
+        return cues
+    }
+
     /** Seek helper shared by Jellyfin and YouTube, using the selected Japanese subtitle timeline. */
     suspend fun previousSubtitlePosition(media: MiningMediaContext): Long? {
         val index = media.subtitleIndex.takeIf { it >= 0 } ?: return null
-        require(media.youTubeSession != null || api.baseUrl == media.serverUrl) { "Playback server changed" }
+        requireSameServer(media)
         val cached = japaneseWindow?.takeIf { it.contains(media, index) }
             ?: SubtitleWindow(media, index, subtitles(media, index)).also { japaneseWindow = it }
         return SubtitleTimeline.previousCueStart(cached.cues, media.positionMs)
@@ -126,8 +179,15 @@ class PlayerMiningMedia(context: Context, private val api: ApiClient) {
         }
     }
 
+    private fun requireSameServer(media: MiningMediaContext) {
+        require(media.isLocal || media.youTubeSession != null || api.baseUrl == media.serverUrl) {
+            "Playback server changed"
+        }
+    }
+
     suspend fun sentenceAudio(media: MiningMediaContext, cue: MiningCue): AnkiMediaFile? {
         val audioIndex = media.japaneseAudioIndex ?: return null
+        if (media.isLocal && media.localAudioOrdinal == null) return null
         require(cue.startMs >= 0 && cue.endMs - cue.startMs in 1..SentenceWaveClip.MAX_DURATION_MS)
         var outputFile: File? = null
         var delivered = false
@@ -149,6 +209,20 @@ class PlayerMiningMedia(context: Context, private val api: ApiClient) {
     }
 
     private suspend fun downloadSentence(media: MiningMediaContext, cue: MiningCue, audioIndex: Int): ByteArray {
+        if (media.isLocal) {
+            @Suppress("TooGenericExceptionCaught")
+            return try {
+                LocalSentenceAudio.extract(
+                    appContext,
+                    Uri.parse(requireNotNull(media.localMedia)),
+                    requireNotNull(media.localAudioOrdinal),
+                    cue,
+                )
+            } catch (error: RuntimeException) {
+                // MediaCodec reports unsupported audio (often DTS/TrueHD) as runtime errors.
+                throw IOException("This download's audio could not be decoded", error)
+            }
+        }
         if (media.youTubeSession != null) {
             val endpoint = youTubeUrl(media, "sentence.pcm").newBuilder()
                 .addQueryParameter("start", (cue.startMs / 1000.0).toString())
@@ -195,18 +269,35 @@ class PlayerMiningMedia(context: Context, private val api: ApiClient) {
         }
     }
 
-    private suspend fun subtitles(media: MiningMediaContext, index: Int): List<MiningCue> {
+    private suspend fun subtitles(media: MiningMediaContext, index: Int, whole: Boolean = false): List<MiningCue> {
+        if (media.isLocal) return localSubtitles(media, index)
         if (media.youTubeSession != null) {
             val language = if (index == media.englishIndex) "en" else "ja"
             val bytes = org.jellyfin.mobile.youtube.YouTubeClient.get(youTubeUrl(media, "$language.vtt").toString())
             return SubtitleTimeline.parse(bytes.toString(Charsets.UTF_8))
         }
         val url = url(media, "Videos", media.itemId, media.sourceId, "Subtitles", index.toString(), "Stream.vtt")
-            .newBuilder().addQueryParameter("CopyTimestamps", "true")
-            .addQueryParameter("StartPositionTicks", ((media.positionMs - 60_000).coerceAtLeast(0) * 10_000).toString())
-            .addQueryParameter("EndPositionTicks", ((media.positionMs + 60_000) * 10_000).toString()).build()
+            .newBuilder().addQueryParameter("CopyTimestamps", "true").apply {
+                if (!whole) {
+                    addQueryParameter(
+                        "StartPositionTicks",
+                        ((media.positionMs - 60_000).coerceAtLeast(0) * 10_000).toString(),
+                    )
+                    addQueryParameter("EndPositionTicks", ((media.positionMs + 60_000) * 10_000).toString())
+                }
+            }.build()
         return request(url) { stream ->
-            val bytes = stream.readBytesBounded(1024 * 1024)
+            val bytes = stream.readBytesBounded(if (whole) MAX_WHOLE_SUBTITLE_BYTES else 1024 * 1024)
+            SubtitleTimeline.parse(bytes.toString(Charsets.UTF_8))
+        }
+    }
+
+    private suspend fun localSubtitles(media: MiningMediaContext, index: Int): List<MiningCue> {
+        val uri = media.localSubtitles[index]?.let(Uri::parse) ?: return emptyList()
+        return withContext(Dispatchers.IO) {
+            val bytes = appContext.contentResolver.openInputStream(uri)?.use {
+                it.readBytesBounded(MAX_WHOLE_SUBTITLE_BYTES)
+            } ?: throw IOException("Saved subtitle is missing")
             SubtitleTimeline.parse(bytes.toString(Charsets.UTF_8))
         }
     }
@@ -285,5 +376,7 @@ class PlayerMiningMedia(context: Context, private val api: ApiClient) {
 
     private companion object {
         const val ENGLISH_LOOKAHEAD_MS = 750L
+        const val MAX_WHOLE_SUBTITLE_BYTES = 8 * 1024 * 1024
+        const val LOCAL_SERVER = "local:"
     }
 }

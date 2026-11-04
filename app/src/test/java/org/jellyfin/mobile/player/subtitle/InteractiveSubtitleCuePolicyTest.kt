@@ -115,6 +115,52 @@ class InteractiveSubtitleCuePolicyTest {
         assertFalse(InteractiveSubtitleCuePolicy.canRenderFaithfully(cueGroup))
     }
 
+    @Test
+    fun `selects bottom-centred ASS dialogue and leaves positioned signs to Media3`() {
+        val dialogue = ssaDialogueCue("そんなこと言われても困るよ")
+        val secondSpeaker = ssaDialogueCue("知らないよ")
+        val sign = textCueBuilder()
+            .setTextAlignment(Layout.Alignment.ALIGN_CENTER)
+            .setPosition(0.2f)
+            .setPositionAnchor(Cue.ANCHOR_TYPE_START)
+            .setLine(0.1f, Cue.LINE_TYPE_FRACTION)
+            .setLineAnchor(Cue.ANCHOR_TYPE_START)
+            .build()
+
+        val selection = InteractiveSubtitleCuePolicy.select(listOf(dialogue, sign, secondSpeaker), styledSource = true)
+
+        assertEquals(listOf(dialogue, secondSpeaker), selection?.interactive)
+        assertEquals(listOf(sign), selection?.remaining)
+        assertEquals(0.08f, selection?.bottomPaddingFraction)
+    }
+
+    @Test
+    fun `ASS dialogue rules only apply to styled sources`() {
+        val dialogue = ssaDialogueCue("字幕")
+
+        assertNull(InteractiveSubtitleCuePolicy.select(listOf(dialogue), styledSource = false))
+        assertNull(InteractiveSubtitleCuePolicy.select(listOf(textCueBuilder().setVerticalType(Cue.VERTICAL_TYPE_RL)
+            .build()), styledSource = true))
+    }
+
+    @Test
+    fun `plain cues from a converted ASS stream keep the whole-group rule`() {
+        val selection = InteractiveSubtitleCuePolicy.select(listOf(textCue("変換済み")), styledSource = true)
+
+        assertEquals(1, selection?.interactive?.size)
+        assertTrue(selection?.remaining.orEmpty().isEmpty())
+    }
+
+    /** The shape Media3's SsaParser gives a default bottom-centre (\an2) dialogue event. */
+    private fun ssaDialogueCue(text: String): Cue = Cue.Builder().setText(text)
+        .setTextAlignment(Layout.Alignment.ALIGN_CENTER)
+        .setPosition(0.5f)
+        .setPositionAnchor(Cue.ANCHOR_TYPE_MIDDLE)
+        .setLine(0.95f, Cue.LINE_TYPE_FRACTION)
+        .setLineAnchor(Cue.ANCHOR_TYPE_END)
+        .setTextSize(0.06f, Cue.TEXT_SIZE_TYPE_FRACTIONAL)
+        .build()
+
     private fun textCue(text: String): Cue = Cue.Builder().setText(text).build()
 
     private fun textCueBuilder(): Cue.Builder = Cue.Builder().setText("subtitle")

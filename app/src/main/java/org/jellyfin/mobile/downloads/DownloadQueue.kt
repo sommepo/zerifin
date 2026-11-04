@@ -5,7 +5,10 @@ import android.net.Uri
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import org.jellyfin.mobile.app.ApiClientController
 import org.jellyfin.mobile.app.StorageManager
 import org.jellyfin.mobile.data.dao.DownloadDao
@@ -14,8 +17,10 @@ import org.jellyfin.mobile.data.entity.DownloadFiles
 import org.jellyfin.sdk.api.client.ApiClient
 import org.jellyfin.sdk.api.client.extensions.imageApi
 import org.jellyfin.sdk.api.client.extensions.libraryApi
+import org.jellyfin.sdk.api.client.util.AuthorizationHeaderBuilder
 import org.jellyfin.sdk.model.api.ImageFormat
 import org.jellyfin.sdk.model.api.ImageType
+import timber.log.Timber
 import java.io.IOException
 
 class DownloadQueue(
@@ -24,7 +29,7 @@ class DownloadQueue(
     private val downloadDao: DownloadDao,
     private val downloadNotificationManager: DownloadNotificationManager,
     private val storageManager: StorageManager,
-    okHttpClient: OkHttpClient,
+    private val okHttpClient: OkHttpClient,
 ) {
     private data class QueuedFile(val file: DownloadFileEntity, val remoteUri: Uri)
 
@@ -68,6 +73,8 @@ class DownloadQueue(
             for (queuedFile in queuedFiles) {
                 download(api, queuedFile, notificationProgressCallback)
             }
+
+            downloadSubtitles(api, downloadWithFiles)
 
             notificationProgressCallback.onEnd()
             downloadDao.update(downloadWithFiles.download.copy(status = DownloadStatus.DOWNLOADED))
@@ -141,6 +148,70 @@ class DownloadQueue(
 
             // Add main item second as it is (often) the largest and important file
             prepareMainFile(api, downloadWithFiles, itemLocation).let(::add)
+        }
+    }
+
+    /**
+     * Save Japanese and English text subtitles as WebVTT so lookup, the line list and mining work
+     * offline. Best effort: a subtitle that fails never fails the video download.
+     */
+    @Suppress("TooGenericExceptionCaught")
+    private suspend fun downloadSubtitles(api: ApiClient, downloadWithFiles: DownloadFiles) {
+        val item = downloadWithFiles.download.item
+        val source = item.mediaSources?.firstOrNull() ?: return
+        val baseUrl = api.baseUrl ?: return
+        val itemLocation = storageManager.getStorageLocation()?.findFile(downloadWithFiles.download.path) ?: return
+        for (stream in DownloadedSubtitles.wanted(source.mediaStreams.orEmpty())) {
+            try {
+                val existing = downloadWithFiles.files.firstOrNull {
+                    it.type == DownloadFileType.SUBTITLE && it.fileName == DownloadedSubtitles.fileName(stream.index)
+                }
+                if (existing?.status == DownloadStatus.DOWNLOADED && existing.size > 0) continue
+                val file = createOrUpdateFile(
+                    filter = { it === existing },
+                    downloadWithFiles = downloadWithFiles,
+                    itemLocation = itemLocation,
+                    type = DownloadFileType.SUBTITLE,
+                    fileName = DownloadedSubtitles.fileName(stream.index),
+                )
+                val url = "${baseUrl.trimEnd('/')}/Videos/${item.id}/${source.id}/Subtitles/${stream.index}/Stream.vtt"
+                val bytes = withContext(Dispatchers.IO) { fetchSubtitle(api, url) }
+                withContext(Dispatchers.IO) {
+                    context.contentResolver.openOutputStream(file.uri, "wt")?.use { it.write(bytes) }
+                        ?: error("Unable to write ${file.fileName}")
+                }
+                downloadDao.updateFile(file.copy(size = bytes.size.toLong(), status = DownloadStatus.DOWNLOADED))
+            } catch (error: CancellationException) {
+                throw error
+            } catch (error: Exception) {
+                Timber.w(error, "Subtitle %d was not saved for offline use", stream.index)
+            }
+        }
+    }
+
+    private fun fetchSubtitle(api: ApiClient, url: String): ByteArray {
+        val request = Request.Builder().url(url).header(
+            "Authorization",
+            AuthorizationHeaderBuilder.buildHeader(
+                clientName = api.clientInfo.name,
+                clientVersion = api.clientInfo.version,
+                deviceId = api.deviceInfo.id,
+                deviceName = api.deviceInfo.name,
+                accessToken = api.accessToken,
+            ),
+        ).build()
+        okHttpClient.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Subtitle request failed (${response.code})")
+            val body = requireNotNull(response.body).byteStream()
+            val output = java.io.ByteArrayOutputStream()
+            val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+            while (true) {
+                val count = body.read(buffer)
+                if (count < 0) break
+                if (output.size() + count > MAX_SUBTITLE_BYTES) throw IOException("Subtitle is too large")
+                output.write(buffer, 0, count)
+            }
+            return output.toByteArray().also { require(it.isNotEmpty()) { "Empty subtitle" } }
         }
     }
 
@@ -220,3 +291,5 @@ class DownloadQueue(
         }
     }
 }
+
+private const val MAX_SUBTITLE_BYTES = 8 * 1024 * 1024

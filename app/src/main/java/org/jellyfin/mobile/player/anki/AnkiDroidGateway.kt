@@ -95,6 +95,27 @@ class AnkiDroidGateway private constructor(
         }
     }
 
+    /**
+     * The mapped Word field of every note in the configured note type, or null when AnkiDroid is
+     * unavailable or no Word field is mapped. Read-only; nothing is written to the collection.
+     */
+    @Suppress("TooGenericExceptionCaught")
+    suspend fun knownWordFieldValues(): List<String>? = withContext(ioDispatcher) {
+        if (access() != AnkiAccess.AVAILABLE) return@withContext null
+        val preset = preferences.load() ?: return@withContext null
+        val wordField = preset.fields.firstOrNull { it.source == AnkiFieldSource.WORD }?.fieldName
+            ?: return@withContext null
+        try {
+            val fieldIndex = api.getFieldList(preset.modelId)?.indexOf(wordField)?.takeIf { it >= 0 }
+                ?: return@withContext null
+            api.noteFieldValues(preset.modelId, fieldIndex)
+        } catch (error: CancellationException) {
+            throw error
+        } catch (_: RuntimeException) {
+            null
+        }
+    }
+
     private suspend fun queryCollection(
         itemName: String,
         query: () -> Map<Long, String>?,
@@ -207,6 +228,22 @@ private class AddContentAnkiApi(
         return "zerifin_${digest.digest().joinToString("") { byte -> "%02x".format(byte) }}"
     }
 
+    override fun noteFieldValues(modelId: Long, fieldIndex: Int): List<String>? = context.contentResolver.query(
+        FlashCardsContract.Note.CONTENT_URI,
+        arrayOf(FlashCardsContract.Note.FLDS),
+        // AnkiDroid treats the selection as an Anki search.
+        "mid:$modelId",
+        null,
+        null,
+    )?.use { cursor ->
+        val fieldsColumn = cursor.getColumnIndexOrThrow(FlashCardsContract.Note.FLDS)
+        buildList {
+            while (cursor.moveToNext()) {
+                cursor.getString(fieldsColumn)?.split(FIELD_SEPARATOR)?.getOrNull(fieldIndex)?.let(::add)
+            }
+        }
+    }
+
     override fun addNote(
         modelId: Long,
         deckId: Long,
@@ -214,3 +251,5 @@ private class AddContentAnkiApi(
         tags: Set<String>,
     ): Long? = delegate.addNote(modelId, deckId, fields.toTypedArray(), tags)
 }
+
+private const val FIELD_SEPARATOR = '\u001f'

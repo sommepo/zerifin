@@ -196,6 +196,15 @@ object JapaneseTextCandidateGenerator {
         "こない" to ("くる" to listOf(NEGATIVE)),
     )
 
+    /** Dictionary forms a literal could be inflected from, including the literal itself. */
+    fun baseForms(literal: String): List<String> {
+        val normalized = Normalizer.normalize(literal, Normalizer.Form.NFKC)
+        return listOf(normalized) + deinflect(normalized).map(DeinflectedForm::text)
+    }
+
+    /** Whether a code point belongs to the Japanese text that lookups consider. */
+    fun isJapaneseCodePoint(character: Int): Boolean = isJapanese(character)
+
     fun generate(subtitleText: String, tappedCharacterOffset: Int): List<JapaneseTextCandidate> {
         if (tappedCharacterOffset !in subtitleText.indices) return emptyList()
         val tapStart = if (Character.isLowSurrogate(subtitleText[tappedCharacterOffset]) && tappedCharacterOffset > 0 &&

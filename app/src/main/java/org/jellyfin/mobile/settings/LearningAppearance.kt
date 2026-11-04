@@ -31,6 +31,38 @@ class LookupPreferences(context: Context) {
         } ?: LearningControlsTimeout.TWO_AND_HALF_SECONDS
         set(value) { preferences.edit { putString("learning_controls_timeout", value.name) } }
 
+    var highlightKnownWords: Boolean
+        get() = preferences.getBoolean("highlight_known_words", true)
+        set(value) { preferences.edit { putBoolean("highlight_known_words", value) } }
+
+    var blurAreaPerShow: Boolean
+        get() = preferences.getBoolean("blur_area_per_show", true)
+        set(value) { preferences.edit { putBoolean("blur_area_per_show", value) } }
+
+    /** The blur area saved for one show (or film, or YouTube), falling back to the global one. */
+    fun blurAreaFor(key: String?): BlurArea? {
+        if (key == null || !blurAreaPerShow) return blurArea
+        return BlurAreaCodec.decode(preferences.getString("blur_area_show_$key", null)) ?: blurArea
+    }
+
+    fun saveBlurArea(key: String?, area: BlurArea) {
+        blurArea = area
+        if (key != null && blurAreaPerShow) {
+            preferences.edit { putString("blur_area_show_$key", BlurAreaCodec.encode(area)) }
+        }
+    }
+
+    /** Whether the blur area was left on for this show; null when never set. */
+    fun blurAreaShownFor(key: String?): Boolean? {
+        if (key == null || !blurAreaPerShow || !preferences.contains("blur_area_on_$key")) return null
+        return preferences.getBoolean("blur_area_on_$key", false)
+    }
+
+    fun setBlurAreaShown(key: String?, shown: Boolean) {
+        if (key == null || !blurAreaPerShow) return
+        preferences.edit { putBoolean("blur_area_on_$key", shown) }
+    }
+
     var theme: LookupTheme
         get() = LookupTheme.entries.firstOrNull { it.name == preferences.getString("theme", null) } ?: LookupTheme.SYSTEM
         set(value) { preferences.edit { putString("theme", value.name) } }
@@ -91,6 +123,21 @@ data class LearningControlsPosition(val x: Float, val y: Float)
 
 /** A blur rectangle expressed as fractions of the displayed video frame. */
 data class BlurArea(val x: Float, val y: Float, val width: Float, val height: Float)
+
+internal object BlurAreaCodec {
+    fun encode(area: BlurArea): String = listOf(area.x, area.y, area.width, area.height).joinToString(",")
+
+    fun decode(value: String?): BlurArea? {
+        val parts = value?.split(',')?.map { it.toFloatOrNull() ?: return null } ?: return null
+        if (parts.size != 4) return null
+        return BlurArea(
+            x = parts[0].coerceIn(0f, 1f),
+            y = parts[1].coerceIn(0f, 1f),
+            width = parts[2].coerceIn(0.05f, 1f),
+            height = parts[3].coerceIn(0.05f, 1f),
+        )
+    }
+}
 
 data class LearningPalette(
     val background: Int,

@@ -27,6 +27,7 @@ import org.jellyfin.mobile.player.cast.Chromecast
 import org.jellyfin.mobile.player.cast.IChromecast
 import org.jellyfin.mobile.player.ui.PlayerFragment
 import org.jellyfin.mobile.setup.ConnectFragment
+import org.jellyfin.mobile.update.UpdatePrompt
 import org.jellyfin.mobile.utils.AndroidVersion
 import org.jellyfin.mobile.utils.BackPressInterceptor
 import org.jellyfin.mobile.utils.BluetoothPermissionHelper
@@ -125,6 +126,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }.show()
             return
+        }
+
+        if (savedInstanceState == null) {
+            lifecycleScope.launch { UpdatePrompt.checkOnLaunch(this@MainActivity) }
         }
 
         // Bind player service

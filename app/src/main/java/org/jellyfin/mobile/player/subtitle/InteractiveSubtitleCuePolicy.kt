@@ -4,6 +4,7 @@ import android.text.Layout
 import androidx.media3.common.text.Cue
 import androidx.media3.common.text.CueGroup
 import androidx.media3.ui.SubtitleView
+import kotlin.math.abs
 
 /**
  * Guards use of [InteractiveSubtitleOverlay] to cue shapes that it can render faithfully.
@@ -15,12 +16,29 @@ import androidx.media3.ui.SubtitleView
 object InteractiveSubtitleCuePolicy {
     private const val CENTER_POSITION = 0.5f
     private const val FULL_SIZE = 1f
+    private const val STYLED_BOTTOM_LINE = 0.7f
+    private const val STYLED_CENTER_TOLERANCE = 0.1f
 
     fun canRenderFaithfully(cueGroup: CueGroup): Boolean =
         canRenderFaithfully(cueGroup.cues)
 
     fun canRenderFaithfully(cues: List<Cue>): Boolean =
         cues.size == 1 && isOrdinaryCenteredTextCue(cues.single())
+
+    /**
+     * Choose the cues the interactive overlay should draw.
+     *
+     * SRT and WebVTT keep the strict whole-group rule. ASS/SSA dialogue arrives from Media3 with
+     * an explicit bottom-centred position and style sizes, so for styled sources the bottom-centred
+     * dialogue lines become interactive and any signs or positioned text stay on the stock renderer.
+     */
+    fun select(cues: List<Cue>, styledSource: Boolean): InteractiveCueSelection? {
+        bottomPaddingFraction(cues)?.let { return InteractiveCueSelection(cues, emptyList(), it) }
+        if (!styledSource) return null
+        val (dialogue, remaining) = cues.partition(::isStyledDialogueCue)
+        if (dialogue.isEmpty()) return null
+        return InteractiveCueSelection(dialogue, remaining, SubtitleView.DEFAULT_BOTTOM_PADDING_FRACTION)
+    }
 
     fun bottomPaddingFraction(cues: List<Cue>): Float? {
         if (!canRenderFaithfully(cues)) return null
@@ -31,6 +49,26 @@ object InteractiveSubtitleCuePolicy {
             SubtitleView.DEFAULT_BOTTOM_PADDING_FRACTION
         }
     }
+
+    /* Media3's SSA parser places bottom-aligned dialogue at line 0.95 (or a \pos near the bottom). */
+    private fun isStyledDialogueCue(cue: Cue): Boolean =
+        cue.hasOrdinaryTextContent() &&
+            cue.hasCenteredAlignment() &&
+            cue.verticalType == Cue.TYPE_UNSET &&
+            cue.shearDegrees == 0f &&
+            cue.hasBottomLine() &&
+            cue.hasRoughlyCenteredPosition()
+
+    private fun Cue.hasBottomLine(): Boolean = when {
+        line == Cue.DIMEN_UNSET -> lineType == Cue.TYPE_UNSET
+        lineType == Cue.LINE_TYPE_FRACTION -> line >= STYLED_BOTTOM_LINE &&
+            (lineAnchor == Cue.ANCHOR_TYPE_END || lineAnchor == Cue.TYPE_UNSET)
+        else -> hasNormalizedWebvttDefaultLine()
+    }
+
+    private fun Cue.hasRoughlyCenteredPosition(): Boolean =
+        (position == Cue.DIMEN_UNSET || abs(position - CENTER_POSITION) <= STYLED_CENTER_TOLERANCE) &&
+            (positionAnchor == Cue.TYPE_UNSET || positionAnchor == Cue.ANCHOR_TYPE_MIDDLE)
 
     private fun isOrdinaryCenteredTextCue(cue: Cue): Boolean =
         cue.hasOrdinaryTextContent() &&
@@ -84,3 +122,10 @@ object InteractiveSubtitleCuePolicy {
     private fun Layout.Alignment?.isUnspecifiedOrCentered(): Boolean =
         this == null || this == Layout.Alignment.ALIGN_CENTER
 }
+
+/** Cues drawn by the interactive overlay, and any left for Media3's renderer (ASS signs). */
+data class InteractiveCueSelection(
+    val interactive: List<Cue>,
+    val remaining: List<Cue>,
+    val bottomPaddingFraction: Float,
+)

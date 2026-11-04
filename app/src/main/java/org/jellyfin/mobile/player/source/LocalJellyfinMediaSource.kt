@@ -13,6 +13,8 @@ class LocalJellyfinMediaSource(
     playSessionId: String,
     playbackDetails: PlaybackDetails? = null,
     val remoteFileUri: Uri,
+    /** Saved WebVTT copies of text subtitles, by Jellyfin stream index. */
+    val subtitleFiles: Map<Int, Uri> = emptyMap(),
 ) : JellyfinMediaSource(itemId, item, sourceInfo, playSessionId, playbackDetails) {
     override val playMethod: PlayMethod = PlayMethod.DIRECT_PLAY
 }

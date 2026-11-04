@@ -371,6 +371,11 @@ class PlayerGestureHelper(
         },
     )
 
+    private val twoFingerTap = TwoFingerTapDetector(
+        touchSlop = android.view.ViewConfiguration.get(playerView.context).scaledTouchSlop.toFloat(),
+        tapTimeoutMs = TWO_FINGER_TAP_TIMEOUT_MS,
+    )
+
     /**
      * Handles scale/zoom gesture
      */
@@ -405,6 +410,13 @@ class PlayerGestureHelper(
      * stream so seek, brightness, volume, and zoom gestures behave normally.
      */
     fun handleTouchEvent(event: MotionEvent): Boolean {
+        if (twoFingerTap.onTouchEvent(event)) fragment.toggleBlurArea()
+        if (playerView.useController && event.actionMasked == MotionEvent.ACTION_POINTER_DOWN) {
+            // A second finger means pinch or two-finger tap, never a one-finger tap or swipe.
+            val cancel = MotionEvent.obtain(event).apply { action = MotionEvent.ACTION_CANCEL }
+            gestureDetector.onTouchEvent(cancel)
+            cancel.recycle()
+        }
         if (playerView.useController) {
             when (event.pointerCount) {
                 1 -> gestureDetector.onTouchEvent(event)
@@ -489,3 +501,5 @@ class PlayerGestureHelper(
         }
     }
 }
+
+private const val TWO_FINGER_TAP_TIMEOUT_MS = 300L

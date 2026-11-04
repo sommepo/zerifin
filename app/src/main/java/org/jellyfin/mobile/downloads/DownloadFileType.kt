@@ -10,4 +10,10 @@ enum class DownloadFileType {
      * The primary image for the item.
      */
     IMAGE_PRIMARY,
+
+    /**
+     * A Japanese or English text subtitle saved as WebVTT for offline lookup and mining. The file
+     * name carries the Jellyfin stream index (see [DownloadedSubtitles]).
+     */
+    SUBTITLE,
 }
