@@ -1315,7 +1315,7 @@ class PlayerFragment : Fragment(), BackPressInterceptor {
     fun peekLearningControls() {
         val binding = _playerBinding ?: return
         binding.learningControls.removeCallbacks(hideLearningControlsAction)
-        if (activity?.isInPictureInPictureMode == true) {
+        if (AndroidVersion.isAtLeastN && activity?.isInPictureInPictureMode == true) {
             binding.learningControls.isVisible = false
             return
         }
