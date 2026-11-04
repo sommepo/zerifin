@@ -2,15 +2,15 @@
 
 Active product repository. On 2026-11-04 the checkout was moved from a detached older blur-area
 commit (`5a47a373`, kept as branch `archive/blur-area-old-base`) to `main`, which is the single
-current line: every subtitle/pause option plus the blur area. Work continues on
-`claude/single-build-v0.1.2` (0.1.2 consolidation, then the 0.1.3 features). The SER9 resolver deployment still pins `1dace256`; `companion/` is
+current line: every subtitle/pause option plus the blur area. That work (0.1.2
+consolidation, then the 0.1.3 features) is merged to `main` and pushed. The SER9 resolver deployment still pins `1dace256`; `companion/` is
 unchanged since then, so it needs no redeploy.
 
 The one distributed build is the signed Libre release (`io.github.sommepo.zerifin`, retained
 release key), offered on the SER9 homepage Downloads page as `Zerifin-android.apk`; it updates
 v0.1.x in place. 0.1.3 (2026-11-04) added ASS lookup, the subtitle line list, known-word tinting,
-quick/per-show blur, offline mining and the update check. GitHub's latest release is still
-v0.1.1. The earlier debug build (`io.github.sommepo.zerifin.debug`) is no longer offered; it
+quick/per-show blur, offline mining and the update check. It is also the latest GitHub release
+(`v0.1.3`, tag on `748058cd`, same APK and SHA-256 as the Downloads copy). The earlier debug build (`io.github.sommepo.zerifin.debug`) is no longer offered; it
 installs as a separate app.
 
 # Working
@@ -50,7 +50,7 @@ cannot send multi-touch), the update prompt, blur on rotation/PiP, and updating 
 
 # Planned / likely next work
 
-Device checks above. Publish 0.1.3 as a GitHub release so the default update source offers it.
+Device checks above.
 
 # Important recent architectural decisions
 
